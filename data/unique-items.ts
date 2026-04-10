@@ -1,0 +1,484 @@
+import { UniqueItemDefinition } from "@/lib/types";
+
+const validationIndex = {
+  label: "diablo2.io uniques index",
+  url: "https://diablo2.io/uniques"
+} as const;
+
+export const uniqueItems: UniqueItemDefinition[] = [
+  {
+    id: "war-travelers",
+    name: "War Travelers",
+    category: "Boots",
+    hasVariableRolls: true,
+    keyRollFields: ["magicFind", "damage"],
+    scnlPriority: "high",
+    sclPriority: "high",
+    liquidity: "High",
+    notes: "Staple MF boots. Magic Find drives value heavily, while added damage is a lighter secondary tiebreaker.",
+    source: "Arreat Summit / diablo2.io",
+    rollDefinitions: [
+      {
+        key: "magicFind",
+        label: "Magic Find",
+        min: 30,
+        max: 50,
+        higherIsBetter: true,
+        thresholds: { low: 35, mid: 45, high: 50 }
+      },
+      {
+        key: "damage",
+        label: "Added Damage",
+        min: 15,
+        max: 25,
+        higherIsBetter: true,
+        thresholds: { low: 18, mid: 22, high: 25 },
+        note: "Useful secondary roll, but still behind Magic Find for trade value."
+      }
+    ],
+    sources: {
+      baselineSource: {
+        label: "The Arreat Summit - Exceptional Unique Boots",
+        url: "https://classic.battle.net/diablo2exp/items/exceptional/uboots.shtml"
+      },
+      validationSource: {
+        label: "diablo2.io - War Traveler",
+        url: "https://diablo2.io/post1129.html"
+      },
+      notes: "Exact variable ranges come from Arreat Summit. Threshold bands remain local triage heuristics layered on top of those ranges."
+    }
+  },
+  {
+    id: "raven-frost",
+    name: "Raven Frost",
+    category: "Ring",
+    hasVariableRolls: true,
+    keyRollFields: ["dexterity", "attackRating"],
+    scnlPriority: "high",
+    sclPriority: "high",
+    liquidity: "High",
+    notes: "Staple Cannot Be Frozen ring. Dexterity and attack rating both matter, but rolls affect value moderately rather than radically.",
+    source: "Arreat Summit / diablo2.io",
+    rollDefinitions: [
+      {
+        key: "dexterity",
+        label: "Dexterity",
+        min: 15,
+        max: 20,
+        higherIsBetter: true,
+        thresholds: { low: 17, mid: 19, high: 20 }
+      },
+      {
+        key: "attackRating",
+        label: "Attack Rating",
+        min: 150,
+        max: 250,
+        higherIsBetter: true,
+        thresholds: { low: 180, mid: 220, high: 250 }
+      }
+    ],
+    sources: {
+      baselineSource: {
+        label: "The Arreat Summit - Unique Rings",
+        url: "https://classic.battle.net/diablo2exp/items/normal/urings.shtml"
+      },
+      validationSource: validationIndex,
+      notes: "Raven Frost's variable value comes from dexterity and attack rating; cold absorb and Cannot Be Frozen are fixed."
+    }
+  },
+  {
+    id: "nagelring",
+    name: "Nagelring",
+    category: "Ring",
+    hasVariableRolls: true,
+    keyRollFields: ["magicFind"],
+    scnlPriority: "low",
+    sclPriority: "medium",
+    liquidity: "Medium",
+    notes: "Mostly about the Magic Find roll. Rolls matter heavily because low Nagels are common and much less desirable.",
+    source: "Arreat Summit / diablo2.io",
+    rollDefinitions: [
+      {
+        key: "magicFind",
+        label: "Magic Find",
+        min: 15,
+        max: 30,
+        higherIsBetter: true,
+        thresholds: { low: 20, mid: 26, high: 30 }
+      }
+    ],
+    sources: {
+      baselineSource: {
+        label: "The Arreat Summit - Unique Rings",
+        url: "https://classic.battle.net/diablo2exp/items/normal/urings.shtml"
+      },
+      validationSource: validationIndex,
+      notes: "Attack Rating is also variable on Nagelring, but Magic Find is the main value-check field for this MVP."
+    }
+  },
+  {
+    id: "vipermagi",
+    name: "Skin of the Vipermagi",
+    category: "Armor",
+    hasVariableRolls: true,
+    keyRollFields: ["allResist"],
+    scnlPriority: "high",
+    sclPriority: "high",
+    liquidity: "High",
+    notes: "Caster staple. All resist is the meaningful variable and stronger rolls matter noticeably for trade quality.",
+    source: "Arreat Summit / diablo2.io",
+    rollDefinitions: [
+      {
+        key: "allResist",
+        label: "All Resist",
+        min: 20,
+        max: 35,
+        higherIsBetter: true,
+        thresholds: { low: 24, mid: 30, high: 35 }
+      }
+    ],
+    sources: {
+      baselineSource: {
+        label: "The Arreat Summit - Exceptional Unique Armor",
+        url: "https://classic.battle.net/diablo2exp/items/exceptional/uarmor.shtml"
+      },
+      validationSource: {
+        label: "diablo2.io - Skin of the Vipermagi",
+        url: "https://diablo2.io/post4205013.html"
+      },
+      notes: "Magic damage reduction also varies, but all resist is the main fast triage field for trade quality."
+    }
+  },
+  {
+    id: "titans-revenge",
+    name: "Titan's Revenge",
+    category: "Javelin",
+    hasVariableRolls: true,
+    keyRollFields: ["enhancedDamage", "lifeLeech"],
+    scnlPriority: "medium",
+    sclPriority: "high",
+    liquidity: "Medium",
+    notes: "Still worth checking for javazon demand, especially in SCL. Enhanced damage matters most, with life leech as a lighter secondary roll.",
+    source: "Arreat Summit / diablo2.io",
+    rollDefinitions: [
+      {
+        key: "enhancedDamage",
+        label: "Enhanced Damage",
+        min: 150,
+        max: 200,
+        higherIsBetter: true,
+        thresholds: { low: 165, mid: 185, high: 200 }
+      },
+      {
+        key: "lifeLeech",
+        label: "Life Leech",
+        min: 5,
+        max: 9,
+        higherIsBetter: true,
+        thresholds: { low: 6, mid: 8, high: 9 }
+      }
+    ],
+    sources: {
+      baselineSource: {
+        label: "The Arreat Summit - Unique Class-specific Items",
+        url: "https://classic.battle.net/diablo2exp/items/normal/uclass.shtml"
+      },
+      validationSource: {
+        label: "diablo2.io - Titan's Revenge",
+        url: "https://diablo2.io/uniques/titan-s-revenge-t995.html"
+      },
+      notes: "This corrects the old MVP shortcut that treated strength as a value roll even though Titan's strength bonus is fixed."
+    }
+  },
+  {
+    id: "andariels-visage",
+    name: "Andariel's Visage",
+    category: "Helm",
+    hasVariableRolls: true,
+    keyRollFields: ["strength", "lifeLeech"],
+    scnlPriority: "high",
+    sclPriority: "high",
+    liquidity: "High",
+    notes: "Widely used mercenary helm. Strength and life leech both matter, though rolls usually fine-tune value rather than define it outright.",
+    source: "Arreat Summit / diablo2.io",
+    rollDefinitions: [
+      {
+        key: "strength",
+        label: "Strength",
+        min: 25,
+        max: 30,
+        higherIsBetter: true,
+        thresholds: { low: 27, mid: 29, high: 30 }
+      },
+      {
+        key: "lifeLeech",
+        label: "Life Leech",
+        min: 8,
+        max: 10,
+        higherIsBetter: true,
+        thresholds: { low: 8, mid: 9, high: 10 }
+      }
+    ],
+    sources: {
+      baselineSource: {
+        label: "The Arreat Summit - Elite Unique Helms",
+        url: "https://classic.battle.net/diablo2exp/items/elite/uhelms.shtml"
+      },
+      validationSource: {
+        label: "diablo2.io - Andariel's Visage",
+        url: "https://diablo2.io/post3965559.html"
+      },
+      notes: "Fire Resist -30% and poison stats are fixed; the fast value check is mainly strength plus life leech."
+    }
+  },
+  {
+    id: "griffons-eye",
+    name: "Griffon's Eye",
+    category: "Helm",
+    hasVariableRolls: true,
+    keyRollFields: ["minusEnemyLightningResist", "lightningSkillDamage"],
+    scnlPriority: "premium",
+    sclPriority: "premium",
+    liquidity: "High",
+    notes: "Top-end lightning unique. Both lightning rolls matter heavily, and strong combined rolls drive premium value.",
+    source: "Arreat Summit / diablo2.io",
+    rollDefinitions: [
+      {
+        key: "minusEnemyLightningResist",
+        label: "-Enemy Lightning Resist",
+        min: 15,
+        max: 20,
+        higherIsBetter: true,
+        thresholds: { low: 16, mid: 18, high: 20 }
+      },
+      {
+        key: "lightningSkillDamage",
+        label: "Lightning Skill Damage",
+        min: 10,
+        max: 15,
+        higherIsBetter: true,
+        thresholds: { low: 11, mid: 13, high: 15 }
+      }
+    ],
+    sources: {
+      baselineSource: {
+        label: "The Arreat Summit - Elite Unique Circlets",
+        url: "https://classic.battle.net/diablo2exp/items/elite/ucirclets.shtml"
+      },
+      validationSource: validationIndex,
+      notes: "Griffon's Eye is highly roll-sensitive, so both variable lightning lines are modeled explicitly."
+    }
+  },
+  {
+    id: "deaths-fathom",
+    name: "Death's Fathom",
+    category: "Weapon",
+    hasVariableRolls: true,
+    keyRollFields: ["coldSkillDamage"],
+    scnlPriority: "premium",
+    sclPriority: "premium",
+    liquidity: "High",
+    notes: "Premium cold sorceress weapon. Cold skill damage is the meaningful value driver and rolls matter heavily.",
+    source: "Arreat Summit / diablo2.io",
+    rollDefinitions: [
+      {
+        key: "coldSkillDamage",
+        label: "Cold Skill Damage",
+        min: 15,
+        max: 30,
+        higherIsBetter: true,
+        thresholds: { low: 20, mid: 25, high: 30 }
+      }
+    ],
+    sources: {
+      baselineSource: {
+        label: "The Arreat Summit - Elite Unique Sorceress Orbs",
+        url: "https://classic.battle.net/diablo2exp/items/elite/usorceress.shtml"
+      },
+      validationSource: validationIndex,
+      notes: "Fire and lightning resist also vary, but cold skill damage is the most important quick trade-quality field."
+    }
+  },
+  {
+    id: "arachnid-mesh",
+    name: "Arachnid Mesh",
+    category: "Belt",
+    hasVariableRolls: false,
+    keyRollFields: [],
+    scnlPriority: "high",
+    sclPriority: "high",
+    liquidity: "High",
+    notes: "Staple caster belt with very consistent trade demand. The MVP triage treats it as a staple rather than a roll-sensitive unique.",
+    source: "Arreat Summit / diablo2.io",
+    sources: {
+      baselineSource: {
+        label: "The Arreat Summit - Elite Unique Belts",
+        url: "https://classic.battle.net/diablo2exp/items/elite/ubelts.shtml"
+      },
+      validationSource: validationIndex,
+      notes: "Enhanced defense varies, but it is usually not the reason to keep or skip an Arachnid Mesh."
+    }
+  },
+  {
+    id: "herald-of-zakarum",
+    name: "Herald of Zakarum",
+    category: "Shield",
+    hasVariableRolls: false,
+    keyRollFields: [],
+    scnlPriority: "high",
+    sclPriority: "high",
+    liquidity: "Medium",
+    notes: "Classic paladin shield. This MVP treats it as a staple check because the important trade call is usually the item itself, not its defense roll.",
+    source: "Arreat Summit / diablo2.io",
+    sources: {
+      baselineSource: {
+        label: "The Arreat Summit - Unique Class-specific Items",
+        url: "https://classic.battle.net/diablo2exp/items/normal/uclass.shtml"
+      },
+      validationSource: {
+        label: "diablo2.io - Herald of Zakarum",
+        url: "https://diablo2.io/uniques/herald-of-zakarum-t815.html"
+      },
+      notes: "Enhanced defense varies, but the current MVP avoids adding an enhanced-defense field solely for this one item."
+    }
+  },
+  {
+    id: "gore-rider",
+    name: "Gore Rider",
+    category: "Boots",
+    hasVariableRolls: false,
+    keyRollFields: [],
+    scnlPriority: "medium",
+    sclPriority: "medium",
+    liquidity: "Medium",
+    notes: "Solid melee staple. Usually worth keeping or checking market activity, even without roll input in this MVP.",
+    source: "Arreat Summit / diablo2.io",
+    sources: {
+      baselineSource: {
+        label: "The Arreat Summit - Exceptional Unique Boots",
+        url: "https://classic.battle.net/diablo2exp/items/exceptional/uboots.shtml"
+      },
+      validationSource: validationIndex,
+      notes: "Its varying enhanced defense is not normally the deciding trade factor in quick triage."
+    }
+  },
+  {
+    id: "string-of-ears",
+    name: "String of Ears",
+    category: "Belt",
+    hasVariableRolls: true,
+    keyRollFields: ["lifeLeech"],
+    scnlPriority: "medium",
+    sclPriority: "medium",
+    liquidity: "Medium",
+    notes: "Usable belt, but trade value depends on stronger defensive rolls. Life leech matters lightly here as a quick single-field check.",
+    source: "Arreat Summit / diablo2.io",
+    rollDefinitions: [
+      {
+        key: "lifeLeech",
+        label: "Life Leech",
+        min: 6,
+        max: 8,
+        higherIsBetter: true,
+        thresholds: { low: 6, mid: 7, high: 8 }
+      }
+    ],
+    sources: {
+      baselineSource: {
+        label: "The Arreat Summit - Exceptional Unique Belts",
+        url: "https://classic.battle.net/diablo2exp/items/exceptional/ubelts.shtml"
+      },
+      validationSource: validationIndex,
+      notes: "Damage reduction and magic damage reduction also vary, but life leech is the current MVP quick-check field."
+    }
+  },
+  {
+    id: "maras-kaleidoscope",
+    name: "Mara's Kaleidoscope",
+    category: "Amulet",
+    hasVariableRolls: true,
+    keyRollFields: ["allResist"],
+    scnlPriority: "premium",
+    sclPriority: "premium",
+    liquidity: "High",
+    notes: "Premium all-around amulet. All resist is the main value driver, and higher rolls matter heavily.",
+    source: "Arreat Summit / diablo2.io",
+    rollDefinitions: [
+      {
+        key: "allResist",
+        label: "All Resist",
+        min: 20,
+        max: 30,
+        higherIsBetter: true,
+        thresholds: { low: 23, mid: 27, high: 30 }
+      }
+    ],
+    sources: {
+      baselineSource: {
+        label: "The Arreat Summit - Unique Amulets",
+        url: "https://classic.battle.net/diablo2exp/items/normal/uamulets.shtml"
+      },
+      validationSource: {
+        label: "diablo2.io - Mara's Kaleidoscope trade page",
+        url: "https://diablo2.io/post4257999.html"
+      },
+      notes: "All attributes are fixed; all resist is the real fast value-check roll."
+    }
+  },
+  {
+    id: "stone-of-jordan",
+    name: "Stone of Jordan",
+    category: "Ring",
+    hasVariableRolls: false,
+    keyRollFields: [],
+    scnlPriority: "premium",
+    sclPriority: "premium",
+    liquidity: "High",
+    notes: "Staple chase ring with steady trade demand. The main decision is whether it dropped at all, not how it rolled.",
+    source: "Arreat Summit / diablo2.io",
+    sources: {
+      baselineSource: {
+        label: "The Arreat Summit - Unique Rings",
+        url: "https://classic.battle.net/diablo2exp/items/normal/urings.shtml"
+      },
+      validationSource: {
+        label: "diablo2.io - The Stone of Jordan",
+        url: "https://diablo2.io/uniques/the-stone-of-jordan-t938-20.html"
+      },
+      notes: "The lightning damage line varies, but it is not a meaningful triage field for trade quality."
+    }
+  },
+  {
+    id: "bul-kathos-wedding-band",
+    name: "Bul-Kathos' Wedding Band",
+    category: "Ring",
+    hasVariableRolls: true,
+    keyRollFields: ["lifeLeech"],
+    scnlPriority: "medium",
+    sclPriority: "medium",
+    liquidity: "Medium",
+    notes: "Still tradable, but usually less liquid than Stone of Jordan. Life leech is the meaningful quick roll check and matters moderately.",
+    source: "Arreat Summit / diablo2.io",
+    rollDefinitions: [
+      {
+        key: "lifeLeech",
+        label: "Life Leech",
+        min: 3,
+        max: 5,
+        higherIsBetter: true,
+        thresholds: { low: 3, mid: 4, high: 5 }
+      }
+    ],
+    sources: {
+      baselineSource: {
+        label: "The Arreat Summit - Unique Rings",
+        url: "https://classic.battle.net/diablo2exp/items/normal/urings.shtml"
+      },
+      validationSource: {
+        label: "diablo2.io - Bul-Kathos' Wedding Band trade page",
+        url: "https://diablo2.io/post4216701.html"
+      },
+      notes: "The life bonus scales with character level; life leech is the cleaner fast triage input for this MVP."
+    }
+  }
+];

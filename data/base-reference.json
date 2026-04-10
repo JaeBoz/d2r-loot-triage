@@ -1,0 +1,35 @@
+{
+  "SCNL": {
+    "focus": [
+      "Elite merc polearms with ethereal potential",
+      "SCNL is saturated, so stronger rolls and cleaner bases matter more",
+      "Paladin shields with strong all-res automods",
+      "Always inspect diadems, claws, and clean Spirit bases"
+    ],
+    "highDemand": [
+      "Phase Blade",
+      "Thresher",
+      "Giant Thresher",
+      "Archon Plate",
+      "Mage Plate",
+      "Sacred Targe",
+      "Monarch"
+    ]
+  },
+  "SCL": {
+    "focus": [
+      "Spirit/Insight starter bases move quickly early ladder",
+      "Low-requirement armor bases stay liquid",
+      "4os polearms and monarchs have strong starter demand",
+      "Paladin shields spike early if all-res is high"
+    ],
+    "highDemand": [
+      "Monarch",
+      "Thresher",
+      "Archon Plate",
+      "Mage Plate",
+      "Sacred Targe",
+      "Phase Blade"
+    ]
+  }
+}

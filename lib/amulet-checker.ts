@@ -1,0 +1,412 @@
+import { amuletModeAdjustments, amuletStatWeights, amuletSynergies } from "@/data/amulet-rules";
+import {
+  AmuletClassSkill,
+  AmuletCheckInput,
+  AmuletCheckResult,
+  EvaluationPriority,
+  Liquidity,
+  RingArchetype,
+  Verdict
+} from "@/lib/types";
+
+type StatKey = keyof Omit<AmuletCheckInput, "mode" | "levelRequirement" | "classSkillType"> | "levelRequirement";
+type NormalizedAmuletStats = Omit<AmuletCheckInput, "mode">;
+
+const casterFriendlyClassSkills: AmuletClassSkill[] = [
+  "Assassin Skills",
+  "Druid Skills",
+  "Necromancer Skills",
+  "Paladin Skills",
+  "Sorceress Skills"
+];
+
+const meleeFriendlyClassSkills: AmuletClassSkill[] = [
+  "Amazon Skills",
+  "Assassin Skills",
+  "Barbarian Skills",
+  "Druid Skills",
+  "Paladin Skills"
+];
+
+const classSkillTradeBias: Record<AmuletClassSkill, number> = {
+  "Amazon Skills": 0,
+  "Assassin Skills": 0,
+  "Barbarian Skills": -1,
+  "Druid Skills": 0,
+  "Necromancer Skills": 1,
+  "Paladin Skills": 1,
+  "Sorceress Skills": 1
+};
+
+const numericKeys: StatKey[] = [
+  "allSkills",
+  "classSkills",
+  "fasterCastRate",
+  "strength",
+  "dexterity",
+  "life",
+  "mana",
+  "allResist",
+  "fireResist",
+  "lightningResist",
+  "coldResist",
+  "poisonResist",
+  "magicFind",
+  "attackRating",
+  "minDamage",
+  "maxDamage",
+  "levelRequirement",
+  "energy",
+  "replenishLife",
+  "extraGold"
+];
+
+const labelByKey: Record<StatKey, string> = {
+  allSkills: "all skills",
+  classSkills: "class skills",
+  fasterCastRate: "FCR",
+  strength: "strength",
+  dexterity: "dexterity",
+  life: "life",
+  mana: "mana",
+  allResist: "all resist",
+  fireResist: "fire resist",
+  lightningResist: "lightning resist",
+  coldResist: "cold resist",
+  poisonResist: "poison resist",
+  magicFind: "magic find",
+  attackRating: "attack rating",
+  minDamage: "min damage",
+  maxDamage: "max damage",
+  levelRequirement: "level requirement",
+  energy: "energy",
+  replenishLife: "replenish life",
+  extraGold: "extra gold"
+};
+
+const verdictFromScore = (score: number): Verdict => {
+  if (score <= 1) return "Ignore";
+  if (score <= 5) return "Low Priority";
+  if (score <= 9) return "Check";
+  if (score <= 14) return "Keep";
+  if (score <= 19) return "List";
+  return "Premium";
+};
+
+const priorityFromVerdict = (verdict: Verdict): EvaluationPriority => {
+  if (verdict === "Ignore") return "Trash";
+  if (verdict === "Low Priority") return "Low Trade Value";
+  if (verdict === "Check" || verdict === "Keep") return "Moderate Trade Value";
+  if (verdict === "List") return "High Trade Value";
+  return "Premium Trade Value";
+};
+
+function normalizeStats(input: AmuletCheckInput): NormalizedAmuletStats {
+  const stats: NormalizedAmuletStats = {};
+
+  for (const key of numericKeys) {
+    const value = input[key];
+    if (typeof value === "number" && !Number.isNaN(value) && value > 0) {
+      stats[key] = value;
+    }
+  }
+
+  if (input.classSkillType) {
+    stats.classSkillType = input.classSkillType;
+  }
+
+  return stats;
+}
+
+function statScoreFor(key: keyof NormalizedAmuletStats, value: number) {
+  const rule = amuletStatWeights.find((entry) => entry.key === key);
+  if (!rule) return 0;
+  const match = rule.thresholds.find((threshold) => value >= threshold.min);
+  return match?.score ?? 0;
+}
+
+function isCasterFriendlyClassSkill(classSkillType?: AmuletClassSkill) {
+  return classSkillType ? casterFriendlyClassSkills.includes(classSkillType) : false;
+}
+
+function isMeleeFriendlyClassSkill(classSkillType?: AmuletClassSkill) {
+  return classSkillType ? meleeFriendlyClassSkills.includes(classSkillType) : false;
+}
+
+function detectArchetypes(stats: NormalizedAmuletStats): RingArchetype[] {
+  const tags = new Set<RingArchetype>();
+
+  if (
+    (stats.allSkills ?? 0) >= 1 ||
+    ((stats.classSkills ?? 0) >= 2 && isCasterFriendlyClassSkill(stats.classSkillType)) ||
+    (stats.fasterCastRate ?? 0) >= 10
+  ) {
+    tags.add("caster");
+  }
+
+  if (
+    (stats.attackRating ?? 0) >= 60 ||
+    (stats.minDamage ?? 0) >= 3 ||
+    (stats.maxDamage ?? 0) >= 5 ||
+    ((stats.classSkills ?? 0) >= 2 && isMeleeFriendlyClassSkill(stats.classSkillType))
+  ) {
+    tags.add("melee");
+  }
+
+  if ((stats.magicFind ?? 0) >= 12) {
+    tags.add("MF");
+  }
+
+  if (
+    ((stats.allSkills ?? 0) >= 1 || ((stats.classSkills ?? 0) >= 2 && isCasterFriendlyClassSkill(stats.classSkillType))) &&
+    (stats.fasterCastRate ?? 0) >= 10
+  ) {
+    tags.add("PvP");
+  }
+
+  if ((stats.life ?? 0) >= 20 || (stats.allResist ?? 0) >= 7 || (stats.lightningResist ?? 0) >= 20) {
+    tags.add("PvM");
+  }
+
+  if (tags.size === 0) {
+    tags.add("niche");
+  }
+
+  return Array.from(tags);
+}
+
+function classSkillContextAdjustment(stats: NormalizedAmuletStats, tags: Set<RingArchetype>, highlights: string[]) {
+  if ((stats.classSkills ?? 0) < 2 || !stats.classSkillType) {
+    return 0;
+  }
+
+  let score = classSkillTradeBias[stats.classSkillType];
+  highlights.push(`${stats.classSkillType.toLowerCase()} roll`);
+
+  const hasCasterSupport = (stats.fasterCastRate ?? 0) >= 10 || (stats.allResist ?? 0) >= 10 || (stats.mana ?? 0) >= 40;
+  const hasMeleeSupport =
+    (stats.attackRating ?? 0) >= 60 ||
+    (stats.strength ?? 0) >= 10 ||
+    (stats.dexterity ?? 0) >= 10 ||
+    (stats.minDamage ?? 0) >= 3 ||
+    (stats.maxDamage ?? 0) >= 5;
+
+  if (isCasterFriendlyClassSkill(stats.classSkillType) && hasCasterSupport) {
+    score += 1;
+  }
+
+  if (isMeleeFriendlyClassSkill(stats.classSkillType) && hasMeleeSupport) {
+    score += 1;
+  }
+
+  if (!isCasterFriendlyClassSkill(stats.classSkillType) && (stats.fasterCastRate ?? 0) >= 10 && (stats.allSkills ?? 0) === 0) {
+    score -= 1;
+    highlights.push("class skill is less attractive with a caster-style stat mix");
+  }
+
+  if (stats.classSkillType === "Barbarian Skills" && !hasMeleeSupport && (stats.life ?? 0) < 20) {
+    score -= 1;
+  }
+
+  if (stats.classSkillType === "Sorceress Skills" || stats.classSkillType === "Paladin Skills" || stats.classSkillType === "Necromancer Skills") {
+    tags.add("caster");
+  }
+
+  return score;
+}
+
+function synergyScore(stats: NormalizedAmuletStats, tags: Set<RingArchetype>, highlights: string[]) {
+  let score = 0;
+
+  for (const synergy of amuletSynergies) {
+    const blocksGenericSkillTreatment =
+      synergy.id.startsWith("skills-") &&
+      (stats.allSkills ?? 0) === 0 &&
+      (stats.classSkills ?? 0) >= 2 &&
+      !isCasterFriendlyClassSkill(stats.classSkillType);
+
+    if (blocksGenericSkillTreatment) {
+      continue;
+    }
+
+    if (synergy.check(stats as Record<string, number | undefined>)) {
+      score += synergy.score;
+      synergy.archetypes.forEach((tag) => tags.add(tag));
+      highlights.push(synergy.label);
+    }
+  }
+
+  return score;
+}
+
+function awkwardComboPenalty(stats: NormalizedAmuletStats, tags: RingArchetype[], highlights: string[]) {
+  let penalty = 0;
+  const numericStatCount = numericKeys.filter((key) => typeof stats[key] === "number" && (stats[key] as number) > 0).length;
+
+  const hasCasterAnchor =
+    (stats.allSkills ?? 0) >= 1 ||
+    ((stats.classSkills ?? 0) >= 2 && isCasterFriendlyClassSkill(stats.classSkillType)) ||
+    (stats.fasterCastRate ?? 0) >= 10;
+  const hasMeleeAnchor = (stats.attackRating ?? 0) >= 60 || (stats.minDamage ?? 0) >= 3 || (stats.maxDamage ?? 0) >= 5;
+  const scattered =
+    numericStatCount >= 4 &&
+    !hasCasterAnchor &&
+    !hasMeleeAnchor &&
+    (stats.allResist ?? 0) < 7 &&
+    (stats.magicFind ?? 0) < 12;
+
+  if (scattered) {
+    penalty += 2;
+    highlights.push("scattered utility without a clear build anchor");
+  }
+
+  if (tags.includes("caster") && tags.includes("melee") && !((stats.allSkills ?? 0) >= 1 || (stats.classSkills ?? 0) >= 2)) {
+    penalty += 1;
+  }
+
+  if ((stats.levelRequirement ?? 0) >= 67) {
+    penalty += 1;
+    highlights.push("elevated level requirement");
+  }
+
+  if ((stats.levelRequirement ?? 0) >= 89) {
+    penalty += 2;
+  }
+
+  return penalty;
+}
+
+function labelForStat(key: StatKey, input: AmuletCheckInput) {
+  if (key === "classSkills" && input.classSkillType) {
+    return input.classSkillType.toLowerCase();
+  }
+
+  return labelByKey[key];
+}
+
+function topStats(stats: NormalizedAmuletStats) {
+  return Object.entries(stats)
+    .filter(([key]) => key !== "levelRequirement" && key !== "classSkillType")
+    .map(([key, value]) => ({
+      key: key as StatKey,
+      value: value as number,
+      score: statScoreFor(key as keyof NormalizedAmuletStats, value as number)
+    }))
+    .filter((entry) => entry.score > 0)
+    .sort((left, right) => right.score - left.score || right.value - left.value)
+    .slice(0, 4);
+}
+
+function liquidityFrom(score: number, mode: AmuletCheckInput["mode"], tags: RingArchetype[], input: AmuletCheckInput): Liquidity {
+  let liquidityScore = score + amuletModeAdjustments[mode].liquidityBias;
+
+  if (tags.includes("caster")) liquidityScore += 2;
+  if (tags.includes("MF")) liquidityScore -= 1;
+  if (tags.includes("niche") && !tags.includes("caster") && !tags.includes("melee")) liquidityScore -= 1;
+  if (input.classSkillType) liquidityScore += classSkillTradeBias[input.classSkillType];
+
+  if (liquidityScore <= 6) return "Low";
+  if (liquidityScore <= 13) return "Medium";
+  return "High";
+}
+
+function explanationFor(
+  input: AmuletCheckInput,
+  verdict: Verdict,
+  tags: RingArchetype[],
+  highlights: string[],
+  topRated: Array<{ key: StatKey; value: number }>
+) {
+  const leadTag = tags[0] ?? "niche";
+  const summaryBits = topRated.slice(0, 3).map((entry) => `+${entry.value} ${labelForStat(entry.key, input)}`);
+  const summaryText = summaryBits.length > 0 ? summaryBits.join(", ") : "very little usable value";
+  const comboText = highlights.length > 0 ? highlights.slice(0, 2).join(" and ") : "the overall stat mix";
+
+  if (verdict === "Ignore") {
+    return `This amulet has ${summaryText}, but the combination is too weak for meaningful ${input.mode} demand.`;
+  }
+
+  if (verdict === "Low Priority") {
+    return `Useful stats are present, but this ${leadTag} amulet is still too thin for strong ${input.mode} demand.`;
+  }
+
+  if (verdict === "Check") {
+    return `This amulet has ${leadTag} appeal due to ${summaryText}. It is worth checking more carefully because of ${comboText}.`;
+  }
+
+  if (verdict === "Keep") {
+    return `This looks like a practical ${leadTag} amulet. ${summaryText} and ${comboText} give it real self-use or trade value.`;
+  }
+
+  if (verdict === "List") {
+    return `This is a real ${leadTag} amulet worth listing. ${summaryText} plus ${comboText} create a solid market profile.`;
+  }
+
+  return `This is a premium ${leadTag} amulet. ${summaryText} with ${comboText} pushes it into premium trade territory.`;
+}
+
+function recommendedActionFor(verdict: Verdict, mode: AmuletCheckInput["mode"]) {
+  if (verdict === "Ignore") return "Ignore it unless you need a temporary self-use amulet.";
+  if (verdict === "Low Priority") return "Only keep it if you want a progression filler.";
+  if (verdict === "Check") return "Give it a second pass before selling or tossing it. The stat mix is at least checkable.";
+  if (verdict === "Keep") return `Keep it and compare it against your other ${mode} utility amulets.`;
+  if (verdict === "List") return "List it or compare it against other rare amulets with similar caster or utility rolls.";
+  return "Treat this as premium trade value and prepare to list it.";
+}
+
+export function evaluateAmulet(input: AmuletCheckInput): AmuletCheckResult {
+  const stats = normalizeStats(input);
+  const presentStats = Object.keys(stats).filter((key) => key !== "levelRequirement").length;
+
+  if (presentStats === 0) {
+    return {
+      verdict: "Ignore",
+      priority: "Trash",
+      liquidity: "Low",
+      explanation: "No amulet stats were entered yet, so there is nothing meaningful to evaluate.",
+      recommendedAction: "Enter the visible mods to triage the amulet.",
+      qualityScore: 0,
+      archetypeTags: ["niche"]
+    };
+  }
+
+  let score = amuletModeAdjustments[input.mode].floorBonus;
+  const tagSet = new Set<RingArchetype>(detectArchetypes(stats));
+  const highlights: string[] = [];
+
+  for (const [key, value] of Object.entries(stats)) {
+    if (key === "levelRequirement" || key === "classSkillType") continue;
+    score += statScoreFor(key as keyof NormalizedAmuletStats, value as number);
+  }
+
+  score += synergyScore(stats, tagSet, highlights);
+  score += classSkillContextAdjustment(stats, tagSet, highlights);
+  const archetypeTags = Array.from(tagSet);
+  score -= awkwardComboPenalty(stats, archetypeTags, highlights);
+
+  if (input.mode === "SCNL" && score <= 11) {
+    score -= 1;
+  }
+
+  if (
+    input.mode === "SCL" &&
+    ((stats.allSkills ?? 0) >= 1 ||
+      ((stats.classSkills ?? 0) >= 2 && isCasterFriendlyClassSkill(stats.classSkillType)) ||
+      (stats.fasterCastRate ?? 0) >= 10)
+  ) {
+    score += 1;
+  }
+
+  const verdict = verdictFromScore(score);
+  const explanation = explanationFor(input, verdict, archetypeTags, highlights, topStats(stats));
+
+  return {
+    verdict,
+    priority: priorityFromVerdict(verdict),
+    liquidity: liquidityFrom(score, input.mode, archetypeTags, input),
+    explanation,
+    recommendedAction: recommendedActionFor(verdict, input.mode),
+    qualityScore: Math.max(0, score),
+    archetypeTags
+  };
+}

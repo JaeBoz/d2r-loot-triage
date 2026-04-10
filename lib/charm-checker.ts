@@ -1,0 +1,361 @@
+import { charmModeAdjustments, charmPatterns } from "@/data/charm-rules";
+import { CharmCheckInput, CharmCheckResult, CharmPatternInput, Liquidity, RingArchetype, Verdict } from "@/lib/types";
+
+const verdictRank: Record<Verdict, number> = {
+  Ignore: 0,
+  "Low Priority": 1,
+  Check: 2,
+  "Check sockets": 2,
+  Keep: 3,
+  List: 4,
+  Premium: 5
+};
+
+const floorVerdictMap = {
+  Check: "Check",
+  Keep: "Keep",
+  List: "List",
+  Premium: "Premium"
+} as const;
+
+const skillerOptions = [
+  "",
+  "Amazon Bow",
+  "Amazon Passive",
+  "Amazon Javelin",
+  "Assassin Martial Arts",
+  "Assassin Shadow",
+  "Assassin Traps",
+  "Barbarian Combat",
+  "Barbarian Masteries",
+  "Barbarian Warcries",
+  "Druid Elemental",
+  "Druid Shape Shifting",
+  "Druid Summoning",
+  "Necromancer Curses",
+  "Necromancer Poison and Bone",
+  "Necromancer Summoning",
+  "Paladin Combat",
+  "Paladin Defensive Auras",
+  "Paladin Offensive Auras",
+  "Sorceress Cold",
+  "Sorceress Fire",
+  "Sorceress Lightning"
+];
+
+const verdictFromScore = (score: number): Verdict => {
+  if (score <= 1) return "Ignore";
+  if (score <= 4) return "Low Priority";
+  if (score <= 7) return "Check";
+  if (score <= 11) return "Keep";
+  if (score <= 15) return "List";
+  return "Premium";
+};
+
+function liquidityFrom(score: number, mode: CharmCheckInput["mode"], tags: RingArchetype[]): Liquidity {
+  let liquidityScore = score + charmModeAdjustments[mode].liquidityBias;
+  if (tags.includes("caster")) liquidityScore += 2;
+  if (tags.includes("MF")) liquidityScore += 1;
+  if (tags.includes("niche")) liquidityScore -= 1;
+  if (liquidityScore <= 4) return "Low";
+  if (liquidityScore <= 10) return "Medium";
+  return "High";
+}
+
+function priorityFromCharm(
+  verdict: Verdict,
+  input: CharmCheckInput,
+  matchedPatternIds: string[],
+  score: number
+): "Trash" | "Low Trade Value" | "Moderate Trade Value" | "High Trade Value" | "Premium Trade Value" {
+  if (verdict === "Premium") {
+    return "Premium Trade Value";
+  }
+
+  if (verdict === "List") {
+    return "High Trade Value";
+  }
+
+  if (
+    matchedPatternIds.includes("gc-skiller") ||
+    matchedPatternIds.includes("gc-skiller-life") ||
+    matchedPatternIds.includes("gc-skiller-fhr") ||
+    matchedPatternIds.includes("sc-life-res") ||
+    (matchedPatternIds.includes("sc-mf") && (input.magicFind ?? 0) >= 7)
+  ) {
+    return "High Trade Value";
+  }
+
+  if (verdict === "Keep" || verdict === "Check" || score >= 6) {
+    return "Moderate Trade Value";
+  }
+
+  if (verdict === "Low Priority") {
+    return "Low Trade Value";
+  }
+
+  return "Trash";
+}
+
+function charmLiquidityFrom(
+  input: CharmCheckInput,
+  score: number,
+  mode: CharmCheckInput["mode"],
+  tags: RingArchetype[],
+  matchedPatternIds: string[]
+): Liquidity {
+  if (matchedPatternIds.includes("gc-skiller-life") || matchedPatternIds.includes("gc-skiller-fhr")) {
+    return "High";
+  }
+
+  if (matchedPatternIds.includes("gc-skiller")) {
+    return "High";
+  }
+
+  if (matchedPatternIds.includes("sc-mf") && (input.magicFind ?? 0) >= 7) {
+    return "High";
+  }
+
+  if (matchedPatternIds.includes("sc-life-res")) {
+    return mode === "SCNL" ? "Medium" : "High";
+  }
+
+  return liquidityFrom(score, mode, tags);
+}
+
+function isPlainSkiller(matchedPatternIds: string[]) {
+  return (
+    matchedPatternIds.includes("gc-skiller") &&
+    !matchedPatternIds.includes("gc-skiller-life") &&
+    !matchedPatternIds.includes("gc-skiller-life-strong") &&
+    !matchedPatternIds.includes("gc-skiller-fhr")
+  );
+}
+
+function baseTags(input: CharmCheckInput): Set<RingArchetype> {
+  const tags = new Set<RingArchetype>();
+  if (input.skill?.trim()) {
+    tags.add("caster");
+  }
+  if ((input.magicFind ?? 0) > 0) {
+    tags.add("MF");
+  }
+  if ((input.maxDamage ?? 0) > 0 || (input.attackRating ?? 0) > 0) {
+    tags.add("melee");
+  }
+  if (
+    (input.life ?? 0) > 0 ||
+    (input.allResist ?? 0) > 0 ||
+    (input.fireResist ?? 0) > 0 ||
+    (input.lightningResist ?? 0) > 0 ||
+    (input.coldResist ?? 0) > 0 ||
+    (input.poisonResist ?? 0) > 0
+  ) {
+    tags.add("PvM");
+  }
+  if ((input.fasterHitRecovery ?? 0) > 0) {
+    tags.add("PvP");
+  }
+  if (tags.size === 0) {
+    tags.add("niche");
+  }
+  return tags;
+}
+
+function awkwardPenalty(input: CharmCheckInput, matchedPatterns: string[]) {
+  let penalty = 0;
+  const rawStats = [
+    input.life,
+    input.mana,
+    input.magicFind,
+    input.allResist,
+    input.fireResist,
+    input.lightningResist,
+    input.coldResist,
+    input.poisonResist,
+    input.fasterHitRecovery,
+    input.maxDamage,
+    input.attackRating
+  ].filter((value) => typeof value === "number" && value > 0).length;
+
+  if (rawStats >= 3 && matchedPatterns.length === 0) {
+    penalty += 2;
+  }
+
+  if (input.size === "Large Charm" && matchedPatterns.length === 0) {
+    penalty += 1;
+  }
+
+  return penalty;
+}
+
+function topSummary(input: CharmCheckInput) {
+  const parts: string[] = [];
+  if (input.skill?.trim()) parts.push(input.skill.trim());
+  if (input.life) parts.push(`+${input.life} life`);
+  if (input.magicFind) parts.push(`+${input.magicFind}% magic find`);
+  if (input.allResist) parts.push(`+${input.allResist} all resist`);
+  if (!input.allResist && input.fireResist) parts.push(`+${input.fireResist} fire resist`);
+  if (input.lightningResist) parts.push(`+${input.lightningResist} lightning resist`);
+  if (input.fasterHitRecovery) parts.push(`+${input.fasterHitRecovery}% FHR`);
+  if (input.maxDamage && input.attackRating) parts.push(`+${input.maxDamage} max damage / +${input.attackRating} AR`);
+  return parts.slice(0, 3).join(", ");
+}
+
+function toCharmPatternInput(input: CharmCheckInput): CharmPatternInput {
+  return {
+    size: input.size,
+    life: input.life,
+    mana: input.mana,
+    magicFind: input.magicFind,
+    allResist: input.allResist,
+    fireResist: input.fireResist,
+    lightningResist: input.lightningResist,
+    coldResist: input.coldResist,
+    poisonResist: input.poisonResist,
+    fasterHitRecovery: input.fasterHitRecovery,
+    skill: input.skill,
+    maxDamage: input.maxDamage,
+    attackRating: input.attackRating
+  };
+}
+
+export function evaluateCharm(input: CharmCheckInput): CharmCheckResult {
+  const hasInput =
+    !!input.skill?.trim() ||
+    [
+      input.life,
+      input.mana,
+      input.magicFind,
+      input.allResist,
+      input.fireResist,
+      input.lightningResist,
+      input.coldResist,
+      input.poisonResist,
+      input.fasterHitRecovery,
+      input.maxDamage,
+      input.attackRating
+    ].some((value) => typeof value === "number" && value > 0);
+
+  if (!hasInput) {
+    return {
+      verdict: "Ignore",
+      priority: "Trash",
+      liquidity: "Low",
+      explanation: "No charm stats were entered yet, so there is nothing meaningful to evaluate.",
+      recommendedAction: "Enter the visible charm mods to triage it.",
+      qualityScore: 0,
+      archetypeTags: ["niche"]
+    };
+  }
+
+  let score = charmModeAdjustments[input.mode].scoreBias;
+  let floorVerdict: Verdict = "Ignore";
+  const matchedPatterns: string[] = [];
+  const matchedPatternIds: string[] = [];
+  const tags = baseTags(input);
+  const patternInput = toCharmPatternInput(input);
+
+  for (const pattern of charmPatterns) {
+    if (pattern.size !== "Any" && pattern.size !== input.size) continue;
+    if (!pattern.check(patternInput)) continue;
+    score += pattern.score;
+    matchedPatterns.push(pattern.label);
+    matchedPatternIds.push(pattern.id);
+    pattern.archetypes.forEach((tag) => tags.add(tag));
+    if (pattern.verdictFloor) {
+      const candidate = floorVerdictMap[pattern.verdictFloor];
+      if (verdictRank[candidate] > verdictRank[floorVerdict]) {
+        floorVerdict = candidate;
+      }
+    }
+  }
+
+  if (input.size === "Grand Charm" && input.skill?.trim()) {
+    score += 2;
+  }
+
+  if (input.size === "Small Charm" && (input.magicFind ?? 0) >= 7) {
+    score += 3;
+  }
+
+  if (
+    input.size === "Small Charm" &&
+    matchedPatternIds.includes("sc-life-res") &&
+    ((input.allResist ?? 0) >= 5 ||
+      (input.fireResist ?? 0) >= 9 ||
+      (input.lightningResist ?? 0) >= 9 ||
+      (input.coldResist ?? 0) >= 9 ||
+      (input.poisonResist ?? 0) >= 9)
+  ) {
+    score += 2;
+  }
+
+  if (input.size === "Small Charm" && (input.maxDamage ?? 0) > 0 && (input.attackRating ?? 0) > 0) {
+    score += 1;
+  }
+
+  if (input.mode === "SCNL" && input.size === "Large Charm" && matchedPatterns.length <= 1) {
+    score -= 1;
+  }
+
+  if (input.mode === "SCL" && input.size === "Small Charm" && matchedPatterns.length > 0) {
+    score += 1;
+  }
+
+  score -= awkwardPenalty(input, matchedPatterns);
+
+  let verdict = verdictFromScore(score);
+  if (verdictRank[floorVerdict] > verdictRank[verdict]) {
+    verdict = floorVerdict;
+  }
+
+  const archetypeTags = Array.from(tags);
+  const summary = topSummary(input) || "some usable stats";
+  const patternText =
+    matchedPatterns.length > 0 ? matchedPatterns.slice(0, 2).join(" and ") : "do not form a strong charm pattern";
+
+  let explanation = "";
+  if (matchedPatterns.length > 0) {
+    if (input.size === "Grand Charm" && isPlainSkiller(matchedPatternIds)) {
+      explanation = `${summary} fits a valuable ${input.size.toLowerCase()} pattern. Plain skiller grand charms are often tradable, though value depends on the skill tree and current demand.`;
+    } else if (input.size === "Grand Charm" && input.skill?.trim()) {
+      explanation = `${summary} fits a valuable ${input.size.toLowerCase()} pattern. Skill grand charms have strong demand, especially when backed by ${patternText}.`;
+    } else if (input.size === "Small Charm") {
+      explanation = `${summary} fits a useful ${input.size.toLowerCase()} pattern. Small charms with ${patternText} are broadly useful.`;
+    } else {
+      explanation = `${summary} gives this ${input.size.toLowerCase()} some value. ${patternText} keeps it at least worth checking.`;
+    }
+  } else {
+    explanation = `${summary} is present, but the stats do not form a strong charm pattern for ${input.mode}.`;
+  }
+
+  let recommendedAction = "";
+  if (verdict === "Ignore") {
+    recommendedAction = "Ignore it unless you need a temporary filler charm.";
+  } else if (verdict === "Low Priority") {
+    recommendedAction = "Only keep it if you want a stopgap charm or have extra stash room.";
+  } else if (verdict === "Check") {
+    recommendedAction = "Check it a bit more carefully before tossing it. The pattern is at least somewhat usable.";
+  } else if (isPlainSkiller(matchedPatternIds)) {
+    recommendedAction = "Check market activity or list it if the skill tree is useful. Plain skillers are commonly tradable.";
+  } else if (verdict === "Keep") {
+    recommendedAction = "Keep it. This matches a real charm pattern and is worth stashing.";
+  } else if (verdict === "List") {
+    recommendedAction = "List it or compare it against similar charms with the same pattern.";
+  } else {
+    recommendedAction = "Treat this as premium trade value and prepare to list or mule it.";
+  }
+
+  return {
+    verdict,
+    priority: priorityFromCharm(verdict, input, matchedPatternIds, score),
+    liquidity: charmLiquidityFrom(input, score, input.mode, archetypeTags, matchedPatternIds),
+    explanation,
+    recommendedAction,
+    qualityScore: Math.max(0, score),
+    archetypeTags
+  };
+}
+
+export const charmSkillOptions = skillerOptions;
