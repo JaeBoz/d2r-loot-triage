@@ -8,7 +8,7 @@ import { VERDICT_STYLES } from "@/lib/constants";
 import { evaluateAmulet } from "@/lib/amulet-checker";
 import { AmuletAffixKey, AmuletClassSkill, AmuletSkillTier, AmuletSkillTree, GameMode } from "@/lib/types";
 
-type VisibleAmuletAffixKey = Exclude<AmuletAffixKey, "allSkills" | "classSkills">;
+type VisibleAmuletAffixKey = Exclude<AmuletAffixKey, "classSkills">;
 
 const amuletFormKeys: VisibleAmuletAffixKey[] = [
   "fasterCastRate",
@@ -71,11 +71,11 @@ const amuletSkillTreeOptions: AmuletSkillTree[] = [
 
 const visibleCoreAffixes = amuletCoreAffixes.filter(
   (affix): affix is (typeof amuletCoreAffixes)[number] & { key: VisibleAmuletAffixKey } =>
-    affix.key !== "allSkills" && affix.key !== "classSkills"
+    affix.key !== "classSkills"
 );
 const visibleOptionalAffixes = amuletOptionalAffixes.filter(
   (affix): affix is (typeof amuletOptionalAffixes)[number] & { key: VisibleAmuletAffixKey } =>
-    affix.key !== "allSkills" && affix.key !== "classSkills"
+    affix.key !== "classSkills"
 );
 
 function toOptionalNumber(value: string) {
