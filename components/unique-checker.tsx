@@ -13,10 +13,16 @@ const fieldLabels: Record<UniqueRollField, string> = {
   attackRating: "Attack Rating",
   allResist: "All Resist",
   minusEnemyLightningResist: "-Enemy Lightning Res",
+  minusEnemyPoisonResist: "-Enemy Poison Res",
   lightningSkillDamage: "Lightning Damage",
+  fireSkillDamage: "Fire Skill Damage",
   enhancedDamage: "Enhanced Damage",
   strength: "Strength",
   lifeLeech: "Life Leech",
+  damageReduction: "Damage Reduction",
+  sockets: "Sockets",
+  poisonAndBoneSkills: "Poison and Bone Skills",
+  energy: "Energy",
   coldSkillDamage: "Cold Skill Damage",
   allSkills: "All Skills"
 };
@@ -34,10 +40,16 @@ const emptyForm: UniqueFormState = {
   attackRating: "",
   allResist: "",
   minusEnemyLightningResist: "",
+  minusEnemyPoisonResist: "",
   lightningSkillDamage: "",
+  fireSkillDamage: "",
   enhancedDamage: "",
   strength: "",
   lifeLeech: "",
+  damageReduction: "",
+  sockets: "",
+  poisonAndBoneSkills: "",
+  energy: "",
   coldSkillDamage: "",
   allSkills: ""
 };
@@ -50,35 +62,44 @@ export function UniqueChecker({ mode }: { mode: GameMode }) {
   const defaultItemId = uniqueItems[0]?.id ?? "";
   const [itemId, setItemId] = useState(defaultItemId);
   const [form, setForm] = useState<UniqueFormState>(emptyForm);
+  const [ethereal, setEthereal] = useState(false);
 
   const selectedItem = useMemo(() => uniqueItems.find((item) => item.id === itemId), [itemId]);
   const hasInput =
-    itemId !== defaultItemId || Object.values(form).some((value) => value.trim() !== "");
+    itemId !== defaultItemId || ethereal || Object.values(form).some((value) => value.trim() !== "");
 
   const result = useMemo(
     () =>
       evaluateUnique({
         mode,
         itemId,
+        ethereal,
         magicFind: toOptionalNumber(form.magicFind),
         damage: toOptionalNumber(form.damage),
         dexterity: toOptionalNumber(form.dexterity),
         attackRating: toOptionalNumber(form.attackRating),
         allResist: toOptionalNumber(form.allResist),
         minusEnemyLightningResist: toOptionalNumber(form.minusEnemyLightningResist),
+        minusEnemyPoisonResist: toOptionalNumber(form.minusEnemyPoisonResist),
         lightningSkillDamage: toOptionalNumber(form.lightningSkillDamage),
+        fireSkillDamage: toOptionalNumber(form.fireSkillDamage),
         enhancedDamage: toOptionalNumber(form.enhancedDamage),
         strength: toOptionalNumber(form.strength),
         lifeLeech: toOptionalNumber(form.lifeLeech),
+        damageReduction: toOptionalNumber(form.damageReduction),
+        sockets: toOptionalNumber(form.sockets),
+        poisonAndBoneSkills: toOptionalNumber(form.poisonAndBoneSkills),
+        energy: toOptionalNumber(form.energy),
         coldSkillDamage: toOptionalNumber(form.coldSkillDamage),
         allSkills: toOptionalNumber(form.allSkills)
       }),
-    [form, itemId, mode]
+    [ethereal, form, itemId, mode]
   );
 
   const handleReset = () => {
     setItemId(defaultItemId);
     setForm(emptyForm);
+    setEthereal(false);
   };
 
   return (
@@ -116,6 +137,18 @@ export function UniqueChecker({ mode }: { mode: GameMode }) {
               ))}
             </select>
           </label>
+
+          {selectedItem?.etherealRelevant ? (
+            <label className="flex items-center gap-3 rounded-xl border border-border bg-black/10 px-3 py-3 text-sm text-zinc-200 md:col-span-2">
+              <input
+                className="h-4 w-4 rounded border-border bg-black/20 text-accent focus:ring-accent"
+                type="checkbox"
+                checked={ethereal}
+                onChange={(event) => setEthereal(event.target.checked)}
+              />
+              Ethereal
+            </label>
+          ) : null}
 
           {selectedItem?.hasVariableRolls ? (
             selectedItem.keyRollFields.map((field) => (

@@ -30,6 +30,24 @@ export interface CharmPatternRule {
 
 export const charmPatterns: CharmPatternRule[] = [
   {
+    id: "sc-frw",
+    size: "Small Charm",
+    label: "FRW utility",
+    score: 5,
+    verdictFloor: "Check",
+    archetypes: ["PvP", "PvM"],
+    check: (stats) => (Number(stats.fasterRunWalk) || 0) >= 3
+  },
+  {
+    id: "sc-frw-res",
+    size: "Small Charm",
+    label: "FRW with resist",
+    score: 7,
+    verdictFloor: "Keep",
+    archetypes: ["PvP", "PvM"],
+    check: (stats) => (Number(stats.fasterRunWalk) || 0) >= 3 && ((Number(stats.allResist) || 0) >= 4 || hasUsefulSingleResist(stats))
+  },
+  {
     id: "sc-life-res",
     size: "Small Charm",
     label: "life with resist",
@@ -55,6 +73,24 @@ export const charmPatterns: CharmPatternRule[] = [
     verdictFloor: "Check",
     archetypes: ["PvM", "niche"],
     check: (stats) => (Number(stats.life) || 0) >= 15 && (Number(stats.mana) || 0) >= 12
+  },
+  {
+    id: "sc-poison",
+    size: "Small Charm",
+    label: "high poison damage",
+    score: 5,
+    verdictFloor: "Check",
+    archetypes: ["PvP", "niche"],
+    check: (stats) => (Number(stats.poisonDamage) || 0) >= 100 && (Number(stats.poisonDamage) || 0) < 451
+  },
+  {
+    id: "sc-poison-top",
+    size: "Small Charm",
+    label: "top poison damage",
+    score: 17,
+    verdictFloor: "Premium",
+    archetypes: ["PvP", "niche"],
+    check: (stats) => (Number(stats.poisonDamage) || 0) >= 451
   },
   {
     id: "sc-max-ar-life",

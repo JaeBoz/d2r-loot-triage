@@ -6,6 +6,7 @@ import { AmuletChecker } from "@/components/amulet-checker";
 import { BaseChecker } from "@/components/base-checker";
 import { BootsChecker } from "@/components/boots-checker";
 import { CharmChecker } from "@/components/charm-checker";
+import { CircletChecker } from "@/components/circlet-checker";
 import { JewelChecker } from "@/components/jewel-checker";
 import { PlaceholderCategoryPanel } from "@/components/placeholder-category-panel";
 import { RingChecker } from "@/components/ring-checker";
@@ -76,6 +77,7 @@ export function AppShell() {
       </Card>
 
       {category === "Bases" ? <BaseChecker mode={mode} /> : null}
+      {category === "Circlets" ? <CircletChecker mode={mode} /> : null}
       {category === "Runes" ? <RuneGuide mode={mode} /> : null}
       {category === "Charms" ? <CharmChecker mode={mode} /> : null}
       {category === "Jewels" ? <JewelChecker mode={mode} /> : null}
@@ -84,6 +86,7 @@ export function AppShell() {
       {category === "Boots" ? <BootsChecker mode={mode} /> : null}
       {category === "Uniques" ? <UniqueChecker mode={mode} /> : null}
       {category !== "Bases" &&
+      category !== "Circlets" &&
       category !== "Runes" &&
       category !== "Charms" &&
       category !== "Jewels" &&

@@ -2,8 +2,8 @@ import { GameMode, RingArchetype } from "@/lib/types";
 
 export interface AmuletWeightRule {
   key:
-    | "allSkills"
     | "classSkills"
+    | "skillTreeSkills"
     | "fasterCastRate"
     | "strength"
     | "dexterity"
@@ -31,8 +31,8 @@ export interface AmuletSynergyRule {
 }
 
 export const amuletStatWeights: AmuletWeightRule[] = [
-  { key: "allSkills", label: "all skills", thresholds: [{ min: 2, score: 7 }, { min: 1, score: 4 }] },
   { key: "classSkills", label: "class skills", thresholds: [{ min: 2, score: 6 }, { min: 1, score: 3 }] },
+  { key: "skillTreeSkills", label: "skill tree skills", thresholds: [{ min: 2, score: 4 }, { min: 1, score: 2 }] },
   { key: "fasterCastRate", label: "FCR", thresholds: [{ min: 20, score: 6 }, { min: 10, score: 4 }, { min: 5, score: 2 }] },
   { key: "strength", label: "strength", thresholds: [{ min: 20, score: 3 }, { min: 10, score: 2 }, { min: 5, score: 1 }] },
   { key: "dexterity", label: "dexterity", thresholds: [{ min: 15, score: 3 }, { min: 10, score: 2 }, { min: 5, score: 1 }] },
@@ -55,21 +55,21 @@ export const amuletSynergies: AmuletSynergyRule[] = [
     label: "+skills with FCR",
     score: 5,
     archetypes: ["caster", "PvP"],
-    check: (stats) => ((stats.allSkills ?? 0) >= 1 || (stats.classSkills ?? 0) >= 2) && (stats.fasterCastRate ?? 0) >= 10
+    check: (stats) => ((stats.classSkills ?? 0) >= 2 || (stats.skillTreeSkills ?? 0) >= 2) && (stats.fasterCastRate ?? 0) >= 10
   },
   {
     id: "skills-res",
     label: "+skills with all resist",
     score: 4,
     archetypes: ["caster", "PvM"],
-    check: (stats) => ((stats.allSkills ?? 0) >= 1 || (stats.classSkills ?? 0) >= 2) && (stats.allResist ?? 0) >= 10
+    check: (stats) => ((stats.classSkills ?? 0) >= 2 || (stats.skillTreeSkills ?? 0) >= 2) && (stats.allResist ?? 0) >= 10
   },
   {
     id: "skills-life",
     label: "+skills with life",
     score: 3,
     archetypes: ["caster", "PvM"],
-    check: (stats) => ((stats.allSkills ?? 0) >= 1 || (stats.classSkills ?? 0) >= 2) && (stats.life ?? 0) >= 25
+    check: (stats) => ((stats.classSkills ?? 0) >= 2 || (stats.skillTreeSkills ?? 0) >= 2) && (stats.life ?? 0) >= 25
   },
   {
     id: "fcr-res",

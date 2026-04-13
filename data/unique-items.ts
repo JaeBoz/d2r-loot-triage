@@ -155,10 +155,12 @@ export const uniqueItems: UniqueItemDefinition[] = [
     category: "Javelin",
     hasVariableRolls: true,
     keyRollFields: ["enhancedDamage", "lifeLeech"],
+    etherealRelevant: true,
+    ethPriority: "high",
     scnlPriority: "medium",
     sclPriority: "high",
     liquidity: "Medium",
-    notes: "Still worth checking for javazon demand, especially in SCL. Enhanced damage matters most, with life leech as a lighter secondary roll.",
+    notes: "Still worth checking for javazon demand, especially in SCL. Enhanced damage matters most, with life leech as a lighter secondary roll, and ethereal versions carry extra appeal.",
     source: "Arreat Summit / diablo2.io",
     rollDefinitions: [
       {
@@ -187,7 +189,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
         label: "diablo2.io - Titan's Revenge",
         url: "https://diablo2.io/uniques/titan-s-revenge-t995.html"
       },
-      notes: "This corrects the old MVP shortcut that treated strength as a value roll even though Titan's strength bonus is fixed."
+      notes: "This corrects the old MVP shortcut that treated strength as a value roll even though Titan's strength bonus is fixed. Ethereal is also relevant because replenishes quantity keeps those versions usable."
     }
   },
   {
@@ -297,6 +299,233 @@ export const uniqueItems: UniqueItemDefinition[] = [
       },
       validationSource: validationIndex,
       notes: "Fire and lightning resist also vary, but cold skill damage is the most important quick trade-quality field."
+    }
+  },
+  {
+    id: "nightwings-veil",
+    name: "Nightwing's Veil",
+    category: "Helm",
+    hasVariableRolls: true,
+    keyRollFields: ["coldSkillDamage", "dexterity"],
+    scnlPriority: "high",
+    sclPriority: "high",
+    liquidity: "Medium",
+    notes: "Cold sorceress staple helm. Cold skill damage is the main trade driver, while dexterity is a useful secondary tiebreaker.",
+    source: "Arreat Summit / diablo2.io",
+    rollDefinitions: [
+      {
+        key: "coldSkillDamage",
+        label: "Cold Skill Damage",
+        min: 8,
+        max: 15,
+        higherIsBetter: true,
+        thresholds: { low: 10, mid: 13, high: 15 }
+      },
+      {
+        key: "dexterity",
+        label: "Dexterity",
+        min: 10,
+        max: 20,
+        higherIsBetter: true,
+        thresholds: { low: 13, mid: 17, high: 20 },
+        note: "Secondary quality roll behind cold skill damage."
+      }
+    ],
+    sources: {
+      baselineSource: {
+        label: "The Arreat Summit - Elite Unique Helms",
+        url: "https://classic.battle.net/diablo2exp/items/elite/uhelms.shtml"
+      },
+      validationSource: {
+        label: "diablo2.io - Nightwing's Veil",
+        url: "https://diablo2.io/uniques/nightwing-s-veil-t885.html"
+      },
+      notes: "Cold skill damage is the key fast triage roll; dexterity matters as a secondary quality check."
+    }
+  },
+  {
+    id: "deaths-web",
+    name: "Death's Web",
+    category: "Weapon",
+    hasVariableRolls: true,
+    keyRollFields: ["minusEnemyPoisonResist", "poisonAndBoneSkills"],
+    scnlPriority: "premium",
+    sclPriority: "premium",
+    liquidity: "High",
+    notes: "Premium poison necromancer wand. -Enemy poison resist drives value heavily, with Poison and Bone Skills as a meaningful secondary roll.",
+    source: "Arreat Summit / diablo2.io",
+    rollDefinitions: [
+      {
+        key: "minusEnemyPoisonResist",
+        label: "-Enemy Poison Resist",
+        min: 40,
+        max: 50,
+        higherIsBetter: true,
+        thresholds: { low: 43, mid: 47, high: 50 }
+      },
+      {
+        key: "poisonAndBoneSkills",
+        label: "Poison and Bone Skills",
+        min: 1,
+        max: 2,
+        higherIsBetter: true,
+        thresholds: { low: 1, mid: 2, high: 2 },
+        note: "+2 is a real value separator on top of the poison resist roll."
+      }
+    ],
+    sources: {
+      baselineSource: {
+        label: "The Arreat Summit - Elite Unique Wands",
+        url: "https://classic.battle.net/diablo2exp/items/elite/uwands.shtml"
+      },
+      validationSource: {
+        label: "diablo2.io - Death's Web",
+        url: "https://diablo2.io/uniques/death-s-web-t735.html"
+      },
+      notes: "Lower resist charges and mana/life after kill also vary, but poison resist and Poison and Bone Skills are the high-signal trade rolls."
+    }
+  },
+  {
+    id: "eschutas-temper",
+    name: "Eschuta's Temper",
+    category: "Weapon",
+    hasVariableRolls: true,
+    keyRollFields: ["allSkills", "lightningSkillDamage", "fireSkillDamage"],
+    scnlPriority: "medium",
+    sclPriority: "high",
+    liquidity: "Medium",
+    notes: "Caster orb with roll-sensitive demand. Sorceress skills matter first, while the elemental skill damage lines separate middling drops from strong ones.",
+    source: "Arreat Summit / diablo2.io",
+    rollDefinitions: [
+      {
+        key: "allSkills",
+        label: "Sorceress Skills",
+        min: 1,
+        max: 3,
+        higherIsBetter: true,
+        thresholds: { low: 1, mid: 2, high: 3 }
+      },
+      {
+        key: "lightningSkillDamage",
+        label: "Lightning Skill Damage",
+        min: 10,
+        max: 20,
+        higherIsBetter: true,
+        thresholds: { low: 13, mid: 17, high: 20 }
+      },
+      {
+        key: "fireSkillDamage",
+        label: "Fire Skill Damage",
+        min: 10,
+        max: 20,
+        higherIsBetter: true,
+        thresholds: { low: 13, mid: 17, high: 20 },
+        note: "Useful for fire variants, but still secondary to the skill roll and preferred elemental line."
+      }
+    ],
+    sources: {
+      baselineSource: {
+        label: "The Arreat Summit - Elite Unique Sorceress Orbs",
+        url: "https://classic.battle.net/diablo2exp/items/elite/usorceress.shtml"
+      },
+      validationSource: {
+        label: "diablo2.io - Eschuta's Temper",
+        url: "https://diablo2.io/uniques/eschuta-s-temper-t757.html"
+      },
+      notes: "Energy also varies, but the meaningful trade call is driven by sorceress skills plus the elemental damage lines."
+    }
+  },
+  {
+    id: "the-reapers-toll",
+    name: "The Reaper's Toll",
+    category: "Weapon",
+    hasVariableRolls: true,
+    keyRollFields: ["enhancedDamage", "lifeLeech"],
+    etherealRelevant: true,
+    ethPriority: "high",
+    scnlPriority: "high",
+    sclPriority: "high",
+    liquidity: "High",
+    notes: "Staple mercenary polearm. Enhanced damage matters most, and ethereal versions are a major trade-value upgrade.",
+    source: "Arreat Summit / diablo2.io",
+    rollDefinitions: [
+      {
+        key: "enhancedDamage",
+        label: "Enhanced Damage",
+        min: 190,
+        max: 240,
+        higherIsBetter: true,
+        thresholds: { low: 205, mid: 225, high: 240 }
+      },
+      {
+        key: "lifeLeech",
+        label: "Life Leech",
+        min: 11,
+        max: 15,
+        higherIsBetter: true,
+        thresholds: { low: 12, mid: 14, high: 15 }
+      }
+    ],
+    sources: {
+      baselineSource: {
+        label: "The Arreat Summit - Elite Unique Polearms",
+        url: "https://classic.battle.net/diablo2exp/items/elite/upolearms.shtml"
+      },
+      validationSource: {
+        label: "diablo2.io - The Reaper's Toll",
+        url: "https://diablo2.io/uniques/the-reaper-s-toll-t939.html"
+      },
+      notes: "Decrepify is fixed; the fast trade-quality check is enhanced damage, life leech, and whether the item is ethereal."
+    }
+  },
+  {
+    id: "crown-of-ages",
+    name: "Crown of Ages",
+    category: "Helm",
+    hasVariableRolls: true,
+    keyRollFields: ["allResist", "damageReduction", "sockets"],
+    scnlPriority: "high",
+    sclPriority: "high",
+    liquidity: "Medium",
+    notes: "High-end defensive helm. Sockets are a major separator, with damage reduction and all resist deciding how strong the piece really is.",
+    source: "Arreat Summit / diablo2.io",
+    rollDefinitions: [
+      {
+        key: "allResist",
+        label: "All Resist",
+        min: 20,
+        max: 30,
+        higherIsBetter: true,
+        thresholds: { low: 23, mid: 27, high: 30 }
+      },
+      {
+        key: "damageReduction",
+        label: "Damage Reduction",
+        min: 10,
+        max: 15,
+        higherIsBetter: true,
+        thresholds: { low: 11, mid: 13, high: 15 }
+      },
+      {
+        key: "sockets",
+        label: "Sockets",
+        min: 1,
+        max: 2,
+        higherIsBetter: true,
+        thresholds: { low: 1, mid: 2, high: 2 },
+        note: "Two sockets are a major value jump."
+      }
+    ],
+    sources: {
+      baselineSource: {
+        label: "The Arreat Summit - Elite Unique Helms",
+        url: "https://classic.battle.net/diablo2exp/items/elite/uhelms.shtml"
+      },
+      validationSource: {
+        label: "diablo2.io - Crown of Ages",
+        url: "https://diablo2.io/uniques/crown-of-ages-t724.html"
+      },
+      notes: "Defense also varies, but sockets plus defensive rolls are the practical triage fields."
     }
   },
   {

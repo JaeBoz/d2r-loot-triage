@@ -29,6 +29,7 @@ export function BaseChecker({ mode }: { mode: GameMode }) {
   const [ethereal, setEthereal] = useState(false);
   const [superior, setSuperior] = useState(false);
   const [defenseOrEd, setDefenseOrEd] = useState<number | undefined>(undefined);
+  const [durabilityBonus, setDurabilityBonus] = useState<number | undefined>(undefined);
   const [allRes, setAllRes] = useState<number | undefined>(undefined);
 
   const selectedItem = useMemo(() => baseItems.find((item) => item.id === itemId), [itemId]);
@@ -47,6 +48,7 @@ export function BaseChecker({ mode }: { mode: GameMode }) {
     setEthereal(false);
     setSuperior(false);
     setDefenseOrEd(undefined);
+    setDurabilityBonus(undefined);
     setAllRes(undefined);
   }, [itemId, selectedItem]);
 
@@ -59,14 +61,17 @@ export function BaseChecker({ mode }: { mode: GameMode }) {
         ethereal,
         superior,
         defenseOrEd,
+        durabilityBonus,
         allRes
       }),
-    [allRes, defenseOrEd, ethereal, itemId, mode, sockets, superior]
+    [allRes, defenseOrEd, durabilityBonus, ethereal, itemId, mode, sockets, superior]
   );
 
+  const isCircletFamily = selectedItem?.tags.includes("circlet") ?? false;
   const showAllResInput = selectedItem?.tags.includes("paladin") ?? false;
-  const showDefenseInput = selectedItem?.category === "Armor";
-  const showSuperiorToggle = selectedItem?.socketSensitive ?? false;
+  const showDefenseInput = selectedItem?.category === "Armor" || isCircletFamily;
+  const showDurabilityInput = isCircletFamily && superior;
+  const showSuperiorToggle = (selectedItem?.socketSensitive ?? false) || isCircletFamily;
   const showEtherealToggle = selectedItem?.etherealAllowed ?? false;
 
   const handleReset = () => {
@@ -77,6 +82,7 @@ export function BaseChecker({ mode }: { mode: GameMode }) {
     setEthereal(false);
     setSuperior(false);
     setDefenseOrEd(undefined);
+    setDurabilityBonus(undefined);
     setAllRes(undefined);
   };
 
@@ -189,6 +195,25 @@ export function BaseChecker({ mode }: { mode: GameMode }) {
                   setDefenseOrEd(value === "" ? undefined : Number(value));
                 }}
                 aria-label="Defense"
+              />
+            </label>
+          ) : null}
+
+          {showDurabilityInput ? (
+            <label className="grid gap-2 text-sm text-zinc-300">
+              Superior durability %
+              <input
+                className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
+                type="number"
+                min={0}
+                inputMode="numeric"
+                placeholder="Blank"
+                value={durabilityBonus ?? ""}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  setDurabilityBonus(value === "" ? undefined : Number(value));
+                }}
+                aria-label="Superior durability percentage"
               />
             </label>
           ) : null}

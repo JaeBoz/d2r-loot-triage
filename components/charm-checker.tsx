@@ -15,7 +15,9 @@ const numericFields: Array<{ key: keyof Omit<CharmCheckInput, "mode" | "size" | 
   { key: "lightningResist", label: "Lightning Resist" },
   { key: "coldResist", label: "Cold Resist" },
   { key: "poisonResist", label: "Poison Resist" },
+  { key: "fasterRunWalk", label: "FRW" },
   { key: "fasterHitRecovery", label: "FHR" },
+  { key: "poisonDamage", label: "Poison Damage" },
   { key: "maxDamage", label: "Max Damage" },
   { key: "attackRating", label: "Attack Rating" }
 ];
@@ -36,7 +38,9 @@ const emptyForm: CharmFormState = {
   lightningResist: "",
   coldResist: "",
   poisonResist: "",
+  fasterRunWalk: "",
   fasterHitRecovery: "",
+  poisonDamage: "",
   maxDamage: "",
   attackRating: ""
 };
@@ -64,7 +68,9 @@ export function CharmChecker({ mode }: { mode: GameMode }) {
         lightningResist: toOptionalNumber(form.lightningResist),
         coldResist: toOptionalNumber(form.coldResist),
         poisonResist: toOptionalNumber(form.poisonResist),
+        fasterRunWalk: toOptionalNumber(form.fasterRunWalk),
         fasterHitRecovery: toOptionalNumber(form.fasterHitRecovery),
+        poisonDamage: toOptionalNumber(form.poisonDamage),
         maxDamage: toOptionalNumber(form.maxDamage),
         attackRating: toOptionalNumber(form.attackRating)
       }),

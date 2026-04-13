@@ -4,6 +4,12 @@ import { BootsCheckInput, BootsCheckResult, EvaluationPriority, Liquidity, RingA
 type StatKey = keyof Omit<BootsCheckInput, "mode">;
 type NormalizedBootsStats = Omit<BootsCheckInput, "mode">;
 
+type RatedStat = {
+  key: StatKey;
+  value: number;
+  score: number;
+};
+
 const numericKeys: StatKey[] = [
   "fasterRunWalk",
   "fasterHitRecovery",
@@ -110,6 +116,58 @@ function awkwardPenalty(stats: NormalizedBootsStats, highlights: string[]) {
   return penalty;
 }
 
+function ratedStats(stats: NormalizedBootsStats): RatedStat[] {
+  return Object.entries(stats)
+    .map(([key, value]) => ({
+      key: key as StatKey,
+      value: value as number,
+      score: statScoreFor(key as keyof NormalizedBootsStats, value as number)
+    }))
+    .filter((entry) => entry.score > 0);
+}
+
+function rollPackageAdjustment(stats: NormalizedBootsStats, rated: RatedStat[], highlights: string[]) {
+  const highCount = rated.filter((entry) => entry.score >= 4).length;
+  const mediumCount = rated.filter((entry) => entry.score >= 2).length;
+  const lowCount = rated.filter((entry) => entry.score === 1).length;
+  const resistHits = [stats.fireResist ?? 0, stats.lightningResist ?? 0, stats.coldResist ?? 0, stats.poisonResist ?? 0].filter(
+    (value) => value >= 25
+  ).length;
+  const hasRealFrwAnchor = (stats.fasterRunWalk ?? 0) >= 30;
+  const hasRealMfAnchor = (stats.magicFind ?? 0) >= 20;
+  const hasRealResAnchor = (stats.allResist ?? 0) >= 8 || resistHits >= 2;
+  const hasPremiumShell =
+    hasRealFrwAnchor &&
+    (hasRealResAnchor || hasRealMfAnchor || ((stats.fasterHitRecovery ?? 0) >= 10 && ((stats.allResist ?? 0) >= 8 || (stats.lightningResist ?? 0) >= 25)));
+
+  if (hasPremiumShell) {
+    highlights.push("coherent premium boot shell");
+    return 2;
+  }
+
+  if (highCount >= 3) {
+    highlights.push("multiple high-impact utility rolls");
+    return 2;
+  }
+
+  if (highCount >= 2 && mediumCount >= 3) {
+    highlights.push("strong overall boot package");
+    return 1;
+  }
+
+  if (highCount === 0 && mediumCount <= 1 && lowCount >= 2) {
+    highlights.push("mostly filler-level utility");
+    return -2;
+  }
+
+  if (!hasRealFrwAnchor && !hasRealResAnchor && !hasRealMfAnchor && mediumCount > 0 && lowCount > 0) {
+    highlights.push("mixed utility without a strong boot pattern");
+    return -1;
+  }
+
+  return 0;
+}
+
 function liquidityFrom(score: number, mode: BootsCheckInput["mode"], tags: RingArchetype[], highlights: string[]): Liquidity {
   if (highlights.includes("tri-res utility boots")) return mode === "SCNL" ? "Medium" : "High";
   if (highlights.includes("FRW with strong resist support")) return "High";
@@ -142,10 +200,13 @@ function explanationFor(
   verdict: Verdict,
   tags: RingArchetype[],
   highlights: string[],
-  stats: NormalizedBootsStats
+  stats: NormalizedBootsStats,
+  rated: RatedStat[]
 ) {
   const summary = summaryFor(stats) || "some utility stats";
   const comboText = highlights.length > 0 ? highlights.slice(0, 2).join(" and ") : "the overall stat mix";
+  const highCount = rated.filter((entry) => entry.score >= 4).length;
+  const lowOnly = rated.length > 0 && rated.every((entry) => entry.score <= 1);
 
   if (verdict === "Ignore") {
     return `These boots have ${summary}, but they do not form a strong tradable pattern for ${input.mode}.`;
@@ -156,18 +217,22 @@ function explanationFor(
   }
 
   if (verdict === "Check") {
-    return `${summary} gives these boots some utility appeal. They are worth a second look because of ${comboText}.`;
+    return `${summary} gives these boots some utility appeal, but they still read more like a partial hit than a clearly tradable pair. ${comboText} is the main reason to give them a second look.`;
   }
 
   if (verdict === "Keep") {
-    return `${summary} makes these boots useful. ${comboText} gives them real self-use or selective trade appeal.`;
+    return `${summary} makes these boots useful. ${comboText} gives them real self-use or selective trade appeal, even if they stop short of a true jackpot pair.`;
   }
 
   if (verdict === "List") {
     return `${summary} makes these boots clearly tradable. ${comboText} is a real marketable boot pattern.`;
   }
 
-  return `${summary} makes these boots premium. ${comboText} pushes them into premium trade territory.`;
+  if (highCount >= 2 && !lowOnly) {
+    return `${summary} makes these boots premium. ${comboText} pushes them into premium trade territory.`;
+  }
+
+  return `${summary} makes these boots look premium at a glance, but they are still worth checking carefully because the full utility mix matters on rare boots.`;
 }
 
 function recommendedActionFor(verdict: Verdict, highlights: string[]) {
@@ -209,6 +274,8 @@ export function evaluateBoots(input: BootsCheckInput): BootsCheckResult {
 
   score += synergyScore(stats, tagSet, highlights);
   score -= awkwardPenalty(stats, highlights);
+  const rated = ratedStats(stats);
+  score += rollPackageAdjustment(stats, rated, highlights);
 
   if (input.mode === "SCNL" && score <= 9) {
     score -= 1;
@@ -225,7 +292,7 @@ export function evaluateBoots(input: BootsCheckInput): BootsCheckResult {
     verdict,
     priority: priorityFromVerdict(verdict),
     liquidity: liquidityFrom(score, input.mode, archetypeTags, highlights),
-    explanation: explanationFor(input, verdict, archetypeTags, highlights, stats),
+    explanation: explanationFor(input, verdict, archetypeTags, highlights, stats, rated),
     recommendedAction: recommendedActionFor(verdict, highlights),
     qualityScore: Math.max(0, score),
     archetypeTags

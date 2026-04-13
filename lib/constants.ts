@@ -7,6 +7,7 @@ export const MODE_OPTIONS = [
 
 export const CATEGORY_TABS: ItemCategory[] = [
   "Bases",
+  "Circlets",
   "Runes",
   "Uniques",
   "Charms",

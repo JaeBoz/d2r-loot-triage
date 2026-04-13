@@ -12,6 +12,12 @@ type StatKey = keyof Omit<RingCheckInput, "mode" | "levelRequirement"> | "levelR
 
 type NormalizedRingStats = Omit<RingCheckInput, "mode">;
 
+type RatedStat = {
+  key: StatKey;
+  value: number;
+  score: number;
+};
+
 const numericKeys: StatKey[] = [
   "fasterCastRate",
   "strength",
@@ -176,7 +182,7 @@ function awkwardComboPenalty(stats: NormalizedRingStats, tags: RingArchetype[], 
   return penalty;
 }
 
-function topStats(stats: NormalizedRingStats) {
+function ratedStats(stats: NormalizedRingStats): RatedStat[] {
   return Object.entries(stats)
     .filter(([key]) => key !== "levelRequirement")
     .map(([key, value]) => ({
@@ -184,9 +190,65 @@ function topStats(stats: NormalizedRingStats) {
       value: value as number,
       score: statScoreFor(key as keyof NormalizedRingStats, value as number)
     }))
-    .filter((entry) => entry.score > 0)
+    .filter((entry) => entry.score > 0);
+}
+
+function topStats(stats: NormalizedRingStats) {
+  return ratedStats(stats)
     .sort((left, right) => right.score - left.score || right.value - left.value)
     .slice(0, 4);
+}
+
+function rollPackageAdjustment(
+  stats: NormalizedRingStats,
+  rated: RatedStat[],
+  tags: RingArchetype[],
+  highlights: string[]
+) {
+  const highCount = rated.filter((entry) => entry.score >= 4).length;
+  const mediumCount = rated.filter((entry) => entry.score >= 2).length;
+  const lowCount = rated.filter((entry) => entry.score === 1).length;
+  const hasCasterAnchor = (stats.fasterCastRate ?? 0) >= 10;
+  const hasMeleeAnchor =
+    (stats.lifeLeech ?? 0) >= 4 || (stats.manaLeech ?? 0) >= 4 || (stats.attackRating ?? 0) >= 60;
+  const hasRealResSupport = (stats.allResist ?? 0) >= 7 || (stats.lightningResist ?? 0) >= 20;
+  const hasPremiumCasterShell =
+    hasCasterAnchor && ((stats.strength ?? 0) >= 10 || (stats.dexterity ?? 0) >= 10) && hasRealResSupport;
+  const hasPremiumMeleeShell =
+    ((stats.lifeLeech ?? 0) >= 4 || (stats.manaLeech ?? 0) >= 4) &&
+    (stats.attackRating ?? 0) >= 60 &&
+    (((stats.strength ?? 0) >= 8 && (stats.dexterity ?? 0) >= 8) || (stats.maxDamage ?? 0) >= 5);
+
+  if (hasPremiumCasterShell || hasPremiumMeleeShell) {
+    highlights.push("coherent premium shell");
+    return 2;
+  }
+
+  if (highCount >= 3) {
+    highlights.push("multiple high-impact rolls");
+    return 2;
+  }
+
+  if (highCount >= 2 && mediumCount >= 3) {
+    highlights.push("strong overall stat package");
+    return 1;
+  }
+
+  if (highCount === 0 && mediumCount <= 1 && lowCount >= 2) {
+    highlights.push("mostly filler-level stats");
+    return -2;
+  }
+
+  if (highCount === 0 && mediumCount > 0 && lowCount > 0 && !hasCasterAnchor && !hasMeleeAnchor) {
+    highlights.push("mixed utility without a strong anchor");
+    return -1;
+  }
+
+  if (tags.includes("caster") && !hasCasterAnchor) {
+    return -1;
+  }
+
+  return 0;
 }
 
 function liquidityFrom(score: number, mode: RingCheckInput["mode"], tags: RingArchetype[]): Liquidity {
@@ -214,13 +276,16 @@ function explanationFor(
   verdict: Verdict,
   tags: RingArchetype[],
   highlights: string[],
-  topRated: Array<{ key: StatKey; value: number }>
+  topRated: Array<{ key: StatKey; value: number }>,
+  rated: RatedStat[]
 ) {
   const leadTag = tags[0] ?? "niche";
   const summaryBits = topRated.slice(0, 3).map((entry) => `${entry.value} ${labelByKey[entry.key]}`);
   const summaryText = summaryBits.length > 0 ? summaryBits.join(", ") : "very little usable value";
   const comboText =
     highlights.length > 0 ? highlights.slice(0, 2).join(" and ") : "the overall stat mix";
+  const highCount = rated.filter((entry) => entry.score >= 4).length;
+  const lowOnly = rated.length > 0 && rated.every((entry) => entry.score <= 1);
 
   if (verdict === "Ignore") {
     return `This ring has ${summaryText}, but the combination is too weak for meaningful ${input.mode} demand.`;
@@ -231,18 +296,22 @@ function explanationFor(
   }
 
   if (verdict === "Check") {
-    return `${summaryText} gives this ring some ${leadTag} appeal. It is worth a closer look, especially because of ${comboText}.`;
+    return `${summaryText} gives this ring some ${leadTag} appeal, but it still reads more like a partial hit than a clean winner. ${comboText} is the main reason to check it more closely.`;
   }
 
   if (verdict === "Keep") {
-    return `${summaryText} makes this a practical ${leadTag} ring. The combination of ${comboText} gives it real use value.`;
+    return `${summaryText} makes this a practical ${leadTag} ring. The combination of ${comboText} gives it real use value, even if it stops short of premium trade territory.`;
   }
 
   if (verdict === "List") {
     return `${summaryText} makes this a real ${leadTag} ring worth listing. ${comboText} gives it a strong, marketable profile.`;
   }
 
-  return `${summaryText} makes this a premium ${leadTag} ring. ${comboText} pushes it into premium trade territory.`;
+  if (highCount >= 2 && !lowOnly) {
+    return `${summaryText} makes this a premium ${leadTag} ring. ${comboText} pushes it into premium trade territory.`;
+  }
+
+  return `${summaryText} makes this a premium ${leadTag} ring, but it is still worth checking carefully because the value depends on how the full stat mix comes together.`;
 }
 
 function recommendedActionFor(verdict: Verdict, mode: RingCheckInput["mode"]) {
@@ -299,6 +368,8 @@ export function evaluateRing(input: RingCheckInput): RingCheckResult {
   score += synergyScore(stats, tagSet, highlights);
   const archetypeTags = Array.from(tagSet);
   score -= awkwardComboPenalty(stats, archetypeTags, highlights);
+  const rated = ratedStats(stats);
+  score += rollPackageAdjustment(stats, rated, archetypeTags, highlights);
 
   if (input.mode === "SCNL" && score <= 8) {
     score -= 1;
@@ -310,7 +381,7 @@ export function evaluateRing(input: RingCheckInput): RingCheckResult {
 
   const verdict = verdictFromScore(score);
   const topRated = topStats(stats);
-  const explanation = explanationFor(input, verdict, archetypeTags, highlights, topRated);
+  const explanation = explanationFor(input, verdict, archetypeTags, highlights, topRated, rated);
 
   return {
     verdict,

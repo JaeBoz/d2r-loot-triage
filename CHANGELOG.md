@@ -1,4 +1,191 @@
-# D2R Loot Triage App — Internal Changelog
+# D2R Loot Triage App - Internal Changelog
+
+[2026-04-13]
+
+Change:
+- Tuned Rare Boots triage so coherent FRW/resist and utility boot patterns separate more clearly from partial or noisy mixed pairs.
+
+Type:
+- Checker
+
+Why:
+- Rare boots validation showed some scattered utility rolls were reading a little too close to truly tradable boot combinations.
+
+Impact:
+- Strong boot shells now stand out more cleanly, while mixed or filler-heavy boots fall into more believable trade-value tiers with sharper explanations.
+
+Notes:
+- This was a focused scoring and explanation pass only and did not change the boot input model or affix-entry flow.
+
+[2026-04-13]
+
+Change:
+- Tuned Rare Ring triage so coherent premium combinations separate more clearly from partial hits and noisy mixed rings.
+
+Type:
+- Checker
+
+Why:
+- Rare ring validation showed some mixed or only partially anchored rings were reading a little too close to true trade winners.
+
+Impact:
+- Premium ring shells now stand out more cleanly, while middling mixed rings and weak filler rolls fall into more believable trade-value tiers with clearer explanations.
+
+Notes:
+- This was a focused scoring and explanation pass only and did not change the ring input model or affix-entry flow.
+
+[2026-04-13]
+
+Change:
+- Tuned Unique Checker roll hierarchy and explanation wording so strong multi-roll uniques stand out more clearly from middling and weak versions.
+
+Type:
+- Checker
+
+Why:
+- Early validation showed some recent unique additions still read a little too generically, especially when rolls were mixed or when eth-sensitive items needed more item-specific treatment.
+
+Impact:
+- Premium and clearly strong unique rolls now separate more cleanly from weak or mixed packages, and eth-sensitive uniques like Titan's Revenge and Reaper's Toll explain their trade context more believably.
+
+Notes:
+- This was a focused tuning pass only and did not expand the curated unique list or alter the checker UI flow.
+
+[2026-04-13]
+
+Change:
+- Tuned Circlet Checker weighting so partial rare circlet hits no longer sit too close to true jackpot patterns, and improved circlet explanation clarity.
+
+Type:
+- Checker
+
+Why:
+- Early validation showed standalone rare circlet lines like 20 FCR or +2 skills were reading a bit too close to finished high-end circlets.
+
+Impact:
+- Premium 2/20-style circlets still stand out clearly, while weaker partial hits now land in more believable trade-value tiers with clearer explanations.
+
+Notes:
+- This was a focused tuning pass only and did not broaden the circlet input set or change the overall checker architecture.
+
+[2026-04-13]
+
+Change:
+- Added a dedicated Circlet Checker for magic and rare circlet-family items with deterministic jackpot-pattern triage.
+
+Type:
+- Checker
+
+Why:
+- Circlets do not fit cleanly inside normal base logic because their value is driven more by affix combinations than by base-state checks.
+
+Impact:
+- Circlet, Coronet, Tiara, and Diadem drops can now be screened more cleanly for high-signal trade patterns like magic skill/FCR hits and rare 2/20-style circlets.
+
+Notes:
+- This stays curated and compact, and does not replace the temporary circlet-family support still present in the Base Checker.
+
+[2026-04-13]
+
+Change:
+- Expanded Unique Triage with more high-signal roll-sensitive uniques and added eth support where it meaningfully affects trade value.
+
+Type:
+- Checker
+
+Why:
+- The Unique Checker was too slim for real farming use, leaving several important variable-roll uniques and eth-sensitive cases unrepresented.
+
+Impact:
+- More commonly checked uniques like Nightwing's Veil, Death's Web, Eschuta's Temper, Crown of Ages, and The Reaper's Toll can now be triaged with clearer roll-based trade guidance.
+
+Notes:
+- This stays curated and focused on meaningful roll variance rather than turning the app into a full unique database.
+
+[2026-04-10]
+
+Change:
+- Improved Rare Amulet skill-affix coverage with valid +1/+2 class-skill states and curated tree-skill support.
+
+Type:
+- Checker
+
+Why:
+- Real rare amulet skill outcomes were not fully representable, which caused inaccurate input and weak trade-value reads.
+
+Impact:
+- Rare amulets can now be entered more faithfully for class and tree skill rolls, including examples like +1 Druid Skills and Paladin Offensive Auras.
+
+Notes:
+- This stays scoped to valid rare-amulet skill affixes and does not expand into broader circlet or exhaustive affix modeling.
+
+[2026-04-10]
+
+Change:
+- Added circlet-family support to the Base Checker, including Circlet and Tiara plus superior circlet base-state handling.
+
+Type:
+- Checker
+
+Why:
+- Circlet-family bases were missing from the Base Checker, so valid farming finds like 2-socket superior circlets could not be represented at all.
+
+Impact:
+- The Base Checker can now capture trade-relevant circlet base states like sockets, superior defense, and superior durability in the existing compact flow.
+
+Notes:
+- This stays focused on base-state triage only and does not expand into full magic or rare circlet identification.
+
+[2026-04-10]
+
+Change:
+- Corrected Base Checker ethereal availability flags so curated bases expose ethereal whenever that is a valid natural item state.
+
+Type:
+- Data
+
+Why:
+- Several curated bases were hiding a valid ethereal state, which made the checker feel inconsistent with real in-game drops.
+
+Impact:
+- The Base Checker now shows ethereal more consistently while still leaving value judgment about eth desirability to the evaluator.
+
+Notes:
+- Phase Blade remains non-eth in the base selector because it does not naturally spawn ethereal as a native white base.
+
+[2026-04-10]
+
+Change:
+- Corrected top-end poison small charm evaluation so 451 poison rolls are treated as premium standalone hits.
+
+Type:
+- Checker
+
+Why:
+- Top poison small charms were being undervalued and were reading too close to minor utility outcomes during farming.
+
+Impact:
+- Premium poison small charms now surface as high-end trade results with clearer explanation and action guidance.
+
+Notes:
+- Lower poison tiers remain niche and do not inherit the top-end premium treatment.
+
+[2026-04-10]
+
+Change:
+- Added missing high-impact Charm Checker affixes for poison damage and FRW utility support.
+
+Type:
+- Checker
+
+Why:
+- Missing charm affixes were causing obvious misreads on frequently checked farming drops and breaking trust in charm triage.
+
+Impact:
+- Charm evaluations now better recognize poison small charms and FRW utility charms without changing the existing rule-based structure.
+
+Notes:
+- Kept the charm dataset curated and limited to clearly trade-relevant additions.
 
 [2026-04-10]
 

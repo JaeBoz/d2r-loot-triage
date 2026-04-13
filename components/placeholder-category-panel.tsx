@@ -2,6 +2,7 @@ import { Card } from "@/components/ui";
 import { ItemCategory } from "@/lib/types";
 
 const categoryHints: Record<Exclude<ItemCategory, "Bases">, string> = {
+  Circlets: "Circlet-family items deserve their own jackpot-focused checker because magic and rare outcomes matter more than base-state logic.",
   Runes: "Starter list should rank chase runes and mode-specific liquidity without requiring price APIs.",
   Uniques: "Seed this with deterministic keep/list checks for staple uniques first, then expand by slot.",
   Charms: "Great future fit for exact roll thresholds and class-specific breakpoints.",

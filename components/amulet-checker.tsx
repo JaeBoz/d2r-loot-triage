@@ -6,12 +6,11 @@ import { Card, Pill } from "@/components/ui";
 import { affixGuidanceByItemType, getAffixesForItemType, getCoreAffixesForItemType, getOptionalAffixesForItemType } from "@/data/variance-affixes";
 import { VERDICT_STYLES } from "@/lib/constants";
 import { evaluateAmulet } from "@/lib/amulet-checker";
-import { AmuletAffixKey, AmuletClassSkill, GameMode } from "@/lib/types";
+import { AmuletAffixKey, AmuletClassSkill, AmuletSkillTier, AmuletSkillTree, GameMode } from "@/lib/types";
 
-type VisibleAmuletAffixKey = Exclude<AmuletAffixKey, "classSkills">;
+type VisibleAmuletAffixKey = Exclude<AmuletAffixKey, "allSkills" | "classSkills">;
 
 const amuletFormKeys: VisibleAmuletAffixKey[] = [
-  "allSkills",
   "fasterCastRate",
   "strength",
   "dexterity",
@@ -55,12 +54,28 @@ const amuletClassSkillOptions: AmuletClassSkill[] = [
   "Paladin Skills",
   "Sorceress Skills"
 ];
+const amuletSkillTierOptions: AmuletSkillTier[] = [1, 2];
+const amuletSkillTreeOptions: AmuletSkillTree[] = [
+  "Amazon Passive and Magic Skills",
+  "Amazon Javelin and Spear Skills",
+  "Assassin Traps",
+  "Barbarian Warcries",
+  "Druid Elemental Skills",
+  "Druid Summoning Skills",
+  "Necromancer Poison and Bone Skills",
+  "Paladin Combat Skills",
+  "Paladin Offensive Auras",
+  "Sorceress Cold Spells",
+  "Sorceress Lightning Spells"
+];
 
 const visibleCoreAffixes = amuletCoreAffixes.filter(
-  (affix): affix is (typeof amuletCoreAffixes)[number] & { key: VisibleAmuletAffixKey } => affix.key !== "classSkills"
+  (affix): affix is (typeof amuletCoreAffixes)[number] & { key: VisibleAmuletAffixKey } =>
+    affix.key !== "allSkills" && affix.key !== "classSkills"
 );
 const visibleOptionalAffixes = amuletOptionalAffixes.filter(
-  (affix): affix is (typeof amuletOptionalAffixes)[number] & { key: VisibleAmuletAffixKey } => affix.key !== "classSkills"
+  (affix): affix is (typeof amuletOptionalAffixes)[number] & { key: VisibleAmuletAffixKey } =>
+    affix.key !== "allSkills" && affix.key !== "classSkills"
 );
 
 function toOptionalNumber(value: string) {
@@ -70,16 +85,21 @@ function toOptionalNumber(value: string) {
 export function AmuletChecker({ mode }: { mode: GameMode }) {
   const [form, setForm] = useState<AmuletFormState>(emptyForm);
   const [classSkillType, setClassSkillType] = useState<AmuletClassSkill | "">("");
+  const [classSkillValue, setClassSkillValue] = useState<AmuletSkillTier>(2);
+  const [skillTreeType, setSkillTreeType] = useState<AmuletSkillTree | "">("");
+  const [skillTreeValue, setSkillTreeValue] = useState<AmuletSkillTier>(2);
   const [activeOptionalKeys, setActiveOptionalKeys] = useState<VisibleAmuletAffixKey[]>(defaultOptionalKeys);
-  const hasInput = Object.values(form).some((value) => value.trim() !== "") || classSkillType !== "";
+  const hasInput =
+    Object.values(form).some((value) => value.trim() !== "") || classSkillType !== "" || skillTreeType !== "";
 
   const result = useMemo(
     () =>
       evaluateAmulet({
         mode,
-        allSkills: toOptionalNumber(form.allSkills),
-        classSkills: classSkillType ? 2 : undefined,
+        classSkills: classSkillType ? classSkillValue : undefined,
         classSkillType: classSkillType || undefined,
+        skillTreeSkills: skillTreeType ? skillTreeValue : undefined,
+        skillTreeType: skillTreeType || undefined,
         fasterCastRate: toOptionalNumber(form.fasterCastRate),
         strength: toOptionalNumber(form.strength),
         dexterity: toOptionalNumber(form.dexterity),
@@ -99,12 +119,15 @@ export function AmuletChecker({ mode }: { mode: GameMode }) {
         replenishLife: toOptionalNumber(form.replenishLife),
         extraGold: toOptionalNumber(form.extraGold)
       }),
-    [classSkillType, form, mode]
+    [classSkillType, classSkillValue, form, mode, skillTreeType, skillTreeValue]
   );
 
   const handleReset = () => {
     setForm(emptyForm);
     setClassSkillType("");
+    setClassSkillValue(2);
+    setSkillTreeType("");
+    setSkillTreeValue(2);
     setActiveOptionalKeys(defaultOptionalKeys);
   };
 
@@ -148,21 +171,80 @@ export function AmuletChecker({ mode }: { mode: GameMode }) {
         </div>
 
         <div className="mt-6">
-          <div className="mb-4 grid gap-2 text-sm text-zinc-300 sm:max-w-sm">
-            <label htmlFor="amulet-class-skill">Class skill</label>
-            <select
-              id="amulet-class-skill"
-              className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
-              value={classSkillType}
-              onChange={(event) => setClassSkillType(event.target.value as AmuletClassSkill | "")}
-            >
-              <option value="">No class skill</option>
-              {amuletClassSkillOptions.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
+          <div className="mb-4 grid gap-4 lg:grid-cols-2">
+            <div className="grid gap-2 text-sm text-zinc-300">
+              <label htmlFor="amulet-class-skill">Class skill</label>
+              <select
+                id="amulet-class-skill"
+                className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
+                value={classSkillType}
+                onChange={(event) => {
+                  const value = event.target.value as AmuletClassSkill | "";
+                  setClassSkillType(value);
+                  if (value) {
+                    setSkillTreeType("");
+                  }
+                }}
+              >
+                <option value="">No class skill</option>
+                {amuletClassSkillOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+              {classSkillType ? (
+                <select
+                  className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
+                  value={String(classSkillValue)}
+                  onChange={(event) => setClassSkillValue(Number(event.target.value) as AmuletSkillTier)}
+                  aria-label="Class skill value"
+                >
+                  {amuletSkillTierOptions.map((option) => (
+                    <option key={option} value={option}>
+                      +{option}
+                    </option>
+                  ))}
+                </select>
+              ) : null}
+            </div>
+
+            <div className="grid gap-2 text-sm text-zinc-300">
+              <label htmlFor="amulet-skill-tree">Tree skill</label>
+              <select
+                id="amulet-skill-tree"
+                className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
+                value={skillTreeType}
+                onChange={(event) => {
+                  const value = event.target.value as AmuletSkillTree | "";
+                  setSkillTreeType(value);
+                  if (value) {
+                    setClassSkillType("");
+                  }
+                }}
+              >
+                <option value="">No tree skill</option>
+                {amuletSkillTreeOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+              {skillTreeType ? (
+                <select
+                  className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
+                  value={String(skillTreeValue)}
+                  onChange={(event) => setSkillTreeValue(Number(event.target.value) as AmuletSkillTier)}
+                  aria-label="Tree skill value"
+                >
+                  {amuletSkillTierOptions.map((option) => (
+                    <option key={option} value={option}>
+                      +{option}
+                    </option>
+                  ))}
+                </select>
+              ) : null}
+            </div>
           </div>
 
           <AffixEntryPanel

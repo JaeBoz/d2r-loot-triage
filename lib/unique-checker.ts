@@ -27,54 +27,78 @@ const verdictFromScore = (score: number): Verdict => {
   return "Premium";
 };
 
+type RollBand = "high" | "mid" | "low" | null;
+
+type RollAssessment = {
+  score: number;
+  provided: number;
+  high: number;
+  mid: number;
+  low: number;
+};
+
 function baseTier(item: UniqueItemDefinition, mode: UniqueCheckInput["mode"]) {
   return mode === "SCNL" ? item.scnlPriority : item.sclPriority;
 }
 
-function scoreDefinitionRoll(input: UniqueCheckInput, definition: UniqueRollDefinition, details: string[]) {
+function getRollBand(input: UniqueCheckInput, definition: UniqueRollDefinition): RollBand {
   const value = input[definition.key];
 
   if (typeof value !== "number") {
-    return 0;
+    return null;
   }
 
   const thresholds = definition.thresholds;
   if (!thresholds) {
-    return 0;
+    return null;
   }
-
-  const label = definition.label;
 
   if (definition.higherIsBetter) {
     if (thresholds.high !== undefined && value >= thresholds.high) {
-      details.push(`${label} rolled near the top end.`);
-      return 5;
+      return "high";
     }
 
     if (thresholds.mid !== undefined && value >= thresholds.mid) {
-      details.push(`${label} rolled in a solid tradable range.`);
-      return 2;
+      return "mid";
     }
 
     if (thresholds.low !== undefined && value < thresholds.low) {
-      details.push(`${label} is on the low side for this unique.`);
-      return -2;
+      return "low";
     }
 
-    return 0;
+    return null;
   }
 
   if (thresholds.high !== undefined && value <= thresholds.high) {
+    return "high";
+  }
+
+  if (thresholds.mid !== undefined && value <= thresholds.mid) {
+    return "mid";
+  }
+
+  if (thresholds.low !== undefined && value > thresholds.low) {
+    return "low";
+  }
+
+  return null;
+}
+
+function scoreDefinitionRoll(input: UniqueCheckInput, definition: UniqueRollDefinition, details: string[]) {
+  const label = definition.label;
+  const band = getRollBand(input, definition);
+
+  if (band === "high") {
     details.push(`${label} rolled near the top end.`);
     return 5;
   }
 
-  if (thresholds.mid !== undefined && value <= thresholds.mid) {
+  if (band === "mid") {
     details.push(`${label} rolled in a solid tradable range.`);
     return 2;
   }
 
-  if (thresholds.low !== undefined && value > thresholds.low) {
+  if (band === "low") {
     details.push(`${label} is on the low side for this unique.`);
     return -2;
   }
@@ -82,18 +106,117 @@ function scoreDefinitionRoll(input: UniqueCheckInput, definition: UniqueRollDefi
   return 0;
 }
 
-function scoreRolls(input: UniqueCheckInput, item: UniqueItemDefinition, details: string[]) {
-  let score = 0;
+function scoreRolls(input: UniqueCheckInput, item: UniqueItemDefinition, details: string[]): RollAssessment {
+  const assessment: RollAssessment = {
+    score: 0,
+    provided: 0,
+    high: 0,
+    mid: 0,
+    low: 0
+  };
 
   if (!item.rollDefinitions) {
-    return score;
+    return assessment;
   }
 
   for (const definition of item.rollDefinitions) {
-    score += scoreDefinitionRoll(input, definition, details);
+    const band = getRollBand(input, definition);
+
+    if (band) {
+      assessment.provided += 1;
+      assessment[band] += 1;
+    }
+
+    assessment.score += scoreDefinitionRoll(input, definition, details);
   }
 
-  return score;
+  return assessment;
+}
+
+function scoreRollPackage(item: UniqueItemDefinition, assessment: RollAssessment, details: string[]) {
+  if (!item.rollDefinitions || assessment.provided === 0) {
+    return 0;
+  }
+
+  if (assessment.high >= 2) {
+    details.push("Multiple key rolls landed near the top end, which materially boosts trade appeal.");
+    return 2;
+  }
+
+  if (assessment.low >= assessment.provided && assessment.provided > 0) {
+    details.push("The tracked rolls are mostly low, so this version is much less exciting than the item name alone suggests.");
+    return -2;
+  }
+
+  if (assessment.low > 0 && assessment.high === 0 && assessment.mid === 0) {
+    details.push("None of the tracked rolls landed in a strong tradable range.");
+    return -1;
+  }
+
+  if (assessment.high === 0 && assessment.mid > 0 && assessment.low > 0) {
+    details.push("This is a mixed roll package rather than a clearly strong one.");
+    return -1;
+  }
+
+  return 0;
+}
+
+function scoreEthereal(input: UniqueCheckInput, item: UniqueItemDefinition, details: string[]) {
+  if (!item.etherealRelevant || !item.ethPriority) {
+    return 0;
+  }
+
+  if (item.id === "titans-revenge") {
+    if (input.ethereal) {
+      details.push("Ethereal adds real javazon appeal here, but it is a selective premium rather than a generic huge upgrade.");
+      return 2;
+    }
+
+    details.push("Non-eth Titan's is still tradable, but it gives up the extra appeal eth rolls can have.");
+    return -1;
+  }
+
+  if (item.id === "the-reapers-toll") {
+    if (input.ethereal) {
+      details.push("Ethereal is a major value jump on Reaper's Toll because mercenary demand strongly favors it.");
+      return 4;
+    }
+
+    details.push("Non-eth Reaper's Toll is still useful, but it misses the strongest mercenary demand.");
+    return -2;
+  }
+
+  if (input.ethereal) {
+    if (item.ethPriority === "required") {
+      details.push("Ethereal is effectively required for the strongest trade appeal on this unique.");
+      return 4;
+    }
+
+    if (item.ethPriority === "high") {
+      details.push("Ethereal meaningfully boosts trade appeal on this unique.");
+      return 3;
+    }
+
+    if (item.ethPriority === "medium") {
+      details.push("Ethereal adds some extra trade appeal here.");
+      return 1;
+    }
+
+    details.push("Ethereal is valid here, but only a minor value factor.");
+    return 0;
+  }
+
+  if (item.ethPriority === "required") {
+    details.push("Non-eth versions are much less desirable for the highest-end demand.");
+    return -3;
+  }
+
+  if (item.ethPriority === "high") {
+    details.push("Non-eth versions are still usable, but they miss the premium eth appeal.");
+    return -2;
+  }
+
+  return 0;
 }
 
 function liquidityFor(item: UniqueItemDefinition, mode: UniqueCheckInput["mode"], verdict: Verdict) {
@@ -139,7 +262,10 @@ export function evaluateUnique(input: UniqueCheckInput): UniqueCheckResult {
     details.push("SCL is a bit more permissive because progression demand is broader.");
   }
 
-  score += scoreRolls(input, item, details);
+  const rollAssessment = scoreRolls(input, item, details);
+  score += rollAssessment.score;
+  score += scoreRollPackage(item, rollAssessment, details);
+  score += scoreEthereal(input, item, details);
 
   const verdict = verdictFromScore(score);
   const priority =
@@ -157,7 +283,17 @@ export function evaluateUnique(input: UniqueCheckInput): UniqueCheckResult {
   if (!item.hasVariableRolls) {
     explanation = `${item.name} is a staple unique with ${item.liquidity.toLowerCase()} trade demand. ${item.notes}`;
   } else if (item.rollDefinitions) {
-    explanation = `${item.name} has real trade value, but value depends heavily on roll quality. ${details.join(" ")}`;
+    const rollSummary =
+      rollAssessment.high >= 2
+        ? "This version has a genuinely strong roll package."
+        : rollAssessment.high >= 1 && rollAssessment.low === 0
+          ? "At least one key roll landed high enough to matter."
+          : rollAssessment.low >= rollAssessment.provided && rollAssessment.provided > 0
+            ? "The visible rolls are mostly weak for this unique."
+            : rollAssessment.mid > 0 || rollAssessment.low > 0
+              ? "This looks more middling than premium."
+              : "Roll quality is the main separator on this unique.";
+    explanation = `${item.name} has real trade value, but value depends heavily on roll quality. ${rollSummary} ${details.join(" ")}`;
   } else {
     explanation = `${item.name} is generally worth caring about, though the exact appeal depends on the visible rolls. ${details.join(" ")}`;
   }
@@ -175,6 +311,13 @@ export function evaluateUnique(input: UniqueCheckInput): UniqueCheckResult {
     recommendedAction = "Check market activity or list it. This unique has real trade value if the roll is competitive.";
   } else {
     recommendedAction = "Treat this as premium and compare it against top-end listings.";
+  }
+
+  if (item.etherealRelevant && input.ethereal && verdict !== "Ignore" && verdict !== "Low Priority") {
+    recommendedAction =
+      verdict === "Premium"
+        ? "Treat this as a premium eth unique and compare it against top-end listings."
+        : "Keep or list it. Ethereal meaningfully improves this unique's trade appeal.";
   }
 
   return {

@@ -140,6 +140,7 @@ function adjustForSockets(score: number, input: BaseCheckInput, item: BaseItem, 
 
 function adjustForAffixes(score: number, input: BaseCheckInput, item: BaseItem, details: string[]) {
   let nextScore = score;
+  const isCircletFamily = item.tags.includes("circlet");
 
   if (input.superior) {
     nextScore += 1;
@@ -153,6 +154,25 @@ function adjustForAffixes(score: number, input: BaseCheckInput, item: BaseItem, 
     } else if (input.defenseOrEd < 430) {
       nextScore -= 1;
       details.push("Low defense reduces upside unless the base is especially liquid.");
+    }
+  }
+
+  if (isCircletFamily && typeof input.defenseOrEd === "number") {
+    if (input.defenseOrEd >= 45) {
+      nextScore += 2;
+      details.push("Strong circlet-family defense makes this base more attractive for superior socketed setups.");
+    } else if (input.defenseOrEd >= 30) {
+      nextScore += 1;
+      details.push("Respectable circlet-family defense helps the base stand out.");
+    }
+  }
+
+  if (isCircletFamily && input.superior && typeof input.durabilityBonus === "number") {
+    if (input.durabilityBonus >= 10) {
+      nextScore += 1;
+      details.push("Superior durability is a real quality bump on circlet-family bases.");
+    } else if (input.durabilityBonus > 0) {
+      details.push("Superior durability is present, but the roll is not especially notable.");
     }
   }
 
@@ -174,6 +194,10 @@ function adjustForAffixes(score: number, input: BaseCheckInput, item: BaseItem, 
 function buildExplanation(item: BaseItem, input: BaseCheckInput, verdict: Verdict, details: string[]) {
   const ethLabel = input.ethereal ? "Eth " : "Non-eth ";
   const useCase = primaryUseCase(item);
+
+  if (item.tags.includes("circlet")) {
+    return `${ethLabel}${item.name} is a circlet-family base for ${input.mode}. ${details.join(" ")}`;
+  }
 
   return `${ethLabel}${item.name} is ${articleFor(useCase)} ${useCase} base for ${input.mode}. ${details.join(" ")}`;
 }

@@ -3,13 +3,14 @@ import {
   AmuletClassSkill,
   AmuletCheckInput,
   AmuletCheckResult,
+  AmuletSkillTree,
   EvaluationPriority,
   Liquidity,
   RingArchetype,
   Verdict
 } from "@/lib/types";
 
-type StatKey = keyof Omit<AmuletCheckInput, "mode" | "levelRequirement" | "classSkillType"> | "levelRequirement";
+type StatKey = keyof Omit<AmuletCheckInput, "mode" | "levelRequirement" | "classSkillType" | "skillTreeType"> | "levelRequirement";
 type NormalizedAmuletStats = Omit<AmuletCheckInput, "mode">;
 
 const casterFriendlyClassSkills: AmuletClassSkill[] = [
@@ -38,9 +39,39 @@ const classSkillTradeBias: Record<AmuletClassSkill, number> = {
   "Sorceress Skills": 1
 };
 
+const casterFriendlySkillTrees: AmuletSkillTree[] = [
+  "Assassin Traps",
+  "Barbarian Warcries",
+  "Druid Elemental Skills",
+  "Necromancer Poison and Bone Skills",
+  "Sorceress Cold Spells",
+  "Sorceress Lightning Spells"
+];
+
+const meleeFriendlySkillTrees: AmuletSkillTree[] = [
+  "Amazon Passive and Magic Skills",
+  "Amazon Javelin and Spear Skills",
+  "Paladin Combat Skills",
+  "Paladin Offensive Auras"
+];
+
+const skillTreeTradeBias: Record<AmuletSkillTree, number> = {
+  "Amazon Passive and Magic Skills": 0,
+  "Amazon Javelin and Spear Skills": 1,
+  "Assassin Traps": 1,
+  "Barbarian Warcries": 1,
+  "Druid Elemental Skills": 1,
+  "Druid Summoning Skills": 0,
+  "Necromancer Poison and Bone Skills": 1,
+  "Paladin Combat Skills": 0,
+  "Paladin Offensive Auras": 1,
+  "Sorceress Cold Spells": 1,
+  "Sorceress Lightning Spells": 1
+};
+
 const numericKeys: StatKey[] = [
-  "allSkills",
   "classSkills",
+  "skillTreeSkills",
   "fasterCastRate",
   "strength",
   "dexterity",
@@ -62,8 +93,8 @@ const numericKeys: StatKey[] = [
 ];
 
 const labelByKey: Record<StatKey, string> = {
-  allSkills: "all skills",
   classSkills: "class skills",
+  skillTreeSkills: "skill tree skills",
   fasterCastRate: "FCR",
   strength: "strength",
   dexterity: "dexterity",
@@ -115,6 +146,10 @@ function normalizeStats(input: AmuletCheckInput): NormalizedAmuletStats {
     stats.classSkillType = input.classSkillType;
   }
 
+  if (input.skillTreeType) {
+    stats.skillTreeType = input.skillTreeType;
+  }
+
   return stats;
 }
 
@@ -133,12 +168,20 @@ function isMeleeFriendlyClassSkill(classSkillType?: AmuletClassSkill) {
   return classSkillType ? meleeFriendlyClassSkills.includes(classSkillType) : false;
 }
 
+function isCasterFriendlySkillTree(skillTreeType?: AmuletSkillTree) {
+  return skillTreeType ? casterFriendlySkillTrees.includes(skillTreeType) : false;
+}
+
+function isMeleeFriendlySkillTree(skillTreeType?: AmuletSkillTree) {
+  return skillTreeType ? meleeFriendlySkillTrees.includes(skillTreeType) : false;
+}
+
 function detectArchetypes(stats: NormalizedAmuletStats): RingArchetype[] {
   const tags = new Set<RingArchetype>();
 
   if (
-    (stats.allSkills ?? 0) >= 1 ||
     ((stats.classSkills ?? 0) >= 2 && isCasterFriendlyClassSkill(stats.classSkillType)) ||
+    ((stats.skillTreeSkills ?? 0) >= 1 && isCasterFriendlySkillTree(stats.skillTreeType)) ||
     (stats.fasterCastRate ?? 0) >= 10
   ) {
     tags.add("caster");
@@ -148,7 +191,8 @@ function detectArchetypes(stats: NormalizedAmuletStats): RingArchetype[] {
     (stats.attackRating ?? 0) >= 60 ||
     (stats.minDamage ?? 0) >= 3 ||
     (stats.maxDamage ?? 0) >= 5 ||
-    ((stats.classSkills ?? 0) >= 2 && isMeleeFriendlyClassSkill(stats.classSkillType))
+    ((stats.classSkills ?? 0) >= 2 && isMeleeFriendlyClassSkill(stats.classSkillType)) ||
+    ((stats.skillTreeSkills ?? 0) >= 1 && isMeleeFriendlySkillTree(stats.skillTreeType))
   ) {
     tags.add("melee");
   }
@@ -158,7 +202,8 @@ function detectArchetypes(stats: NormalizedAmuletStats): RingArchetype[] {
   }
 
   if (
-    ((stats.allSkills ?? 0) >= 1 || ((stats.classSkills ?? 0) >= 2 && isCasterFriendlyClassSkill(stats.classSkillType))) &&
+    (((stats.classSkills ?? 0) >= 2 && isCasterFriendlyClassSkill(stats.classSkillType)) ||
+      ((stats.skillTreeSkills ?? 0) >= 1 && isCasterFriendlySkillTree(stats.skillTreeType))) &&
     (stats.fasterCastRate ?? 0) >= 10
   ) {
     tags.add("PvP");
@@ -176,12 +221,15 @@ function detectArchetypes(stats: NormalizedAmuletStats): RingArchetype[] {
 }
 
 function classSkillContextAdjustment(stats: NormalizedAmuletStats, tags: Set<RingArchetype>, highlights: string[]) {
-  if ((stats.classSkills ?? 0) < 2 || !stats.classSkillType) {
+  if ((stats.classSkills ?? 0) < 1 || !stats.classSkillType) {
     return 0;
   }
 
   let score = classSkillTradeBias[stats.classSkillType];
-  highlights.push(`${stats.classSkillType.toLowerCase()} roll`);
+  if ((stats.classSkills ?? 0) >= 2) {
+    score += 1;
+  }
+  highlights.push(`+${stats.classSkills} ${stats.classSkillType.toLowerCase()}`);
 
   const hasCasterSupport = (stats.fasterCastRate ?? 0) >= 10 || (stats.allResist ?? 0) >= 10 || (stats.mana ?? 0) >= 40;
   const hasMeleeSupport =
@@ -199,7 +247,7 @@ function classSkillContextAdjustment(stats: NormalizedAmuletStats, tags: Set<Rin
     score += 1;
   }
 
-  if (!isCasterFriendlyClassSkill(stats.classSkillType) && (stats.fasterCastRate ?? 0) >= 10 && (stats.allSkills ?? 0) === 0) {
+  if (!isCasterFriendlyClassSkill(stats.classSkillType) && (stats.fasterCastRate ?? 0) >= 10) {
     score -= 1;
     highlights.push("class skill is less attractive with a caster-style stat mix");
   }
@@ -215,17 +263,63 @@ function classSkillContextAdjustment(stats: NormalizedAmuletStats, tags: Set<Rin
   return score;
 }
 
+function skillTreeContextAdjustment(stats: NormalizedAmuletStats, tags: Set<RingArchetype>, highlights: string[]) {
+  if ((stats.skillTreeSkills ?? 0) < 1 || !stats.skillTreeType) {
+    return 0;
+  }
+
+  let score = skillTreeTradeBias[stats.skillTreeType];
+  if ((stats.skillTreeSkills ?? 0) >= 2) {
+    score += 1;
+  }
+  highlights.push(`+${stats.skillTreeSkills} ${stats.skillTreeType.toLowerCase()}`);
+
+  const hasCasterSupport = (stats.fasterCastRate ?? 0) >= 10 || (stats.allResist ?? 0) >= 10 || (stats.mana ?? 0) >= 40;
+  const hasMeleeSupport =
+    (stats.attackRating ?? 0) >= 60 ||
+    (stats.strength ?? 0) >= 10 ||
+    (stats.dexterity ?? 0) >= 10 ||
+    (stats.minDamage ?? 0) >= 3 ||
+    (stats.maxDamage ?? 0) >= 5;
+
+  if (isCasterFriendlySkillTree(stats.skillTreeType) && hasCasterSupport) {
+    score += 1;
+    tags.add("caster");
+  }
+
+  if (isMeleeFriendlySkillTree(stats.skillTreeType) && hasMeleeSupport) {
+    score += 1;
+    tags.add("melee");
+  }
+
+  if (!isCasterFriendlySkillTree(stats.skillTreeType) && (stats.fasterCastRate ?? 0) >= 10) {
+    score -= 1;
+    highlights.push("skill tree is less attractive with a caster-style stat mix");
+  }
+
+  return score;
+}
+
 function synergyScore(stats: NormalizedAmuletStats, tags: Set<RingArchetype>, highlights: string[]) {
   let score = 0;
 
   for (const synergy of amuletSynergies) {
     const blocksGenericSkillTreatment =
       synergy.id.startsWith("skills-") &&
-      (stats.allSkills ?? 0) === 0 &&
-      (stats.classSkills ?? 0) >= 2 &&
+      (stats.classSkills ?? 0) === 0 &&
+      (stats.skillTreeSkills ?? 0) === 0;
+
+    const blocksClassSkillTreatment =
+      synergy.id.startsWith("skills-") &&
+      (stats.classSkills ?? 0) >= 1 &&
       !isCasterFriendlyClassSkill(stats.classSkillType);
 
-    if (blocksGenericSkillTreatment) {
+    const blocksTreeSkillTreatment =
+      synergy.id.startsWith("skills-") &&
+      (stats.skillTreeSkills ?? 0) >= 1 &&
+      !isCasterFriendlySkillTree(stats.skillTreeType);
+
+    if (blocksGenericSkillTreatment || blocksClassSkillTreatment || blocksTreeSkillTreatment) {
       continue;
     }
 
@@ -244,8 +338,8 @@ function awkwardComboPenalty(stats: NormalizedAmuletStats, tags: RingArchetype[]
   const numericStatCount = numericKeys.filter((key) => typeof stats[key] === "number" && (stats[key] as number) > 0).length;
 
   const hasCasterAnchor =
-    (stats.allSkills ?? 0) >= 1 ||
-    ((stats.classSkills ?? 0) >= 2 && isCasterFriendlyClassSkill(stats.classSkillType)) ||
+    ((stats.classSkills ?? 0) >= 1 && isCasterFriendlyClassSkill(stats.classSkillType)) ||
+    ((stats.skillTreeSkills ?? 0) >= 1 && isCasterFriendlySkillTree(stats.skillTreeType)) ||
     (stats.fasterCastRate ?? 0) >= 10;
   const hasMeleeAnchor = (stats.attackRating ?? 0) >= 60 || (stats.minDamage ?? 0) >= 3 || (stats.maxDamage ?? 0) >= 5;
   const scattered =
@@ -260,7 +354,11 @@ function awkwardComboPenalty(stats: NormalizedAmuletStats, tags: RingArchetype[]
     highlights.push("scattered utility without a clear build anchor");
   }
 
-  if (tags.includes("caster") && tags.includes("melee") && !((stats.allSkills ?? 0) >= 1 || (stats.classSkills ?? 0) >= 2)) {
+  if (
+    tags.includes("caster") &&
+    tags.includes("melee") &&
+    !((stats.classSkills ?? 0) >= 1 || (stats.skillTreeSkills ?? 0) >= 1)
+  ) {
     penalty += 1;
   }
 
@@ -281,12 +379,16 @@ function labelForStat(key: StatKey, input: AmuletCheckInput) {
     return input.classSkillType.toLowerCase();
   }
 
+  if (key === "skillTreeSkills" && input.skillTreeType) {
+    return input.skillTreeType.toLowerCase();
+  }
+
   return labelByKey[key];
 }
 
 function topStats(stats: NormalizedAmuletStats) {
   return Object.entries(stats)
-    .filter(([key]) => key !== "levelRequirement" && key !== "classSkillType")
+    .filter(([key]) => key !== "levelRequirement" && key !== "classSkillType" && key !== "skillTreeType")
     .map(([key, value]) => ({
       key: key as StatKey,
       value: value as number,
@@ -304,6 +406,7 @@ function liquidityFrom(score: number, mode: AmuletCheckInput["mode"], tags: Ring
   if (tags.includes("MF")) liquidityScore -= 1;
   if (tags.includes("niche") && !tags.includes("caster") && !tags.includes("melee")) liquidityScore -= 1;
   if (input.classSkillType) liquidityScore += classSkillTradeBias[input.classSkillType];
+  if (input.skillTreeType) liquidityScore += skillTreeTradeBias[input.skillTreeType];
 
   if (liquidityScore <= 6) return "Low";
   if (liquidityScore <= 13) return "Medium";
@@ -375,12 +478,13 @@ export function evaluateAmulet(input: AmuletCheckInput): AmuletCheckResult {
   const highlights: string[] = [];
 
   for (const [key, value] of Object.entries(stats)) {
-    if (key === "levelRequirement" || key === "classSkillType") continue;
+    if (key === "levelRequirement" || key === "classSkillType" || key === "skillTreeType") continue;
     score += statScoreFor(key as keyof NormalizedAmuletStats, value as number);
   }
 
   score += synergyScore(stats, tagSet, highlights);
   score += classSkillContextAdjustment(stats, tagSet, highlights);
+  score += skillTreeContextAdjustment(stats, tagSet, highlights);
   const archetypeTags = Array.from(tagSet);
   score -= awkwardComboPenalty(stats, archetypeTags, highlights);
 
@@ -390,8 +494,8 @@ export function evaluateAmulet(input: AmuletCheckInput): AmuletCheckResult {
 
   if (
     input.mode === "SCL" &&
-    ((stats.allSkills ?? 0) >= 1 ||
-      ((stats.classSkills ?? 0) >= 2 && isCasterFriendlyClassSkill(stats.classSkillType)) ||
+    (((stats.classSkills ?? 0) >= 1 && isCasterFriendlyClassSkill(stats.classSkillType)) ||
+      ((stats.skillTreeSkills ?? 0) >= 1 && isCasterFriendlySkillTree(stats.skillTreeType)) ||
       (stats.fasterCastRate ?? 0) >= 10)
   ) {
     score += 1;

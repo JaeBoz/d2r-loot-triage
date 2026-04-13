@@ -80,6 +80,7 @@ function priorityFromCharm(
     matchedPatternIds.includes("gc-skiller") ||
     matchedPatternIds.includes("gc-skiller-life") ||
     matchedPatternIds.includes("gc-skiller-fhr") ||
+    matchedPatternIds.includes("sc-poison-top") ||
     matchedPatternIds.includes("sc-life-res") ||
     (matchedPatternIds.includes("sc-mf") && (input.magicFind ?? 0) >= 7)
   ) {
@@ -112,6 +113,10 @@ function charmLiquidityFrom(
     return "High";
   }
 
+  if (matchedPatternIds.includes("sc-poison-top")) {
+    return "High";
+  }
+
   if (matchedPatternIds.includes("sc-mf") && (input.magicFind ?? 0) >= 7) {
     return "High";
   }
@@ -132,6 +137,10 @@ function isPlainSkiller(matchedPatternIds: string[]) {
   );
 }
 
+function isTopPoisonSmallCharm(input: CharmCheckInput, matchedPatternIds: string[]) {
+  return input.size === "Small Charm" && matchedPatternIds.includes("sc-poison-top");
+}
+
 function baseTags(input: CharmCheckInput): Set<RingArchetype> {
   const tags = new Set<RingArchetype>();
   if (input.skill?.trim()) {
@@ -139,6 +148,9 @@ function baseTags(input: CharmCheckInput): Set<RingArchetype> {
   }
   if ((input.magicFind ?? 0) > 0) {
     tags.add("MF");
+  }
+  if ((input.poisonDamage ?? 0) >= 100) {
+    tags.add("niche");
   }
   if ((input.maxDamage ?? 0) > 0 || (input.attackRating ?? 0) > 0) {
     tags.add("melee");
@@ -155,6 +167,10 @@ function baseTags(input: CharmCheckInput): Set<RingArchetype> {
   }
   if ((input.fasterHitRecovery ?? 0) > 0) {
     tags.add("PvP");
+  }
+  if ((input.fasterRunWalk ?? 0) > 0) {
+    tags.add("PvP");
+    tags.add("PvM");
   }
   if (tags.size === 0) {
     tags.add("niche");
@@ -173,7 +189,9 @@ function awkwardPenalty(input: CharmCheckInput, matchedPatterns: string[]) {
     input.lightningResist,
     input.coldResist,
     input.poisonResist,
+    input.fasterRunWalk,
     input.fasterHitRecovery,
+    input.poisonDamage,
     input.maxDamage,
     input.attackRating
   ].filter((value) => typeof value === "number" && value > 0).length;
@@ -197,7 +215,9 @@ function topSummary(input: CharmCheckInput) {
   if (input.allResist) parts.push(`+${input.allResist} all resist`);
   if (!input.allResist && input.fireResist) parts.push(`+${input.fireResist} fire resist`);
   if (input.lightningResist) parts.push(`+${input.lightningResist} lightning resist`);
+  if (input.fasterRunWalk) parts.push(`+${input.fasterRunWalk}% FRW`);
   if (input.fasterHitRecovery) parts.push(`+${input.fasterHitRecovery}% FHR`);
+  if (input.poisonDamage) parts.push(`${input.poisonDamage} poison damage`);
   if (input.maxDamage && input.attackRating) parts.push(`+${input.maxDamage} max damage / +${input.attackRating} AR`);
   return parts.slice(0, 3).join(", ");
 }
@@ -213,7 +233,9 @@ function toCharmPatternInput(input: CharmCheckInput): CharmPatternInput {
     lightningResist: input.lightningResist,
     coldResist: input.coldResist,
     poisonResist: input.poisonResist,
+    fasterRunWalk: input.fasterRunWalk,
     fasterHitRecovery: input.fasterHitRecovery,
+    poisonDamage: input.poisonDamage,
     skill: input.skill,
     maxDamage: input.maxDamage,
     attackRating: input.attackRating
@@ -232,7 +254,9 @@ export function evaluateCharm(input: CharmCheckInput): CharmCheckResult {
       input.lightningResist,
       input.coldResist,
       input.poisonResist,
+      input.fasterRunWalk,
       input.fasterHitRecovery,
+      input.poisonDamage,
       input.maxDamage,
       input.attackRating
     ].some((value) => typeof value === "number" && value > 0);
@@ -317,7 +341,9 @@ export function evaluateCharm(input: CharmCheckInput): CharmCheckResult {
 
   let explanation = "";
   if (matchedPatterns.length > 0) {
-    if (input.size === "Grand Charm" && isPlainSkiller(matchedPatternIds)) {
+    if (isTopPoisonSmallCharm(input, matchedPatternIds)) {
+      explanation = `${summary} is a top poison small charm roll. High-end poison small charms have strong standalone trade relevance and should be treated as premium hits.`;
+    } else if (input.size === "Grand Charm" && isPlainSkiller(matchedPatternIds)) {
       explanation = `${summary} fits a valuable ${input.size.toLowerCase()} pattern. Plain skiller grand charms are often tradable, though value depends on the skill tree and current demand.`;
     } else if (input.size === "Grand Charm" && input.skill?.trim()) {
       explanation = `${summary} fits a valuable ${input.size.toLowerCase()} pattern. Skill grand charms have strong demand, especially when backed by ${patternText}.`;
@@ -337,6 +363,8 @@ export function evaluateCharm(input: CharmCheckInput): CharmCheckResult {
     recommendedAction = "Only keep it if you want a stopgap charm or have extra stash room.";
   } else if (verdict === "Check") {
     recommendedAction = "Check it a bit more carefully before tossing it. The pattern is at least somewhat usable.";
+  } else if (isTopPoisonSmallCharm(input, matchedPatternIds)) {
+    recommendedAction = "Treat this as a premium poison small charm and prepare to list or mule it.";
   } else if (isPlainSkiller(matchedPatternIds)) {
     recommendedAction = "Check market activity or list it if the skill tree is useful. Plain skillers are commonly tradable.";
   } else if (verdict === "Keep") {

@@ -11,6 +11,7 @@ export type Liquidity = "Low" | "Medium" | "High";
 
 export type ItemCategory =
   | "Bases"
+  | "Circlets"
   | "Runes"
   | "Uniques"
   | "Charms"
@@ -33,6 +34,39 @@ export type AmuletClassSkill =
   | "Necromancer Skills"
   | "Paladin Skills"
   | "Sorceress Skills";
+export type AmuletSkillTier = 1 | 2;
+export type AmuletSkillTree =
+  | "Amazon Passive and Magic Skills"
+  | "Amazon Javelin and Spear Skills"
+  | "Assassin Traps"
+  | "Barbarian Warcries"
+  | "Druid Elemental Skills"
+  | "Druid Summoning Skills"
+  | "Necromancer Poison and Bone Skills"
+  | "Paladin Combat Skills"
+  | "Paladin Offensive Auras"
+  | "Sorceress Cold Spells"
+  | "Sorceress Lightning Spells";
+export type CircletFamily = "Circlet" | "Coronet" | "Tiara" | "Diadem";
+export type CircletQuality = "Magic" | "Rare";
+export type CircletSkillMode = "none" | "class" | "tree";
+export type CircletSkillTier = 1 | 2 | 3;
+export type CircletClassSkill =
+  | "Amazon Skills"
+  | "Assassin Skills"
+  | "Barbarian Skills"
+  | "Druid Skills"
+  | "Necromancer Skills"
+  | "Paladin Skills"
+  | "Sorceress Skills";
+export type CircletSkillTree =
+  | "Amazon Passive and Magic Skills"
+  | "Assassin Traps"
+  | "Druid Elemental Skills"
+  | "Necromancer Poison and Bone Skills"
+  | "Paladin Combat Skills"
+  | "Sorceress Cold Spells"
+  | "Sorceress Lightning Spells";
 
 export interface BaseItem {
   id: string;
@@ -58,6 +92,7 @@ export interface BaseCheckInput {
   ethereal: boolean;
   superior: boolean;
   defenseOrEd?: number;
+  durabilityBonus?: number;
   allRes?: number;
 }
 
@@ -116,9 +151,10 @@ export type RingAffixKey =
 
 export interface AmuletCheckInput {
   mode: GameMode;
-  allSkills?: number;
   classSkills?: number;
   classSkillType?: AmuletClassSkill;
+  skillTreeSkills?: number;
+  skillTreeType?: AmuletSkillTree;
   fasterCastRate?: number;
   strength?: number;
   dexterity?: number;
@@ -167,7 +203,9 @@ export interface CharmCheckInput {
   lightningResist?: number;
   coldResist?: number;
   poisonResist?: number;
+  fasterRunWalk?: number;
   fasterHitRecovery?: number;
+  poisonDamage?: number;
   skill?: string;
   maxDamage?: number;
   attackRating?: number;
@@ -184,7 +222,9 @@ export type CharmPatternInput = Pick<
   | "lightningResist"
   | "coldResist"
   | "poisonResist"
+  | "fasterRunWalk"
   | "fasterHitRecovery"
+  | "poisonDamage"
   | "skill"
   | "maxDamage"
   | "attackRating"
@@ -304,10 +344,16 @@ export type UniqueRollField =
   | "attackRating"
   | "allResist"
   | "minusEnemyLightningResist"
+  | "minusEnemyPoisonResist"
   | "lightningSkillDamage"
+  | "fireSkillDamage"
   | "enhancedDamage"
   | "strength"
   | "lifeLeech"
+  | "damageReduction"
+  | "sockets"
+  | "poisonAndBoneSkills"
+  | "energy"
   | "coldSkillDamage"
   | "allSkills";
 
@@ -344,6 +390,8 @@ export interface UniqueItemDefinition {
   category: string;
   hasVariableRolls: boolean;
   keyRollFields: UniqueRollField[];
+  etherealRelevant?: boolean;
+  ethPriority?: EthPriority;
   scnlPriority: BasePriorityTier;
   sclPriority: BasePriorityTier;
   liquidity: Liquidity;
@@ -357,16 +405,23 @@ export interface UniqueItemDefinition {
 export interface UniqueCheckInput {
   mode: GameMode;
   itemId: string;
+  ethereal?: boolean;
   magicFind?: number;
   damage?: number;
   dexterity?: number;
   attackRating?: number;
   allResist?: number;
   minusEnemyLightningResist?: number;
+  minusEnemyPoisonResist?: number;
   lightningSkillDamage?: number;
+  fireSkillDamage?: number;
   enhancedDamage?: number;
   strength?: number;
   lifeLeech?: number;
+  damageReduction?: number;
+  sockets?: number;
+  poisonAndBoneSkills?: number;
+  energy?: number;
   coldSkillDamage?: number;
   allSkills?: number;
 }
@@ -378,4 +433,34 @@ export interface UniqueCheckResult {
   explanation: string;
   recommendedAction: string;
   qualityScore: number;
+}
+
+export interface CircletCheckInput {
+  mode: GameMode;
+  family: CircletFamily;
+  quality: CircletQuality;
+  skillMode: CircletSkillMode;
+  classSkillType?: CircletClassSkill;
+  classSkillValue?: 1 | 2;
+  skillTreeType?: CircletSkillTree;
+  skillTreeValue?: 1 | 2 | 3;
+  fasterCastRate?: number;
+  fasterRunWalk?: number;
+  sockets?: number;
+  strength?: number;
+  dexterity?: number;
+  life?: number;
+  allResist?: number;
+  fireResist?: number;
+  lightningResist?: number;
+}
+
+export interface CircletCheckResult {
+  verdict: Verdict;
+  priority: EvaluationPriority;
+  liquidity: Liquidity;
+  explanation: string;
+  recommendedAction: string;
+  qualityScore: number;
+  archetypeTags: RingArchetype[];
 }
