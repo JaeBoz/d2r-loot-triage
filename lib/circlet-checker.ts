@@ -51,13 +51,15 @@ function scoreMagicCirclet(input: CircletCheckInput, details: string[], tags: Se
   let score = 0;
 
   if (input.skillMode === "tree" && input.skillTreeType && input.skillTreeValue) {
+    const skillTreeType = input.skillTreeType;
     score += input.skillTreeValue === 3 ? 10 : input.skillTreeValue === 2 ? 5 : 1;
-    score += circletTreeSkillDemand[input.skillTreeType];
+    score += circletTreeSkillDemand[skillTreeType];
     tags.add("caster");
     details.push(`${getSkillLabel(input)} is one of the classic magic circlet value patterns.`);
   } else if (input.skillMode === "class" && input.classSkillType && input.classSkillValue) {
+    const classSkillType = input.classSkillType;
     score += input.classSkillValue === 2 ? 7 : 3;
-    score += circletClassSkillDemand[input.classSkillType];
+    score += circletClassSkillDemand[classSkillType];
     tags.add("caster");
     details.push(`${getSkillLabel(input)} gives it real magic circlet upside.`);
   }
@@ -131,8 +133,11 @@ function scoreRareCirclet(input: CircletCheckInput, details: string[], tags: Set
     (input.dexterity ?? 0) >= 15;
 
   if (hasClassSkills) {
+    const classSkillType = input.classSkillType;
     score += input.classSkillValue === 2 ? 7 : 2;
-    score += circletClassSkillDemand[input.classSkillType];
+    if (classSkillType) {
+      score += circletClassSkillDemand[classSkillType];
+    }
     tags.add("caster");
     details.push(`${getSkillLabel(input)} is the main rare circlet value driver.`);
   }
