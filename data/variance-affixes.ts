@@ -10,7 +10,6 @@ import {
 
 export const varianceAffixes: VarianceAffixDefinition[] = [
   { key: "fasterCastRate", label: "FCR", itemTypes: ["ring", "amulet"], valueType: "number", impactTier: "core", evaluatorWeight: 5 },
-  { key: "allSkills", label: "All Skills", itemTypes: ["amulet"], valueType: "number", impactTier: "core", evaluatorWeight: 6 },
   { key: "classSkills", label: "Class Skills", itemTypes: ["amulet"], valueType: "number", impactTier: "core", evaluatorWeight: 6 },
   { key: "strength", label: "Strength", itemTypes: ["ring", "amulet", "jewel", "boots"], valueType: "number", impactTier: "secondary", evaluatorWeight: 2 },
   { key: "dexterity", label: "Dexterity", itemTypes: ["ring", "amulet", "jewel", "boots"], valueType: "number", impactTier: "secondary", evaluatorWeight: 2 },
@@ -41,7 +40,7 @@ export const varianceAffixes: VarianceAffixDefinition[] = [
 
 export const coreAffixKeysByItemType: Record<VarianceItemType, VarianceAffixKey[]> = {
   ring: ["fasterCastRate", "strength", "dexterity", "attackRating", "allResist", "lightningResist", "magicFind", "lifeLeech", "manaLeech"],
-  amulet: ["allSkills", "classSkills", "fasterCastRate", "strength", "life", "allResist", "lightningResist", "magicFind"],
+  amulet: ["classSkills", "fasterCastRate", "strength", "life", "allResist", "lightningResist", "magicFind"],
   jewel: ["increasedAttackSpeed", "enhancedDamage", "attackRating", "allResist", "lightningResist", "requirementsReduction"],
   boots: ["fasterRunWalk", "fasterHitRecovery", "magicFind", "lightningResist", "fireResist", "coldResist"]
 };
