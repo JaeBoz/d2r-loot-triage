@@ -30,12 +30,22 @@ export function AppShell() {
               <Pill>{mode}</Pill>
               <Pill>Resurrected</Pill>
             </div>
-            <Link
-              className="rounded-xl border border-border bg-black/20 px-4 py-2 text-sm font-semibold text-zinc-200 transition hover:border-zinc-500 hover:text-white"
-              href="/reference"
-            >
-              Open Guides
-            </Link>
+            <div className="flex flex-wrap items-center gap-2">
+              <a
+                className="rounded-xl border border-border bg-black/20 px-4 py-2 text-sm font-semibold text-zinc-200 transition hover:border-zinc-500 hover:text-white"
+                href="https://forms.gle/TPfgMKG5xeRPPZqw6"
+                target="_blank"
+                rel="noreferrer noopener"
+              >
+                Report Evaluation Issue
+              </a>
+              <Link
+                className="rounded-xl border border-border bg-black/20 px-4 py-2 text-sm font-semibold text-zinc-200 transition hover:border-zinc-500 hover:text-white"
+                href="/reference"
+              >
+                Open Guides
+              </Link>
+            </div>
           </div>
 
           <div className="mt-4 flex flex-wrap gap-3">

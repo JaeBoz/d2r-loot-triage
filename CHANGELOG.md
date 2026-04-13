@@ -3,6 +3,23 @@
 [2026-04-13]
 
 Change:
+- Added a global feedback link in the app shell so public testers can quickly report evaluation issues.
+
+Type:
+- UX
+
+Why:
+- Live public testing needs an easy way for players to report mis-evaluations or representation gaps without interrupting the checker flow.
+
+Impact:
+- Testers can now open the structured Google feedback form in a new tab from anywhere in the app.
+
+Notes:
+- This stays intentionally lightweight and does not add any in-app feedback system or backend handling.
+
+[2026-04-13]
+
+Change:
 - Tuned Rare Boots triage so coherent FRW/resist and utility boot patterns separate more clearly from partial or noisy mixed pairs.
 
 Type:
