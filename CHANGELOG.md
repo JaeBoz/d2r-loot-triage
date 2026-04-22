@@ -1,5 +1,39 @@
 # D2R Loot Triage App - Internal Changelog
 
+[2026-04-21]
+
+Change:
+- Tuned Base Checker explanations and unsocketed eth merc-base handling so newly added runeword and mercenary bases read more believably.
+
+Type:
+- Checker
+
+Why:
+- Validation showed the new high-signal bases were present, but mercenary polearms and similar bases still needed clearer trade context and slightly better handling for unsocketed eth drops.
+
+Impact:
+- Newly added bases like Colossus Voulge, Great Poleaxe, Flail, and Balrog Skin now produce more specific runeword-focused explanations, and unsocketed eth merc bases stand out more clearly.
+
+Notes:
+- This was a focused tuning pass only and did not expand the curated base dataset further.
+
+[2026-04-21]
+
+Change:
+- Expanded the curated Base Checker dataset with additional high-signal polearms, armor, and utility weapon bases like Colossus Voulge, Great Poleaxe, Balrog Skin, Long Sword, and Flail.
+
+Type:
+- Data
+
+Why:
+- Recent farming validation showed several common mercenary and runeword bases were still missing from the quick triage list.
+
+Impact:
+- Players can now represent more of the practical bases that come up during real farming without turning the Base Checker into a full item catalog.
+
+Notes:
+- This stays intentionally curated and focused on trade-relevant bases rather than exhaustive base coverage.
+
 [2026-04-13]
 
 Change:

@@ -68,6 +68,22 @@ const modePriority = (item: BaseItem, mode: GameMode) => (mode === "SCNL" ? item
 
 const primaryUseCase = (item: BaseItem) => item.runewordUseCases[0] ?? "runeword";
 
+function useCaseLabel(item: BaseItem) {
+  if (item.tags.includes("merc")) {
+    return `mercenary ${primaryUseCase(item)} base`;
+  }
+
+  if (item.tags.includes("caster") || item.tags.includes("spirit")) {
+    return `caster ${primaryUseCase(item)} base`;
+  }
+
+  if (item.category === "Armor") {
+    return `${primaryUseCase(item)} armor base`;
+  }
+
+  return `${primaryUseCase(item)} base`;
+}
+
 function adjustForEtherealState(score: number, input: BaseCheckInput, item: BaseItem, details: string[]) {
   if (input.ethereal) {
     if (!item.etherealAllowed) {
@@ -124,7 +140,14 @@ function adjustForSockets(score: number, input: BaseCheckInput, item: BaseItem, 
 
   if (input.sockets === 0) {
     details.push(`Unsocketed ${item.name} can still matter because buyers may want to control the final ${formatSockets(item.desiredSockets)} outcome.`);
-    return score + (item.socketSensitive ? 1 : 0);
+    let nextScore = score + (item.socketSensitive ? 1 : 0);
+
+    if (item.tags.includes("merc") && input.ethereal) {
+      details.push("Unsocketed eth mercenary bases stay attractive because buyers often want to control the final socket outcome.");
+      nextScore += 1;
+    }
+
+    return nextScore;
   }
 
   if (item.desiredSockets.includes(input.sockets)) {
@@ -193,13 +216,13 @@ function adjustForAffixes(score: number, input: BaseCheckInput, item: BaseItem, 
 
 function buildExplanation(item: BaseItem, input: BaseCheckInput, verdict: Verdict, details: string[]) {
   const ethLabel = input.ethereal ? "Eth " : "Non-eth ";
-  const useCase = primaryUseCase(item);
+  const useCase = useCaseLabel(item);
 
   if (item.tags.includes("circlet")) {
     return `${ethLabel}${item.name} is a circlet-family base for ${input.mode}. ${details.join(" ")}`;
   }
 
-  return `${ethLabel}${item.name} is ${articleFor(useCase)} ${useCase} base for ${input.mode}. ${details.join(" ")}`;
+  return `${ethLabel}${item.name} is ${articleFor(useCase)} ${useCase} for ${input.mode}. ${details.join(" ")}`;
 }
 
 function buildRecommendedAction(item: BaseItem, verdict: Verdict) {
