@@ -3,6 +3,23 @@
 [2026-04-24]
 
 Change:
+- Calibrated Unique Checker Trade Value floors so high-demand staple uniques can show High Trade Value without being promoted to Premium by default.
+
+Type:
+- Checker
+
+Why:
+- Testing showed staple uniques like Arachnid Mesh had helpful demand wording but could still display a visible Trade Value tier that felt too weak.
+
+Impact:
+- Staple uniques now provide a clearer keep/check signal while roll-sensitive uniques still depend on their actual roll quality.
+
+Notes:
+- This does not add prices, new datasets, or a visible liquidity system; Premium remains reserved for chase/top-roll outcomes.
+
+[2026-04-24]
+
+Change:
 - Improved demand-aware wording in Base and Unique Checker explanations and recommended actions without adding prices or changing Trade Value tiers.
 
 Type:

@@ -27,6 +27,26 @@ const verdictFromScore = (score: number): Verdict => {
   return "Premium";
 };
 
+const uniqueVerdictRank: Record<Verdict, number> = {
+  Ignore: 0,
+  "Low Priority": 1,
+  Check: 2,
+  "Check sockets": 2,
+  Keep: 3,
+  List: 4,
+  Premium: 5
+};
+
+function applyDemandFloor(item: UniqueItemDefinition, verdict: Verdict) {
+  const isHighDemandStaple = !item.hasVariableRolls && item.liquidity === "High" && item.scnlPriority !== "low";
+
+  if (isHighDemandStaple && uniqueVerdictRank[verdict] < uniqueVerdictRank.List) {
+    return "List" as Verdict;
+  }
+
+  return verdict;
+}
+
 type RollBand = "high" | "mid" | "low" | null;
 
 type RollAssessment = {
@@ -283,7 +303,7 @@ export function evaluateUnique(input: UniqueCheckInput): UniqueCheckResult {
   score += scoreRollPackage(item, rollAssessment, details);
   score += scoreEthereal(input, item, details);
 
-  const verdict = verdictFromScore(score);
+  const verdict = applyDemandFloor(item, verdictFromScore(score));
   const priority =
     verdict === "Ignore"
       ? "Trash"
