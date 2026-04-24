@@ -79,11 +79,12 @@ function scoreMagicCirclet(input: CircletCheckInput, details: string[], tags: Se
   }
 
   if ((input.sockets ?? 0) >= 2) {
-    score += 6;
+    score += (input.sockets ?? 0) >= 3 ? 8 : 6;
     tags.add("niche");
-    details.push(`${input.sockets} sockets create real utility or PvP interest on magic circlets.`);
+    details.push(`${input.sockets} sockets are a major value driver for magic circlet utility and PvP setups.`);
   } else if ((input.sockets ?? 0) === 1) {
     score += 2;
+    details.push("A single socket adds some utility, but multi-socket magic circlets are the real target.");
   }
 
   if ((input.allResist ?? 0) >= 20) {
@@ -105,7 +106,7 @@ function scoreMagicCirclet(input: CircletCheckInput, details: string[], tags: Se
   }
 
   if ((input.sockets ?? 0) >= 2 && (input.fasterRunWalk ?? 0) >= 30) {
-    score += 5;
+    score += (input.sockets ?? 0) >= 3 ? 6 : 5;
     details.push("Socket utility paired with FRW is a real specialty magic circlet hit.");
   }
 
@@ -131,10 +132,11 @@ function scoreRareCirclet(input: CircletCheckInput, details: string[], tags: Set
     (input.life ?? 0) >= 30 ||
     (input.strength ?? 0) >= 15 ||
     (input.dexterity ?? 0) >= 15;
+  const hasSocketUtility = (input.sockets ?? 0) > 0;
 
   if (hasClassSkills) {
     const classSkillType = input.classSkillType;
-    score += input.classSkillValue === 2 ? 7 : 2;
+    score += input.classSkillValue === 2 ? 5 : 2;
     if (classSkillType) {
       score += circletClassSkillDemand[classSkillType];
     }
@@ -197,9 +199,9 @@ function scoreRareCirclet(input: CircletCheckInput, details: string[], tags: Set
     details.push("FRW with solid resist support gives it real utility appeal.");
   }
 
-  if (!has20Fcr && (input.classSkillValue ?? 0) >= 2 && !hasStrongSupport) {
-    score -= 1;
-    details.push("Without FCR or strong secondary support, this is more of a partial rare circlet hit than a finished jackpot.");
+  if (!has20Fcr && (input.classSkillValue ?? 0) >= 2 && !hasStrongSupport && !hasSocketUtility) {
+    score -= 3;
+    details.push("+2 skills alone is only a partial rare circlet hit without FCR, socket utility, or strong secondary support.");
   }
 
   if (has20Fcr && !hasClassSkills && !hasStrongSupport && (input.fasterRunWalk ?? 0) < 30) {
@@ -208,8 +210,8 @@ function scoreRareCirclet(input: CircletCheckInput, details: string[], tags: Set
   }
 
   if ((input.sockets ?? 0) > 0) {
-    score -= 3;
-    details.push("Socket rolls are not part of rare circlet drops, so socket input is treated conservatively.");
+    score += 2;
+    details.push("A socketed rare circlet gains real finished-item utility, especially when paired with skills, FCR, or strong support.");
   }
 
   return score;

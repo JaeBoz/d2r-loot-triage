@@ -16,7 +16,7 @@ export const varianceAffixes: VarianceAffixDefinition[] = [
   { key: "life", label: "Life", itemTypes: ["ring", "amulet", "jewel", "boots"], valueType: "number", impactTier: "secondary", evaluatorWeight: 2 },
   { key: "mana", label: "Mana", itemTypes: ["ring", "amulet"], valueType: "number", impactTier: "secondary", evaluatorWeight: 2 },
   { key: "attackRating", label: "Attack Rating", itemTypes: ["ring", "amulet", "jewel"], valueType: "number", impactTier: "secondary", evaluatorWeight: 2 },
-  { key: "allResist", label: "All Resist", itemTypes: ["ring", "amulet", "jewel", "boots"], valueType: "number", impactTier: "core", evaluatorWeight: 4 },
+  { key: "allResist", label: "All Resist", itemTypes: ["ring", "amulet", "jewel"], valueType: "number", impactTier: "core", evaluatorWeight: 4 },
   { key: "fireResist", label: "Fire Resist", itemTypes: ["ring", "amulet", "jewel", "boots"], valueType: "number", impactTier: "secondary", evaluatorWeight: 2 },
   { key: "lightningResist", label: "Lightning Resist", itemTypes: ["ring", "amulet", "jewel", "boots"], valueType: "number", impactTier: "core", evaluatorWeight: 3 },
   { key: "coldResist", label: "Cold Resist", itemTypes: ["ring", "amulet", "jewel", "boots"], valueType: "number", impactTier: "secondary", evaluatorWeight: 2 },

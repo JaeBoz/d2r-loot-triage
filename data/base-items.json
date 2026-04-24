@@ -64,6 +64,38 @@
     "runewordUseCases": ["Spirit"]
   },
   {
+    "id": "long-sword",
+    "name": "Long Sword",
+    "category": "Weapon",
+    "validSockets": [0, 1, 2, 3, 4],
+    "desiredSockets": [4],
+    "socketSensitive": true,
+    "etherealAllowed": true,
+    "ethPriority": "low",
+    "scnlPriority": "low",
+    "sclPriority": "medium",
+    "levelBand": "Normal/Nightmare",
+    "tags": ["spirit", "caster", "early-runeword"],
+    "notes": "Another realistic low-to-mid game Spirit sword base. Less liquid than crystal swords, but still a familiar farming pickup when 4 sockets line up.",
+    "runewordUseCases": ["Spirit"]
+  },
+  {
+    "id": "flail",
+    "name": "Flail",
+    "category": "Weapon",
+    "validSockets": [0, 1, 2, 3, 4, 5],
+    "desiredSockets": [4, 5],
+    "socketSensitive": true,
+    "etherealAllowed": true,
+    "ethPriority": "low",
+    "scnlPriority": "medium",
+    "sclPriority": "high",
+    "levelBand": "Nightmare/Hell",
+    "tags": ["runeword", "caster", "cta", "hoto"],
+    "notes": "Practical one-handed caster and support runeword base. The main quick check is whether the sockets line up for common 4os or 5os weapon plans.",
+    "runewordUseCases": ["Heart of the Oak", "Call to Arms"]
+  },
+  {
     "id": "colossus-blade",
     "name": "Colossus Blade",
     "category": "Weapon",
@@ -78,6 +110,22 @@
     "tags": ["runeword", "melee", "botd", "death"],
     "notes": "Mostly a specialty two-handed melee base. Worth more when the final runeword plan is obvious.",
     "runewordUseCases": ["Breath of the Dying", "Death"]
+  },
+  {
+    "id": "colossus-voulge",
+    "name": "Colossus Voulge",
+    "category": "Polearm",
+    "validSockets": [0, 1, 2, 3, 4],
+    "desiredSockets": [4],
+    "socketSensitive": true,
+    "etherealAllowed": true,
+    "ethPriority": "high",
+    "scnlPriority": "medium",
+    "sclPriority": "high",
+    "levelBand": "Hell",
+    "tags": ["merc", "insight", "infinity", "cv"],
+    "notes": "Classic mercenary polearm base with very recognizable demand for 4-socket setups, especially when ethereal.",
+    "runewordUseCases": ["Insight", "Infinity"]
   },
   {
     "id": "thresher",
@@ -126,6 +174,22 @@
     "tags": ["merc", "insight", "obedience"],
     "notes": "Strong mercenary base that is a step below the premium polearms, but still worth checking when ethereal.",
     "runewordUseCases": ["Insight", "Obedience", "Infinity"]
+  },
+  {
+    "id": "great-poleaxe",
+    "name": "Great Poleaxe",
+    "category": "Polearm",
+    "validSockets": [0, 1, 2, 3, 4, 5, 6],
+    "desiredSockets": [4, 5],
+    "socketSensitive": true,
+    "etherealAllowed": true,
+    "ethPriority": "high",
+    "scnlPriority": "low",
+    "sclPriority": "medium",
+    "levelBand": "Hell",
+    "tags": ["merc", "insight", "obedience", "polearm"],
+    "notes": "A heavier elite mercenary polearm that still matters when the buyer wants an ethereal high-damage runeword base.",
+    "runewordUseCases": ["Insight", "Obedience", "Pride"]
   },
   {
     "id": "mancatcher",
@@ -238,6 +302,22 @@
     "tags": ["runeword", "fortitude"],
     "notes": "Occasionally kept as a medium-strength armor base, but it is less liquid than the lighter favorites.",
     "runewordUseCases": ["Fortitude", "Chains of Honor"]
+  },
+  {
+    "id": "balrog-skin",
+    "name": "Balrog Skin",
+    "category": "Armor",
+    "validSockets": [0, 1, 2, 3, 4],
+    "desiredSockets": [3, 4],
+    "socketSensitive": true,
+    "etherealAllowed": true,
+    "ethPriority": "medium",
+    "scnlPriority": "low",
+    "sclPriority": "medium",
+    "levelBand": "Hell",
+    "tags": ["runeword", "fortitude", "armor"],
+    "notes": "Recognizable medium-strength elite armor base that still comes up for Fortitude-style plans, especially when unsocketed or ethereal.",
+    "runewordUseCases": ["Fortitude", "Chains of Honor", "Stone"]
   },
   {
     "id": "sacred-armor",

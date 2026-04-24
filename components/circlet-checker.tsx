@@ -79,7 +79,9 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
 
   const familyData = useMemo(() => circletFamilies.find((entry) => entry.family === family), [family]);
   const availableSocketOptions =
-    quality === "Magic" ? Array.from({ length: familyData?.maxMagicSockets ?? 0 }, (_, index) => String(index + 1)) : [];
+    quality === "Magic"
+      ? Array.from({ length: familyData?.maxMagicSockets ?? 0 }, (_, index) => String(index + 1))
+      : ["1"];
   const hasInput =
     quality !== "Rare" ||
     family !== "Diadem" ||
@@ -101,7 +103,7 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
         skillTreeValue: skillMode === "tree" ? skillTreeValue : undefined,
         fasterCastRate: toOptionalNumber(form.fasterCastRate),
         fasterRunWalk: toOptionalNumber(form.fasterRunWalk),
-        sockets: quality === "Magic" && skillMode === "none" ? toOptionalNumber(form.sockets) : undefined,
+        sockets: quality === "Magic" || quality === "Rare" ? toOptionalNumber(form.sockets) : undefined,
         strength: toOptionalNumber(form.strength),
         dexterity: toOptionalNumber(form.dexterity),
         life: toOptionalNumber(form.life),
@@ -136,7 +138,7 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
 
   const handleSkillModeChange = (nextMode: CircletSkillMode) => {
     setSkillMode(nextMode);
-    if (nextMode !== "none") {
+    if (quality === "Magic" && nextMode !== "none") {
       setForm((current) => ({
         ...current,
         sockets: ""
@@ -307,7 +309,7 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
             />
           </label>
 
-          {quality === "Magic" && skillMode === "none" ? (
+          {quality === "Rare" || (quality === "Magic" && skillMode === "none") ? (
             <label className="grid gap-2 text-sm text-zinc-300">
               Sockets
               <select

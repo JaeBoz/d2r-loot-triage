@@ -1,5 +1,22 @@
 # D2R Loot Triage App - Internal Changelog
 
+[2026-04-24]
+
+Change:
+- Removed invalid all-resist representation from Rare Boots triage and tuned Circlet triage so socket utility is valued more clearly while rare +2-skills-alone outcomes are treated as partial hits.
+
+Type:
+- Checker
+
+Why:
+- Live tester feedback showed rare boots could represent an impossible direct all-resist affix, and circlet outputs were too generous for unsupported +2 rare circlets while not clearly rewarding socket utility.
+
+Impact:
+- Rare boots now stay closer to valid in-game affixes, and circlet results better separate socket-supported trade pieces from weaker skill-only rolls during fast farming checks.
+
+Notes:
+- This was a focused correction pass only and did not expand affix coverage or change checker architecture.
+
 [2026-04-21]
 
 Change:

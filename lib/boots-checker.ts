@@ -18,7 +18,6 @@ const numericKeys: StatKey[] = [
   "lightningResist",
   "coldResist",
   "poisonResist",
-  "allResist",
   "strength",
   "dexterity",
   "life",
@@ -70,7 +69,7 @@ function detectArchetypes(stats: NormalizedBootsStats): RingArchetype[] {
     tags.add("MF");
   }
 
-  if ((stats.fasterRunWalk ?? 0) >= 30 || (stats.lightningResist ?? 0) >= 25 || (stats.allResist ?? 0) >= 8) {
+  if ((stats.fasterRunWalk ?? 0) >= 30 || (stats.lightningResist ?? 0) >= 25) {
     tags.add("PvM");
   }
 
@@ -135,10 +134,10 @@ function rollPackageAdjustment(stats: NormalizedBootsStats, rated: RatedStat[], 
   ).length;
   const hasRealFrwAnchor = (stats.fasterRunWalk ?? 0) >= 30;
   const hasRealMfAnchor = (stats.magicFind ?? 0) >= 20;
-  const hasRealResAnchor = (stats.allResist ?? 0) >= 8 || resistHits >= 2;
+  const hasRealResAnchor = resistHits >= 2;
   const hasPremiumShell =
     hasRealFrwAnchor &&
-    (hasRealResAnchor || hasRealMfAnchor || ((stats.fasterHitRecovery ?? 0) >= 10 && ((stats.allResist ?? 0) >= 8 || (stats.lightningResist ?? 0) >= 25)));
+    (hasRealResAnchor || hasRealMfAnchor || ((stats.fasterHitRecovery ?? 0) >= 10 && (stats.lightningResist ?? 0) >= 25));
 
   if (hasPremiumShell) {
     highlights.push("coherent premium boot shell");
@@ -189,8 +188,7 @@ function summaryFor(stats: NormalizedBootsStats) {
   if (stats.fasterRunWalk) parts.push(`${stats.fasterRunWalk} FRW`);
   if (stats.fasterHitRecovery) parts.push(`${stats.fasterHitRecovery} FHR`);
   if (stats.magicFind) parts.push(`${stats.magicFind} MF`);
-  if (stats.allResist) parts.push(`${stats.allResist} all resist`);
-  if (!stats.allResist && stats.lightningResist) parts.push(`${stats.lightningResist} lightning resist`);
+  if (stats.lightningResist) parts.push(`${stats.lightningResist} lightning resist`);
   if (stats.strength) parts.push(`${stats.strength} strength`);
   return parts.slice(0, 3).join(", ");
 }

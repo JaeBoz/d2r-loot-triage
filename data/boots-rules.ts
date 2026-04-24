@@ -17,7 +17,6 @@ export const bootsStatWeights: BootsWeightRule[] = [
   { key: "fasterRunWalk", thresholds: [{ min: 30, score: 5 }, { min: 20, score: 3 }, { min: 10, score: 1 }] },
   { key: "fasterHitRecovery", thresholds: [{ min: 20, score: 4 }, { min: 10, score: 2 }] },
   { key: "magicFind", thresholds: [{ min: 25, score: 4 }, { min: 15, score: 2 }, { min: 8, score: 1 }] },
-  { key: "allResist", thresholds: [{ min: 12, score: 4 }, { min: 8, score: 2 }] },
   { key: "lightningResist", thresholds: [{ min: 35, score: 4 }, { min: 25, score: 3 }, { min: 15, score: 1 }] },
   { key: "fireResist", thresholds: [{ min: 35, score: 3 }, { min: 25, score: 2 }, { min: 15, score: 1 }] },
   { key: "coldResist", thresholds: [{ min: 35, score: 2 }, { min: 25, score: 1 }] },
@@ -44,8 +43,7 @@ export const bootsSynergies: BootsSynergyRule[] = [
     archetypes: ["PvM"],
     check: (stats) =>
       (stats.fasterRunWalk ?? 0) >= 30 &&
-      ((stats.allResist ?? 0) >= 8 ||
-        [stats.fireResist ?? 0, stats.lightningResist ?? 0, stats.coldResist ?? 0].filter((value) => value >= 25).length >= 2)
+      [stats.fireResist ?? 0, stats.lightningResist ?? 0, stats.coldResist ?? 0].filter((value) => value >= 25).length >= 2
   },
   {
     id: "frw-mf",
@@ -62,7 +60,7 @@ export const bootsSynergies: BootsSynergyRule[] = [
     check: (stats) =>
       (stats.fasterRunWalk ?? 0) >= 30 &&
       (stats.fasterHitRecovery ?? 0) >= 10 &&
-      ((stats.allResist ?? 0) >= 8 || (stats.lightningResist ?? 0) >= 25)
+      (stats.lightningResist ?? 0) >= 25
   },
   {
     id: "stat-res",
@@ -71,7 +69,7 @@ export const bootsSynergies: BootsSynergyRule[] = [
     archetypes: ["PvM", "niche"],
     check: (stats) =>
       ((stats.strength ?? 0) >= 10 || (stats.dexterity ?? 0) >= 10) &&
-      ((stats.allResist ?? 0) >= 8 || (stats.lightningResist ?? 0) >= 25 || (stats.fireResist ?? 0) >= 25)
+      ((stats.lightningResist ?? 0) >= 25 || (stats.fireResist ?? 0) >= 25)
   }
 ];
 

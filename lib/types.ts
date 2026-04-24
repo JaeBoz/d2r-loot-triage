@@ -306,7 +306,6 @@ export interface BootsCheckInput {
   lightningResist?: number;
   coldResist?: number;
   poisonResist?: number;
-  allResist?: number;
   strength?: number;
   dexterity?: number;
   life?: number;
