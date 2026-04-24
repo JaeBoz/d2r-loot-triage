@@ -3,6 +3,57 @@
 [2026-04-24]
 
 Change:
+- Added a lightweight mechanics-affix validation scaffold for boots, amulets, circlets, and charms so invalid affix keys are filtered or ignored before evaluation.
+
+Type:
+- Data
+
+Why:
+- Tester feedback showed hand-curated checker inputs can drift into invalid or incomplete affix states without a small mechanics source of truth.
+
+Impact:
+- Future checker updates have a safer guardrail against issues like invalid boot all-resist support while preserving the curated triage workflow.
+
+Notes:
+- This is a minimal validation layer only; it does not add a full affix database, new UI, or pricing logic.
+
+[2026-04-24]
+
+Change:
+- Calibrated Unique Checker messaging and curated notes to separate steady liquidity from raw roll-based trade value, with Arachnid Mesh treated as a high-liquidity caster staple without forcing premium value.
+
+Type:
+- Checker
+
+Why:
+- Live calibration showed some staple uniques needed clearer demand context so saturated but liquid items did not read the same as premium roll-sensitive outcomes.
+
+Impact:
+- Unique results now explain when an item is easy to move because of build demand versus when its actual trade value depends on top-end rolls.
+
+Notes:
+- This remains deterministic trade-value triage only; no exact prices or live market data were added.
+
+[2026-04-24]
+
+Change:
+- Added secondary mana and mana-regeneration support to Rare Boots triage and adjusted top poison small charm recognition to include 450+ poison damage.
+
+Type:
+- Checker
+
+Why:
+- Manual smoke testing showed caster utility boots could not represent valid mana-related affixes, and near-top poison small charms were still being undervalued.
+
+Impact:
+- Boots can now capture Nova/caster-style mana utility without reintroducing invalid all-resist boots, and high poison small charms read as stronger standalone trade outcomes.
+
+Notes:
+- Mana utility remains intentionally secondary and should not inflate weak boots without a real supporting boot pattern.
+
+[2026-04-24]
+
+Change:
 - Removed invalid all-resist representation from Rare Boots triage and tuned Circlet triage so socket utility is valued more clearly while rare +2-skills-alone outcomes are treated as partial hits.
 
 Type:

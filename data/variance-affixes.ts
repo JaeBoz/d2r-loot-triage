@@ -7,6 +7,7 @@ import {
   VarianceAffixKey,
   VarianceItemType
 } from "@/lib/types";
+import { filterValidMechanicsAffixes } from "@/data/mechanics-affixes";
 
 export const varianceAffixes: VarianceAffixDefinition[] = [
   { key: "fasterCastRate", label: "FCR", itemTypes: ["ring", "amulet"], valueType: "number", impactTier: "core", evaluatorWeight: 5 },
@@ -14,7 +15,7 @@ export const varianceAffixes: VarianceAffixDefinition[] = [
   { key: "strength", label: "Strength", itemTypes: ["ring", "amulet", "jewel", "boots"], valueType: "number", impactTier: "secondary", evaluatorWeight: 2 },
   { key: "dexterity", label: "Dexterity", itemTypes: ["ring", "amulet", "jewel", "boots"], valueType: "number", impactTier: "secondary", evaluatorWeight: 2 },
   { key: "life", label: "Life", itemTypes: ["ring", "amulet", "jewel", "boots"], valueType: "number", impactTier: "secondary", evaluatorWeight: 2 },
-  { key: "mana", label: "Mana", itemTypes: ["ring", "amulet"], valueType: "number", impactTier: "secondary", evaluatorWeight: 2 },
+  { key: "mana", label: "Mana", itemTypes: ["ring", "amulet", "boots"], valueType: "number", impactTier: "secondary", evaluatorWeight: 2 },
   { key: "attackRating", label: "Attack Rating", itemTypes: ["ring", "amulet", "jewel"], valueType: "number", impactTier: "secondary", evaluatorWeight: 2 },
   { key: "allResist", label: "All Resist", itemTypes: ["ring", "amulet", "jewel"], valueType: "number", impactTier: "core", evaluatorWeight: 4 },
   { key: "fireResist", label: "Fire Resist", itemTypes: ["ring", "amulet", "jewel", "boots"], valueType: "number", impactTier: "secondary", evaluatorWeight: 2 },
@@ -33,6 +34,7 @@ export const varianceAffixes: VarianceAffixDefinition[] = [
   { key: "strengthRequirement", label: "Strength Req", itemTypes: ["jewel"], valueType: "number", impactTier: "low-impact", evaluatorWeight: 0 },
   { key: "fasterRunWalk", label: "FRW", itemTypes: ["boots"], valueType: "number", impactTier: "core", evaluatorWeight: 5 },
   { key: "fasterHitRecovery", label: "FHR", itemTypes: ["boots"], valueType: "number", impactTier: "core", evaluatorWeight: 4 },
+  { key: "manaRegen", label: "Mana Regeneration", itemTypes: ["boots"], valueType: "number", impactTier: "secondary", evaluatorWeight: 1 },
   { key: "energy", label: "Energy", itemTypes: ["ring", "amulet", "jewel"], valueType: "number", impactTier: "low-impact", evaluatorWeight: 0 },
   { key: "replenishLife", label: "Replenish Life", itemTypes: ["ring", "amulet", "boots"], valueType: "number", impactTier: "low-impact", evaluatorWeight: 0 },
   { key: "extraGold", label: "Extra Gold", itemTypes: ["ring", "amulet", "jewel", "boots"], valueType: "number", impactTier: "low-impact", evaluatorWeight: 0 }
@@ -53,7 +55,10 @@ export const affixGuidanceByItemType: Record<VarianceItemType, string> = {
 };
 
 export function getAffixesForItemType(itemType: VarianceItemType) {
-  return varianceAffixes.filter((affix) => affix.itemTypes.includes(itemType));
+  return filterValidMechanicsAffixes(
+    itemType,
+    varianceAffixes.filter((affix) => affix.itemTypes.includes(itemType))
+  );
 }
 
 export function getCoreAffixesForItemType(itemType: VarianceItemType) {

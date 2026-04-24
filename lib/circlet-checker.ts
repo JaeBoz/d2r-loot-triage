@@ -7,11 +7,36 @@ import {
   Verdict
 } from "@/lib/types";
 import { circletClassSkillDemand, circletFamilies, circletQualityNotes, circletTreeSkillDemand } from "@/data/circlet-rules";
+import { sanitizeMechanicsInput } from "@/data/mechanics-affixes";
 
 const familyMap = new Map(circletFamilies.map((entry) => [entry.family, entry]));
 
 function getFamilyData(family: CircletFamily) {
   return familyMap.get(family) ?? circletFamilies[0];
+}
+
+function normalizeCircletInput(input: CircletCheckInput): CircletCheckInput {
+  const stats = sanitizeMechanicsInput("circlet", input);
+
+  return {
+    mode: input.mode,
+    family: input.family,
+    quality: input.quality,
+    skillMode: input.skillMode,
+    classSkillType: stats.classSkillType,
+    classSkillValue: stats.classSkillValue,
+    skillTreeType: stats.skillTreeType,
+    skillTreeValue: stats.skillTreeValue,
+    fasterCastRate: stats.fasterCastRate,
+    fasterRunWalk: stats.fasterRunWalk,
+    sockets: stats.sockets,
+    strength: stats.strength,
+    dexterity: stats.dexterity,
+    life: stats.life,
+    allResist: stats.allResist,
+    fireResist: stats.fireResist,
+    lightningResist: stats.lightningResist
+  };
 }
 
 function verdictFromScore(score: number): Verdict {
@@ -239,7 +264,8 @@ function liquidityFor(input: CircletCheckInput, verdict: Verdict, tags: Set<Ring
   return verdict === "List" || verdict === "Premium" ? "High" : "Medium";
 }
 
-export function evaluateCirclet(input: CircletCheckInput): CircletCheckResult {
+export function evaluateCirclet(rawInput: CircletCheckInput): CircletCheckResult {
+  const input = normalizeCircletInput(rawInput);
   const family = getFamilyData(input.family);
   const details: string[] = [family.demandNote, circletQualityNotes[input.quality]];
   const tags = new Set<RingArchetype>();

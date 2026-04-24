@@ -1,4 +1,5 @@
 import { charmModeAdjustments, charmPatterns } from "@/data/charm-rules";
+import { sanitizeMechanicsInput } from "@/data/mechanics-affixes";
 import { CharmCheckInput, CharmCheckResult, CharmPatternInput, Liquidity, RingArchetype, Verdict } from "@/lib/types";
 
 const verdictRank: Record<Verdict, number> = {
@@ -223,22 +224,24 @@ function topSummary(input: CharmCheckInput) {
 }
 
 function toCharmPatternInput(input: CharmCheckInput): CharmPatternInput {
+  const stats = sanitizeMechanicsInput("charm", input);
+
   return {
     size: input.size,
-    life: input.life,
-    mana: input.mana,
-    magicFind: input.magicFind,
-    allResist: input.allResist,
-    fireResist: input.fireResist,
-    lightningResist: input.lightningResist,
-    coldResist: input.coldResist,
-    poisonResist: input.poisonResist,
-    fasterRunWalk: input.fasterRunWalk,
-    fasterHitRecovery: input.fasterHitRecovery,
-    poisonDamage: input.poisonDamage,
+    life: stats.life,
+    mana: stats.mana,
+    magicFind: stats.magicFind,
+    allResist: stats.allResist,
+    fireResist: stats.fireResist,
+    lightningResist: stats.lightningResist,
+    coldResist: stats.coldResist,
+    poisonResist: stats.poisonResist,
+    fasterRunWalk: stats.fasterRunWalk,
+    fasterHitRecovery: stats.fasterHitRecovery,
+    poisonDamage: stats.poisonDamage,
     skill: input.skill,
-    maxDamage: input.maxDamage,
-    attackRating: input.attackRating
+    maxDamage: stats.maxDamage,
+    attackRating: stats.attackRating
   };
 }
 

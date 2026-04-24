@@ -1,4 +1,5 @@
 import { bootsModeAdjustments, bootsStatWeights, bootsSynergies } from "@/data/boots-rules";
+import { isValidMechanicsAffix } from "@/data/mechanics-affixes";
 import { BootsCheckInput, BootsCheckResult, EvaluationPriority, Liquidity, RingArchetype, Verdict } from "@/lib/types";
 
 type StatKey = keyof Omit<BootsCheckInput, "mode">;
@@ -21,6 +22,8 @@ const numericKeys: StatKey[] = [
   "strength",
   "dexterity",
   "life",
+  "mana",
+  "manaRegen",
   "extraGold",
   "replenishLife"
 ];
@@ -46,6 +49,10 @@ function normalizeStats(input: BootsCheckInput): NormalizedBootsStats {
   const stats: NormalizedBootsStats = {};
 
   for (const key of numericKeys) {
+    if (!isValidMechanicsAffix("boots", key)) {
+      continue;
+    }
+
     const value = input[key];
     if (typeof value === "number" && !Number.isNaN(value) && value > 0) {
       stats[key] = value;
@@ -79,6 +86,10 @@ function detectArchetypes(stats: NormalizedBootsStats): RingArchetype[] {
 
   if ((stats.strength ?? 0) >= 10 || (stats.dexterity ?? 0) >= 10) {
     tags.add("niche");
+  }
+
+  if ((stats.mana ?? 0) >= 20 || (stats.manaRegen ?? 0) >= 10) {
+    tags.add("caster");
   }
 
   if (tags.size === 0) {
@@ -189,6 +200,8 @@ function summaryFor(stats: NormalizedBootsStats) {
   if (stats.fasterHitRecovery) parts.push(`${stats.fasterHitRecovery} FHR`);
   if (stats.magicFind) parts.push(`${stats.magicFind} MF`);
   if (stats.lightningResist) parts.push(`${stats.lightningResist} lightning resist`);
+  if (stats.mana) parts.push(`${stats.mana} mana`);
+  if (stats.manaRegen) parts.push(`${stats.manaRegen}% mana regen`);
   if (stats.strength) parts.push(`${stats.strength} strength`);
   return parts.slice(0, 3).join(", ");
 }

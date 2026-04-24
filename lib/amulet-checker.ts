@@ -1,4 +1,5 @@
 import { amuletModeAdjustments, amuletStatWeights, amuletSynergies } from "@/data/amulet-rules";
+import { isValidMechanicsAffix } from "@/data/mechanics-affixes";
 import {
   AmuletClassSkill,
   AmuletCheckInput,
@@ -136,6 +137,10 @@ function normalizeStats(input: AmuletCheckInput): NormalizedAmuletStats {
   const stats: NormalizedAmuletStats = {};
 
   for (const key of numericKeys) {
+    if (!isValidMechanicsAffix("amulet", key)) {
+      continue;
+    }
+
     const value = input[key];
     if (typeof value === "number" && !Number.isNaN(value) && value > 0) {
       stats[key] = value;
