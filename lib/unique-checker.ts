@@ -235,6 +235,22 @@ function liquidityFor(item: UniqueItemDefinition, mode: UniqueCheckInput["mode"]
   return item.liquidity;
 }
 
+function demandContext(item: UniqueItemDefinition, verdict: Verdict) {
+  if (item.liquidity === "High" && verdict !== "Premium") {
+    return "Liquidity is stronger than the raw trade-value tier because this unique has steady build demand.";
+  }
+
+  if (item.liquidity === "Medium") {
+    return "Liquidity is more selective, so roll quality or the right buyer matters more than the item name alone.";
+  }
+
+  if (item.liquidity === "Low") {
+    return "Liquidity is limited, so this is mostly a self-use or niche-market check.";
+  }
+
+  return "";
+}
+
 export function evaluateUnique(input: UniqueCheckInput): UniqueCheckResult {
   const item = uniqueItemMap.get(input.itemId);
 
@@ -280,8 +296,9 @@ export function evaluateUnique(input: UniqueCheckInput): UniqueCheckResult {
             : "Premium Trade Value";
 
   let explanation = "";
+  const demandNote = demandContext(item, verdict);
   if (!item.hasVariableRolls) {
-    explanation = `${item.name} is a staple unique with ${item.liquidity.toLowerCase()} trade demand. ${item.notes}`;
+    explanation = `${item.name} is a staple unique with ${item.liquidity.toLowerCase()} liquidity. ${item.notes} ${demandNote}`.trim();
   } else if (item.rollDefinitions) {
     const rollSummary =
       rollAssessment.high >= 2
@@ -293,9 +310,9 @@ export function evaluateUnique(input: UniqueCheckInput): UniqueCheckResult {
             : rollAssessment.mid > 0 || rollAssessment.low > 0
               ? "This looks more middling than premium."
               : "Roll quality is the main separator on this unique.";
-    explanation = `${item.name} has real trade value, but value depends heavily on roll quality. ${rollSummary} ${details.join(" ")}`;
+    explanation = `${item.name} has real trade value, but value depends heavily on roll quality. ${rollSummary} ${details.join(" ")} ${demandNote}`.trim();
   } else {
-    explanation = `${item.name} is generally worth caring about, though the exact appeal depends on the visible rolls. ${details.join(" ")}`;
+    explanation = `${item.name} is generally worth caring about, though the exact appeal depends on the visible rolls. ${details.join(" ")} ${demandNote}`.trim();
   }
 
   let recommendedAction = "";
@@ -306,9 +323,15 @@ export function evaluateUnique(input: UniqueCheckInput): UniqueCheckResult {
   } else if (verdict === "Check") {
     recommendedAction = "Check the roll more carefully before deciding whether to stash or trade it.";
   } else if (verdict === "Keep") {
-    recommendedAction = "Keep it. This is at least a useful or selectively tradable unique.";
+    recommendedAction =
+      item.liquidity === "High"
+        ? "Keep it and check market activity. Demand is steady even if this is not a premium-roll outcome."
+        : "Keep it. This is at least a useful or selectively tradable unique.";
   } else if (verdict === "List") {
-    recommendedAction = "Check market activity or list it. This unique has real trade value if the roll is competitive.";
+    recommendedAction =
+      item.liquidity === "High"
+        ? "Check market activity or list it. Liquidity is strong, but roll quality still controls how exciting it is."
+        : "Check market activity or list it. This unique has real trade value if the roll is competitive.";
   } else {
     recommendedAction = "Treat this as premium and compare it against top-end listings.";
   }

@@ -19,6 +19,8 @@ const bootsFormKeys: BootsAffixKey[] = [
   "strength",
   "dexterity",
   "life",
+  "mana",
+  "manaRegen",
   "extraGold",
   "replenishLife"
 ];
@@ -57,6 +59,8 @@ export function BootsChecker({ mode }: { mode: GameMode }) {
         strength: toOptionalNumber(form.strength),
         dexterity: toOptionalNumber(form.dexterity),
         life: toOptionalNumber(form.life),
+        mana: toOptionalNumber(form.mana),
+        manaRegen: toOptionalNumber(form.manaRegen),
         extraGold: toOptionalNumber(form.extraGold),
         replenishLife: toOptionalNumber(form.replenishLife)
       }),

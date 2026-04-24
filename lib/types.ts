@@ -309,6 +309,8 @@ export interface BootsCheckInput {
   strength?: number;
   dexterity?: number;
   life?: number;
+  mana?: number;
+  manaRegen?: number;
   extraGold?: number;
   replenishLife?: number;
 }

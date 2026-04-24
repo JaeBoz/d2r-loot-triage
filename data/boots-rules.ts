@@ -24,6 +24,8 @@ export const bootsStatWeights: BootsWeightRule[] = [
   { key: "strength", thresholds: [{ min: 15, score: 2 }, { min: 8, score: 1 }] },
   { key: "dexterity", thresholds: [{ min: 15, score: 2 }, { min: 8, score: 1 }] },
   { key: "life", thresholds: [{ min: 30, score: 2 }, { min: 15, score: 1 }] },
+  { key: "mana", thresholds: [{ min: 30, score: 1 }, { min: 15, score: 1 }] },
+  { key: "manaRegen", thresholds: [{ min: 10, score: 1 }] },
   { key: "extraGold", thresholds: [{ min: 60, score: 0 }] },
   { key: "replenishLife", thresholds: [{ min: 5, score: 0 }] }
 ];
@@ -70,6 +72,16 @@ export const bootsSynergies: BootsSynergyRule[] = [
     check: (stats) =>
       ((stats.strength ?? 0) >= 10 || (stats.dexterity ?? 0) >= 10) &&
       ((stats.lightningResist ?? 0) >= 25 || (stats.fireResist ?? 0) >= 25)
+  },
+  {
+    id: "caster-mana-utility",
+    label: "caster mana utility",
+    score: 1,
+    archetypes: ["caster", "PvM"],
+    check: (stats) =>
+      (stats.fasterRunWalk ?? 0) >= 20 &&
+      ((stats.mana ?? 0) >= 20 || (stats.manaRegen ?? 0) >= 10) &&
+      ((stats.lightningResist ?? 0) >= 25 || (stats.fireResist ?? 0) >= 25 || (stats.coldResist ?? 0) >= 25)
   }
 ];
 

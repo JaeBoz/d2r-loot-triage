@@ -4,7 +4,12 @@ export type MechanicsAffixItemType = VarianceItemType | "charm" | "circlet";
 export type AmuletMechanicsAffixKey = keyof Omit<AmuletCheckInput, "mode">;
 export type CharmMechanicsAffixKey = keyof Omit<CharmCheckInput, "mode" | "size" | "skill">;
 export type CircletMechanicsAffixKey = keyof Omit<CircletCheckInput, "mode" | "family" | "quality" | "skillMode">;
-export type MechanicsAffixKey = VarianceAffixKey | AmuletMechanicsAffixKey | CharmMechanicsAffixKey | CircletMechanicsAffixKey;
+export type MechanicsAffixKey =
+  | VarianceAffixKey
+  | AmuletMechanicsAffixKey
+  | CharmMechanicsAffixKey
+  | CircletMechanicsAffixKey
+  | "manaRegen";
 
 const validAffixKeysByItemType: Partial<Record<MechanicsAffixItemType, readonly MechanicsAffixKey[]>> = {
   boots: [

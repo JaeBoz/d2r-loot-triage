@@ -160,7 +160,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "medium",
     sclPriority: "high",
     liquidity: "Medium",
-    notes: "Still worth checking for javazon demand, especially in SCL. Enhanced damage matters most, with life leech as a lighter secondary roll, and ethereal versions carry extra appeal.",
+    notes: "Still worth checking for javazon demand, especially in SCL. Enhanced damage matters most, life leech is a lighter secondary roll, and ethereal versions carry extra but more selective trade appeal.",
     source: "Arreat Summit / diablo2.io",
     rollDefinitions: [
       {
@@ -310,7 +310,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "high",
     sclPriority: "high",
     liquidity: "Medium",
-    notes: "Cold sorceress staple helm. Cold skill damage is the main trade driver, while dexterity is a useful secondary tiebreaker.",
+    notes: "Cold-damage staple with selective but real demand. Cold skill damage is the main trade driver, while dexterity is a useful secondary tiebreaker.",
     source: "Arreat Summit / diablo2.io",
     rollDefinitions: [
       {
@@ -352,7 +352,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "premium",
     sclPriority: "premium",
     liquidity: "High",
-    notes: "Premium poison necromancer wand. -Enemy poison resist drives value heavily, with Poison and Bone Skills as a meaningful secondary roll.",
+    notes: "Premium poison necromancer wand with high-end but build-specific demand. -Enemy poison resist drives value heavily, with Poison and Bone Skills as a meaningful secondary roll.",
     source: "Arreat Summit / diablo2.io",
     rollDefinitions: [
       {
@@ -394,7 +394,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "medium",
     sclPriority: "high",
     liquidity: "Medium",
-    notes: "Caster orb with roll-sensitive demand. Sorceress skills matter first, while the elemental skill damage lines separate middling drops from strong ones.",
+    notes: "Caster orb with selective, roll-sensitive demand. Sorceress skills matter first, and only strong elemental skill damage rolls usually separate it from more common caster options.",
     source: "Arreat Summit / diablo2.io",
     rollDefinitions: [
       {
@@ -446,7 +446,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "high",
     sclPriority: "high",
     liquidity: "High",
-    notes: "Staple mercenary polearm. Enhanced damage matters most, and ethereal versions are a major trade-value upgrade.",
+    notes: "Staple mercenary polearm with steady demand. Enhanced damage matters most, and ethereal versions are a major trade-value upgrade for mercenary use.",
     source: "Arreat Summit / diablo2.io",
     rollDefinitions: [
       {
@@ -487,7 +487,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "high",
     sclPriority: "high",
     liquidity: "Medium",
-    notes: "High-end defensive helm. Sockets are a major separator, with damage reduction and all resist deciding how strong the piece really is.",
+    notes: "High-end defensive helm with selective PvP/endgame demand. Two sockets are a major separator, with damage reduction and all resist deciding how strong the piece really is.",
     source: "Arreat Summit / diablo2.io",
     rollDefinitions: [
       {
@@ -535,9 +535,9 @@ export const uniqueItems: UniqueItemDefinition[] = [
     hasVariableRolls: false,
     keyRollFields: [],
     scnlPriority: "high",
-    sclPriority: "high",
+    sclPriority: "premium",
     liquidity: "High",
-    notes: "Staple caster belt with very consistent trade demand. The MVP triage treats it as a staple rather than a roll-sensitive unique.",
+    notes: "Staple caster belt with very consistent liquidity. Market saturation can keep ordinary copies below premium trade value, but caster demand makes it worth checking or listing.",
     source: "Arreat Summit / diablo2.io",
     sources: {
       baselineSource: {

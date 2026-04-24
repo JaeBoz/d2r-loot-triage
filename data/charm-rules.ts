@@ -81,7 +81,7 @@ export const charmPatterns: CharmPatternRule[] = [
     score: 5,
     verdictFloor: "Check",
     archetypes: ["PvP", "niche"],
-    check: (stats) => (Number(stats.poisonDamage) || 0) >= 100 && (Number(stats.poisonDamage) || 0) < 451
+    check: (stats) => (Number(stats.poisonDamage) || 0) >= 100 && (Number(stats.poisonDamage) || 0) < 450
   },
   {
     id: "sc-poison-top",
@@ -90,7 +90,7 @@ export const charmPatterns: CharmPatternRule[] = [
     score: 17,
     verdictFloor: "Premium",
     archetypes: ["PvP", "niche"],
-    check: (stats) => (Number(stats.poisonDamage) || 0) >= 451
+    check: (stats) => (Number(stats.poisonDamage) || 0) >= 450
   },
   {
     id: "sc-max-ar-life",
