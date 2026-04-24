@@ -3,6 +3,57 @@
 [2026-04-24]
 
 Change:
+- Improved demand-aware wording in Base and Unique Checker explanations and recommended actions without adding prices or changing Trade Value tiers.
+
+Type:
+- UX
+
+Why:
+- Testing showed Trade Value alone was too broad for items that are useful but niche, socket-dependent, or consistently demanded without being premium.
+
+Impact:
+- Outputs now better explain whether an item is easy to trade, niche, mostly self-use, socket-dependent, or commonly sought after.
+
+Notes:
+- This is wording and action guidance only; no datasets, pricing logic, or checker architecture were changed.
+
+[2026-04-24]
+
+Change:
+- Expanded Base Checker coverage with a curated set of additional mercenary polearm/spear bases, armor bases, and paladin shield bases while preserving stricter socket-dependent valuation.
+
+Type:
+- Data
+
+Why:
+- Live farming feedback showed more real base drops needed representation, but common socket-dependent items still needed to avoid inflated trade-value signals.
+
+Impact:
+- Players can now triage more practical runeword and mercenary base drops without turning the Base Checker into a full item database.
+
+Notes:
+- The expansion avoids unsupported staffmod-heavy bases and relies only on currently modeled value drivers like sockets, ethereal state, defense/superior state, and paladin all-res automods.
+
+[2026-04-24]
+
+Change:
+- Tightened Base Checker trade-value scoring and wording for common socket-dependent bases so unsocketed items read as socket potential rather than clean trade wins.
+
+Type:
+- Checker
+
+Why:
+- Live testing showed 0-socket common bases like Phase Blade could land too high because future socket potential was being treated like current trade value.
+
+Impact:
+- Common unsocketed weapon and shield bases now separate more clearly from correct-socket trade bases, with recommended actions pointing users to socket or re-check before listing.
+
+Notes:
+- Ethereal mercenary bases, strong armor bases, paladin automod shields, and circlet-family bases can still retain unsocketed value where socket control is genuinely meaningful.
+
+[2026-04-24]
+
+Change:
 - Added a lightweight mechanics-affix validation scaffold for boots, amulets, circlets, and charms so invalid affix keys are filtered or ignored before evaluation.
 
 Type:

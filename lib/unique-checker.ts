@@ -237,15 +237,15 @@ function liquidityFor(item: UniqueItemDefinition, mode: UniqueCheckInput["mode"]
 
 function demandContext(item: UniqueItemDefinition, verdict: Verdict) {
   if (item.liquidity === "High" && verdict !== "Premium") {
-    return "Liquidity is stronger than the raw trade-value tier because this unique has steady build demand.";
+    return "It is commonly sought after, so demand can be steady even when the roll is not premium.";
   }
 
   if (item.liquidity === "Medium") {
-    return "Liquidity is more selective, so roll quality or the right buyer matters more than the item name alone.";
+    return "Demand is more selective, so roll quality or the right buyer matters more than the item name alone.";
   }
 
   if (item.liquidity === "Low") {
-    return "Liquidity is limited, so this is mostly a self-use or niche-market check.";
+    return "Demand is limited, so this is mostly a self-use or niche-market check.";
   }
 
   return "";
@@ -298,7 +298,7 @@ export function evaluateUnique(input: UniqueCheckInput): UniqueCheckResult {
   let explanation = "";
   const demandNote = demandContext(item, verdict);
   if (!item.hasVariableRolls) {
-    explanation = `${item.name} is a staple unique with ${item.liquidity.toLowerCase()} liquidity. ${item.notes} ${demandNote}`.trim();
+    explanation = `${item.name} is a staple unique. ${item.notes} ${demandNote}`.trim();
   } else if (item.rollDefinitions) {
     const rollSummary =
       rollAssessment.high >= 2
@@ -321,17 +321,20 @@ export function evaluateUnique(input: UniqueCheckInput): UniqueCheckResult {
   } else if (verdict === "Low Priority") {
     recommendedAction = "Keep only if you want a personal placeholder or the market is unusually active.";
   } else if (verdict === "Check") {
-    recommendedAction = "Check the roll more carefully before deciding whether to stash or trade it.";
+    recommendedAction =
+      item.liquidity === "High"
+        ? "Check the roll, but do not toss it quickly. This is a commonly sought-after unique."
+        : "Check the roll more carefully before deciding whether to stash or trade it.";
   } else if (verdict === "Keep") {
     recommendedAction =
       item.liquidity === "High"
         ? "Keep it and check market activity. Demand is steady even if this is not a premium-roll outcome."
-        : "Keep it. This is at least a useful or selectively tradable unique.";
+        : "Keep it if you have stash room. This is useful, but demand may be selective.";
   } else if (verdict === "List") {
     recommendedAction =
       item.liquidity === "High"
-        ? "Check market activity or list it. Liquidity is strong, but roll quality still controls how exciting it is."
-        : "Check market activity or list it. This unique has real trade value if the roll is competitive.";
+        ? "Check market activity or list it. It is easy to understand and commonly traded, but roll quality still matters."
+        : "Check market activity or list it only if the roll is competitive; demand is more niche.";
   } else {
     recommendedAction = "Treat this as premium and compare it against top-end listings.";
   }

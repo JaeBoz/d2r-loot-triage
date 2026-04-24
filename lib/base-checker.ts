@@ -26,7 +26,7 @@ const scoreToVerdict = (score: number): Verdict => {
 
 const scoreToPriority = (score: number): EvaluationPriority => {
   if (score <= 0) return "Trash";
-  if (score <= 2) return "Low Trade Value";
+  if (score <= 3) return "Low Trade Value";
   if (score <= 5) return "Moderate Trade Value";
   if (score <= 7) return "High Trade Value";
   return "Premium Trade Value";
@@ -67,6 +67,58 @@ const articleFor = (value: string) => (/^[aeiou]/i.test(value) ? "an" : "a");
 const modePriority = (item: BaseItem, mode: GameMode) => (mode === "SCNL" ? item.scnlPriority : item.sclPriority);
 
 const primaryUseCase = (item: BaseItem) => item.runewordUseCases[0] ?? "runeword";
+
+function hasMeaningfulUnsocketedDemand(input: BaseCheckInput, item: BaseItem) {
+  if (item.tags.includes("merc") && input.ethereal && item.ethPriority !== "low") {
+    return true;
+  }
+
+  if (item.category === "Armor" && (item.scnlPriority === "high" || item.scnlPriority === "premium")) {
+    return true;
+  }
+
+  if (item.tags.includes("paladin") && (input.allRes ?? 0) >= 30) {
+    return true;
+  }
+
+  if (item.tags.includes("circlet")) {
+    return true;
+  }
+
+  return false;
+}
+
+function baseDemandPhrase(item: BaseItem, input: BaseCheckInput) {
+  if (item.socketSensitive && input.sockets === 0 && !hasMeaningfulUnsocketedDemand(input, item)) {
+    return "This is socket-dependent potential, not an easy trade as-is.";
+  }
+
+  if (item.socketSensitive && input.sockets > 0 && !item.desiredSockets.includes(input.sockets)) {
+    return "Demand is limited because this socket count misses the usual target.";
+  }
+
+  if (item.socketSensitive && item.desiredSockets.includes(input.sockets)) {
+    if (item.tags.includes("spirit") || item.tags.includes("caster") || item.tags.includes("merc")) {
+      return "Correct sockets make this a commonly sought-after trade candidate.";
+    }
+
+    return "Correct sockets are the main reason this has trade appeal.";
+  }
+
+  if (item.tags.includes("merc") && input.ethereal && item.ethPriority !== "low") {
+    return "Ethereal mercenary bases have more reliable demand than ordinary self-use bases.";
+  }
+
+  if (item.tags.includes("paladin") && (input.allRes ?? 0) >= 30) {
+    return "The paladin resist automod is the demand driver here.";
+  }
+
+  if (item.scnlPriority === "low" || item.tags.includes("staffmods")) {
+    return "Demand is niche, so this is mostly a specific-buyer or self-use check.";
+  }
+
+  return "Tradeability depends on whether the visible state matches a real runeword plan.";
+}
 
 function useCaseLabel(item: BaseItem) {
   if (item.tags.includes("merc")) {
@@ -139,12 +191,27 @@ function adjustForSockets(score: number, input: BaseCheckInput, item: BaseItem, 
   }
 
   if (input.sockets === 0) {
-    details.push(`Unsocketed ${item.name} can still matter because buyers may want to control the final ${formatSockets(item.desiredSockets)} outcome.`);
-    let nextScore = score + (item.socketSensitive ? 1 : 0);
+    details.push(
+      `Unsocketed ${item.name} has socket potential for ${formatSockets(item.desiredSockets)}, but its current trade value depends on actually hitting the right socket state.`
+    );
 
-    if (item.tags.includes("merc") && input.ethereal) {
-      details.push("Unsocketed eth mercenary bases stay attractive because buyers often want to control the final socket outcome.");
-      nextScore += 1;
+    if (hasMeaningfulUnsocketedDemand(input, item)) {
+      let nextScore = score;
+
+      if (item.tags.includes("merc") && input.ethereal) {
+        details.push("Unsocketed eth mercenary bases can still attract buyers because socket control has real value.");
+        nextScore += 1;
+      } else {
+        details.push("This base has enough context that the unsocketed state can still be worth checking, but it is not the same as a finished socket hit.");
+      }
+
+      return nextScore;
+    }
+
+    let nextScore = score - 1;
+
+    if (input.mode === "SCNL" && (item.category === "Weapon" || item.category === "Shield")) {
+      details.push("On SCNL, common unsocketed weapon and shield bases are saturated and usually need the correct sockets before they have clean trade value.");
     }
 
     return nextScore;
@@ -217,25 +284,38 @@ function adjustForAffixes(score: number, input: BaseCheckInput, item: BaseItem, 
 function buildExplanation(item: BaseItem, input: BaseCheckInput, verdict: Verdict, details: string[]) {
   const ethLabel = input.ethereal ? "Eth " : "Non-eth ";
   const useCase = useCaseLabel(item);
+  const demandPhrase = baseDemandPhrase(item, input);
 
   if (item.tags.includes("circlet")) {
-    return `${ethLabel}${item.name} is a circlet-family base for ${input.mode}. ${details.join(" ")}`;
+    return `${ethLabel}${item.name} is a circlet-family base for ${input.mode}. ${details.join(" ")} ${demandPhrase}`;
   }
 
-  return `${ethLabel}${item.name} is ${articleFor(useCase)} ${useCase} for ${input.mode}. ${details.join(" ")}`;
+  return `${ethLabel}${item.name} is ${articleFor(useCase)} ${useCase} for ${input.mode}. ${details.join(" ")} ${demandPhrase}`;
 }
 
-function buildRecommendedAction(item: BaseItem, verdict: Verdict) {
+function buildRecommendedAction(item: BaseItem, input: BaseCheckInput, verdict: Verdict) {
+  if (item.socketSensitive && input.sockets === 0 && !hasMeaningfulUnsocketedDemand(input, item)) {
+    return `Do not treat this as a clean trade base yet. Socket it or check the socket path, then re-evaluate if it hits ${formatSockets(item.desiredSockets)}.`;
+  }
+
+  if (item.socketSensitive && input.sockets > 0 && !item.desiredSockets.includes(input.sockets)) {
+    return `Usually move on. This socket count misses the normal ${formatSockets(item.desiredSockets)} target.`;
+  }
+
+  if (item.socketSensitive && item.desiredSockets.includes(input.sockets)) {
+    return "This has the right socket state. Keep it, then compare demand before listing.";
+  }
+
   if (verdict === "Ignore") {
     return "Ignore unless you need the base personally.";
   }
 
   if (verdict === "Low Priority") {
-    return "Stash only if you have room; move on unless the market is unusually active.";
+    return "Stash only if you have room or a specific buyer/use case in mind.";
   }
 
   if (verdict === "Keep") {
-    return "Keep it and compare against your local reference list before listing.";
+    return "Keep it, but treat it as selective demand rather than an automatic listing.";
   }
 
   return "Treat this as a premium trade base and prepare to list or mule it.";
@@ -282,6 +362,6 @@ export function evaluateBase(input: BaseCheckInput): BaseCheckResult {
     priority,
     liquidity,
     explanation: buildExplanation(item, input, verdict, details),
-    recommendedAction: buildRecommendedAction(item, verdict)
+    recommendedAction: buildRecommendedAction(item, input, verdict)
   };
 }
