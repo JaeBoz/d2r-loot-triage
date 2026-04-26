@@ -1,5 +1,22 @@
 # D2R Loot Triage App - Internal Changelog
 
+[2026-04-26]
+
+Change:
+- Consolidated checker result presentation so Trade Value, recommended action, demand context, score, archetypes, and explanation are easier to scan consistently.
+
+Type:
+- UX
+
+Why:
+- Farming checks need faster at-a-glance decisions, and the previous result cards separated the final action from the visible verdict.
+
+Impact:
+- Users now see the recommended action directly inside the result card, with supporting context and reasoning visually secondary.
+
+Notes:
+- This was a UI presentation pass only; evaluation logic, scoring, and Trade Value tier names were unchanged.
+
 [2026-04-24]
 
 Change:

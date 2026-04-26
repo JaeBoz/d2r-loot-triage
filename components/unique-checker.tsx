@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Card, Pill } from "@/components/ui";
-import { VERDICT_STYLES } from "@/lib/constants";
+import { ResultPanel } from "@/components/result-panel";
 import { evaluateUnique, uniqueItems } from "@/lib/unique-checker";
 import { GameMode, UniqueCheckInput, UniqueRollField } from "@/lib/types";
 
@@ -190,48 +190,11 @@ export function UniqueChecker({ mode }: { mode: GameMode }) {
         ) : null}
       </Card>
 
-      <Card className="h-fit">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-400">Verdict</p>
-        {hasInput ? (
-          <>
-            <div className={`mt-3 rounded-2xl border p-4 ${VERDICT_STYLES[result.verdict]}`}>
-              <div className="flex flex-wrap items-start justify-between gap-3">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em]">{result.verdict}</p>
-                  <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-300">Trade Value</p>
-                  <h3 className="mt-2 text-2xl font-black text-white">{result.priority}</h3>
-                </div>
-                <div className="grid gap-2 sm:text-right">
-                  <div className="rounded-xl border border-white/10 bg-black/20 px-3 py-2">
-                    <p className="text-[11px] uppercase tracking-[0.18em] text-zinc-300">Liquidity</p>
-                    <p className="mt-1 text-sm font-semibold text-zinc-50">{result.liquidity}</p>
-                  </div>
-                  <div className="rounded-xl border border-white/10 bg-black/20 px-3 py-2">
-                    <p className="text-[11px] uppercase tracking-[0.18em] text-zinc-300">Score</p>
-                    <p className="mt-1 text-sm font-semibold text-zinc-50">{result.qualityScore}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-4 grid gap-4">
-              <div className="rounded-xl border border-border bg-black/20 px-4 py-3">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-400">Explanation</p>
-                <p className="mt-2 text-sm leading-6 text-zinc-300">{result.explanation}</p>
-              </div>
-
-              <div className="rounded-xl border border-border bg-black/20 px-4 py-3">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-400">Recommended action</p>
-                <p className="mt-2 text-sm leading-6 text-zinc-300">{result.recommendedAction}</p>
-              </div>
-            </div>
-          </>
-        ) : (
-          <div className="mt-3 rounded-2xl border border-dashed border-border bg-black/20 px-4 py-8 text-sm leading-6 text-zinc-400">
-            Select a unique and add any relevant roll values. The panel stays clear until you start a check.
-          </div>
-        )}
-      </Card>
+      <ResultPanel
+        result={result}
+        hasInput={hasInput}
+        emptyMessage="Select a unique and add any relevant roll values. The panel stays clear until you start a check."
+      />
     </div>
   );
 }
