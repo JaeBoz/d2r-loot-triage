@@ -592,6 +592,196 @@ export const uniqueItems: UniqueItemDefinition[] = [
     }
   },
   {
+    id: "harlequin-crest",
+    name: "Harlequin Crest",
+    category: "Helm",
+    hasVariableRolls: false,
+    keyRollFields: [],
+    scnlPriority: "high",
+    sclPriority: "high",
+    liquidity: "High",
+    notes: "Commonly called Shako. Staple all-around helm with broad caster, MF, and general PvM demand; defense is not the main quick-triage value driver.",
+    source: "diablo2.io / Arreat Summit",
+    sources: {
+      baselineSource: {
+        label: "diablo2.io - Harlequin Crest",
+        url: "https://diablo2.io/uniques/harlequin-crest-t37.html"
+      },
+      validationSource: validationIndex,
+      notes: "Defense varies, but the current triage model treats Shako as a staple-demand unique rather than a roll-sensitive item."
+    }
+  },
+  {
+    id: "the-oculus",
+    name: "The Oculus",
+    category: "Weapon",
+    hasVariableRolls: false,
+    keyRollFields: [],
+    scnlPriority: "high",
+    sclPriority: "high",
+    liquidity: "High",
+    notes: "Staple sorceress orb with easy-to-recognize caster and MF demand. Its value is mostly the item identity, not a variable roll check.",
+    source: "Arreat Summit / Diablo Wiki",
+    sources: {
+      baselineSource: {
+        label: "Diablo Wiki - The Oculus",
+        url: "https://diablo.fandom.com/wiki/The_Oculus_(Diablo_II)"
+      },
+      validationSource: validationIndex,
+      notes: "The Oculus has fixed high-signal caster stats for this triage scope, so no roll fields are exposed."
+    }
+  },
+  {
+    id: "gheeds-fortune",
+    name: "Gheed's Fortune",
+    category: "Charm",
+    hasVariableRolls: true,
+    keyRollFields: ["magicFind"],
+    scnlPriority: "medium",
+    sclPriority: "high",
+    liquidity: "High",
+    notes: "Staple magic-find grand charm. Magic Find is the fastest value check; low rolls are common, while high MF rolls are much easier to justify keeping or listing.",
+    source: "Gamer Guides / Diablo Wiki",
+    rollDefinitions: [
+      {
+        key: "magicFind",
+        label: "Magic Find",
+        min: 20,
+        max: 40,
+        higherIsBetter: true,
+        thresholds: { low: 25, mid: 35, high: 40 },
+        note: "Gold find and vendor reduction also vary, but MF is the most important quick triage roll."
+      }
+    ],
+    sources: {
+      baselineSource: {
+        label: "Gamer Guides - Gheed's Fortune",
+        url: "https://www.gamerguides.com/diablo-ii-resurrected/guide/equipment/charms/gheeds-fortune"
+      },
+      validationSource: validationIndex,
+      notes: "Only Magic Find is exposed for the MVP because it drives the most common farming decision."
+    }
+  },
+  {
+    id: "draculs-grasp",
+    name: "Dracul's Grasp",
+    category: "Gloves",
+    hasVariableRolls: true,
+    keyRollFields: ["lifeLeech", "strength"],
+    scnlPriority: "low",
+    sclPriority: "medium",
+    liquidity: "Medium",
+    notes: "Useful melee and Uber-focused gloves. Life Tap is fixed, while life leech and strength separate weak utility copies from stronger tradable ones.",
+    source: "Diablo Wiki / diablo2.io",
+    rollDefinitions: [
+      {
+        key: "lifeLeech",
+        label: "Life Leech",
+        min: 7,
+        max: 10,
+        higherIsBetter: true,
+        thresholds: { low: 7, mid: 9, high: 10 }
+      },
+      {
+        key: "strength",
+        label: "Strength",
+        min: 10,
+        max: 15,
+        higherIsBetter: true,
+        thresholds: { low: 11, mid: 14, high: 15 },
+        note: "Strength is a secondary quality roll behind life leech."
+      }
+    ],
+    sources: {
+      baselineSource: {
+        label: "Diablo Wiki - Dracul's Grasp",
+        url: "https://diablo.fandom.com/wiki/Dracul%27s_Grasp"
+      },
+      validationSource: validationIndex,
+      notes: "Life after each kill also varies, but it is intentionally omitted from fast triage."
+    }
+  },
+  {
+    id: "steelrend",
+    name: "Steelrend",
+    category: "Gloves",
+    hasVariableRolls: true,
+    keyRollFields: ["enhancedDamage", "strength"],
+    scnlPriority: "low",
+    sclPriority: "medium",
+    liquidity: "Medium",
+    notes: "Niche melee gloves where enhanced damage and strength carry most of the trade signal. Weak rolls should read as selective or self-use.",
+    source: "Diablo Wiki / diablo2.io",
+    rollDefinitions: [
+      {
+        key: "enhancedDamage",
+        label: "Enhanced Damage",
+        min: 30,
+        max: 60,
+        higherIsBetter: true,
+        thresholds: { low: 40, mid: 50, high: 60 }
+      },
+      {
+        key: "strength",
+        label: "Strength",
+        min: 15,
+        max: 20,
+        higherIsBetter: true,
+        thresholds: { low: 16, mid: 19, high: 20 }
+      }
+    ],
+    sources: {
+      baselineSource: {
+        label: "Diablo Wiki - Steelrend",
+        url: "https://diablo.fandom.com/wiki/Steelrend"
+      },
+      validationSource: validationIndex,
+      notes: "Defense also varies, but ED and strength are the meaningful trade-quality checks."
+    }
+  },
+  {
+    id: "wisp-projector",
+    name: "Wisp Projector",
+    category: "Ring",
+    hasVariableRolls: true,
+    keyRollFields: ["lightningAbsorb", "magicFind"],
+    scnlPriority: "medium",
+    sclPriority: "medium",
+    liquidity: "Medium",
+    notes: "Rare absorb ring with niche but real demand. Lightning absorb drives value first, with Magic Find as a secondary quality roll.",
+    source: "diablo2.io / Diablo Wiki",
+    rollDefinitions: [
+      {
+        key: "lightningAbsorb",
+        label: "Lightning Absorb",
+        min: 10,
+        max: 20,
+        higherIsBetter: true,
+        thresholds: { low: 13, mid: 17, high: 20 }
+      },
+      {
+        key: "magicFind",
+        label: "Magic Find",
+        min: 10,
+        max: 20,
+        higherIsBetter: true,
+        thresholds: { low: 13, mid: 17, high: 20 },
+        note: "Useful secondary roll, but lightning absorb is the primary value driver."
+      }
+    ],
+    sources: {
+      baselineSource: {
+        label: "diablo2.io - Wisp Projector",
+        url: "https://diablo2.io/uniques/wisp-projector-t1023.html"
+      },
+      validationSource: {
+        label: "Diablo Wiki - Wisp Projector",
+        url: "https://diablo.fandom.com/wiki/Wisp_Projector"
+      },
+      notes: "Summon charges are intentionally omitted because lightning absorb and MF are the fast triage rolls."
+    }
+  },
+  {
     id: "string-of-ears",
     name: "String of Ears",
     category: "Belt",

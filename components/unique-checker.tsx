@@ -24,7 +24,8 @@ const fieldLabels: Record<UniqueRollField, string> = {
   poisonAndBoneSkills: "Poison and Bone Skills",
   energy: "Energy",
   coldSkillDamage: "Cold Skill Damage",
-  allSkills: "All Skills"
+  allSkills: "All Skills",
+  lightningAbsorb: "Lightning Absorb"
 };
 
 function getFieldLabel(field: UniqueRollField, selectedItem?: (typeof uniqueItems)[number]) {
@@ -51,7 +52,8 @@ const emptyForm: UniqueFormState = {
   poisonAndBoneSkills: "",
   energy: "",
   coldSkillDamage: "",
-  allSkills: ""
+  allSkills: "",
+  lightningAbsorb: ""
 };
 
 function toOptionalNumber(value: string) {
@@ -91,7 +93,8 @@ export function UniqueChecker({ mode }: { mode: GameMode }) {
         poisonAndBoneSkills: toOptionalNumber(form.poisonAndBoneSkills),
         energy: toOptionalNumber(form.energy),
         coldSkillDamage: toOptionalNumber(form.coldSkillDamage),
-        allSkills: toOptionalNumber(form.allSkills)
+        allSkills: toOptionalNumber(form.allSkills),
+        lightningAbsorb: toOptionalNumber(form.lightningAbsorb)
       }),
     [ethereal, form, itemId, mode]
   );

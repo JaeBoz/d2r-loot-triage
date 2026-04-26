@@ -3,6 +3,57 @@
 [2026-04-26]
 
 Change:
+- Renamed the decision-layer "Check Market" label to "Check Before Tossing" and updated its action line to better match fast farming triage.
+
+Type:
+- UX
+
+Why:
+- "Check Market" sounded too trade/listing-oriented, while the intended action is to review the item before throwing it away.
+
+Impact:
+- Decision-first result cards now feel less like pricing prompts and more like immediate farming guidance.
+
+Notes:
+- This was a wording-only change; decision mapping behavior, scoring, data, and Trade Value tiers were unchanged.
+
+[2026-04-26]
+
+Change:
+- Added a shared decision-output layer that maps existing results into primary actions like Keep, Check Market, Conditional, or Drop.
+
+Type:
+- UX
+
+Why:
+- Trade Value tiers were useful but still required players to interpret the final action during fast farming.
+
+Impact:
+- Result cards now lead with an immediate decision while preserving Trade Value, recommended action, demand context, score, and explanation as supporting detail.
+
+Notes:
+- This is a deterministic presentation layer only; scoring, evaluator logic, item data, and Trade Value tier names were unchanged.
+
+[2026-04-26]
+
+Change:
+- Expanded Unique Checker coverage with additional curated staples and roll-sensitive uniques including Harlequin Crest, The Oculus, Gheed's Fortune, Dracul's Grasp, Steelrend, and Wisp Projector.
+
+Type:
+- Data
+
+Why:
+- Players commonly hesitate on these uniques because some are steady-demand staples while others depend heavily on a small set of meaningful rolls.
+
+Impact:
+- More common unique farming drops can now be triaged without turning the checker into a full unique database.
+
+Notes:
+- Roll inputs remain minimal and price-free; staple demand floors remain separate from premium top-roll outcomes.
+
+[2026-04-26]
+
+Change:
 - Consolidated checker result presentation so Trade Value, recommended action, demand context, score, archetypes, and explanation are easier to scan consistently.
 
 Type:

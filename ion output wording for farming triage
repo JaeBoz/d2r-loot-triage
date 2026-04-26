@@ -1,0 +1,372 @@
+warning: in the working copy of 'CHANGELOG.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'components/result-panel.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'components/unique-checker.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'data/unique-items.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/types.ts', LF will be replaced by CRLF the next time Git touches it
+[1mdiff --git a/CHANGELOG.md b/CHANGELOG.md[m
+[1mindex 25f9c15..050d340 100644[m
+[1m--- a/CHANGELOG.md[m
+[1m+++ b/CHANGELOG.md[m
+[36m@@ -2,6 +2,57 @@[m
+ [m
+ [2026-04-26][m
+ [m
+[32m+[m[32mChange:[m
+[32m+[m[32m- Renamed the decision-layer "Check Market" label to "Check Before Tossing" and updated its action line to better match fast farming triage.[m
+[32m+[m
+[32m+[m[32mType:[m
+[32m+[m[32m- UX[m
+[32m+[m
+[32m+[m[32mWhy:[m
+[32m+[m[32m- "Check Market" sounded too trade/listing-oriented, while the intended action is to review the item before throwing it away.[m
+[32m+[m
+[32m+[m[32mImpact:[m
+[32m+[m[32m- Decision-first result cards now feel less like pricing prompts and more like immediate farming guidance.[m
+[32m+[m
+[32m+[m[32mNotes:[m
+[32m+[m[32m- This was a wording-only change; decision mapping behavior, scoring, data, and Trade Value tiers were unchanged.[m
+[32m+[m
+[32m+[m[32m[2026-04-26][m
+[32m+[m
+[32m+[m[32mChange:[m
+[32m+[m[32m- Added a shared decision-output layer that maps existing results into primary actions like Keep, Check Market, Conditional, or Drop.[m
+[32m+[m
+[32m+[m[32mType:[m
+[32m+[m[32m- UX[m
+[32m+[m
+[32m+[m[32mWhy:[m
+[32m+[m[32m- Trade Value tiers were useful but still required players to interpret the final action during fast farming.[m
+[32m+[m
+[32m+[m[32mImpact:[m
+[32m+[m[32m- Result cards now lead with an immediate decision while preserving Trade Value, recommended action, demand context, score, and explanation as supporting detail.[m
+[32m+[m
+[32m+[m[32mNotes:[m
+[32m+[m[32m- This is a deterministic presentation layer only; scoring, evaluator logic, item data, and Trade Value tier names were unchanged.[m
+[32m+[m
+[32m+[m[32m[2026-04-26][m
+[32m+[m
+[32m+[m[32mChange:[m
+[32m+[m[32m- Expanded Unique Checker coverage with additional curated staples and roll-sensitive uniques including Harlequin Crest, The Oculus, Gheed's Fortune, Dracul's Grasp, Steelrend, and Wisp Projector.[m
+[32m+[m
+[32m+[m[32mType:[m
+[32m+[m[32m- Data[m
+[32m+[m
+[32m+[m[32mWhy:[m
+[32m+[m[32m- Players commonly hesitate on these uniques because some are steady-demand staples while others depend heavily on a small set of meaningful rolls.[m
+[32m+[m
+[32m+[m[32mImpact:[m
+[32m+[m[32m- More common unique farming drops can now be triaged without turning the checker into a full unique database.[m
+[32m+[m
+[32m+[m[32mNotes:[m
+[32m+[m[32m- Roll inputs remain minimal and price-free; staple demand floors remain separate from premium top-roll outcomes.[m
+[32m+[m
+[32m+[m[32m[2026-04-26][m
+[32m+[m
+ Change:[m
+ - Consolidated checker result presentation so Trade Value, recommended action, demand context, score, archetypes, and explanation are easier to scan consistently.[m
+ [m
+[1mdiff --git a/components/result-panel.tsx b/components/result-panel.tsx[m
+[1mindex 3cc2ebd..e71235d 100644[m
+[1m--- a/components/result-panel.tsx[m
+[1m+++ b/components/result-panel.tsx[m
+[36m@@ -1,5 +1,6 @@[m
+ import { Card, Pill } from "@/components/ui";[m
+ import { VERDICT_STYLES } from "@/lib/constants";[m
+[32m+[m[32mimport { mapDecisionOutput } from "@/lib/decision-output";[m
+ import { EvaluationPriority, Liquidity, RingArchetype, Verdict } from "@/lib/types";[m
+ [m
+ type ResultPanelResult = {[m
+[36m@@ -21,6 +22,8 @@[m [mexport function ResultPanel({[m
+   hasInput?: boolean;[m
+   emptyMessage?: string;[m
+ }) {[m
+[32m+[m[32m  const decision = mapDecisionOutput(result);[m
+[32m+[m
+   return ([m
+     <Card className="h-fit">[m
+       <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-400">Result</p>[m
+[36m@@ -29,12 +32,16 @@[m [mexport function ResultPanel({[m
+           <div className={`mt-3 rounded-2xl border p-4 ${VERDICT_STYLES[result.verdict]}`}>[m
+             <div className="flex flex-wrap items-start justify-between gap-3">[m
+               <div>[m
+[31m-                <p className="text-xs font-semibold uppercase tracking-[0.18em]">{result.verdict}</p>[m
+[31m-                <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-300">Trade Value</p>[m
+[31m-                <h3 className="mt-1 text-2xl font-black text-white">{result.priority}</h3>[m
+[32m+[m[32m                <p className="text-xs font-semibold uppercase tracking-[0.18em]">Decision</p>[m
+[32m+[m[32m                <h3 className="mt-1 text-3xl font-black text-white">{decision.label}</h3>[m
+[32m+[m[32m                <p className="mt-2 max-w-md text-sm font-semibold leading-6 text-zinc-100">{decision.actionLine}</p>[m
+               </div>[m
+ [m
+               <div className="grid gap-2 sm:text-right">[m
+[32m+[m[32m                <div className="rounded-xl border border-white/10 bg-black/20 px-3 py-2">[m
+[32m+[m[32m                  <p className="text-[11px] uppercase tracking-[0.18em] text-zinc-300">Trade Value</p>[m
+[32m+[m[32m                  <p className="mt-1 text-sm font-semibold text-zinc-50">{result.priority}</p>[m
+[32m+[m[32m                </div>[m
+                 <div className="rounded-xl border border-white/10 bg-black/20 px-3 py-2">[m
+                   <p className="text-[11px] uppercase tracking-[0.18em] text-zinc-300">Demand</p>[m
+                   <p className="mt-1 text-sm font-semibold text-zinc-50">{result.liquidity}</p>[m
+[36m@@ -51,6 +58,7 @@[m [mexport function ResultPanel({[m
+             <div className="mt-4 rounded-xl border border-white/10 bg-black/20 px-3 py-2">[m
+               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-300">Recommended Action</p>[m
+               <p className="mt-1 text-sm font-semibold leading-6 text-white">{result.recommendedAction}</p>[m
+[32m+[m[32m              {decision.caveat ? <p className="mt-2 text-xs leading-5 text-zinc-300">{decision.caveat}</p> : null}[m
+             </div>[m
+           </div>[m
+ [m
+[1mdiff --git a/components/unique-checker.tsx b/components/unique-checker.tsx[m
+[1mindex 239dd07..0653c21 100644[m
+[1m--- a/components/unique-checker.tsx[m
+[1m+++ b/components/unique-checker.tsx[m
+[36m@@ -24,7 +24,8 @@[m [mconst fieldLabels: Record<UniqueRollField, string> = {[m
+   poisonAndBoneSkills: "Poison and Bone Skills",[m
+   energy: "Energy",[m
+   coldSkillDamage: "Cold Skill Damage",[m
+[31m-  allSkills: "All Skills"[m
+[32m+[m[32m  allSkills: "All Skills",[m
+[32m+[m[32m  lightningAbsorb: "Lightning Absorb"[m
+ };[m
+ [m
+ function getFieldLabel(field: UniqueRollField, selectedItem?: (typeof uniqueItems)[number]) {[m
+[36m@@ -51,7 +52,8 @@[m [mconst emptyForm: UniqueFormState = {[m
+   poisonAndBoneSkills: "",[m
+   energy: "",[m
+   coldSkillDamage: "",[m
+[31m-  allSkills: ""[m
+[32m+[m[32m  allSkills: "",[m
+[32m+[m[32m  lightningAbsorb: ""[m
+ };[m
+ [m
+ function toOptionalNumber(value: string) {[m
+[36m@@ -91,7 +93,8 @@[m [mexport function UniqueChecker({ mode }: { mode: GameMode }) {[m
+         poisonAndBoneSkills: toOptionalNumber(form.poisonAndBoneSkills),[m
+         energy: toOptionalNumber(form.energy),[m
+         coldSkillDamage: toOptionalNumber(form.coldSkillDamage),[m
+[31m-        allSkills: toOptionalNumber(form.allSkills)[m
+[32m+[m[32m        allSkills: toOptionalNumber(form.allSkills),[m
+[32m+[m[32m        lightningAbsorb: toOptionalNumber(form.lightningAbsorb)[m
+       }),[m
+     [ethereal, form, itemId, mode][m
+   );[m
+[1mdiff --git a/data/unique-items.ts b/data/unique-items.ts[m
+[1mindex aae5e97..0dda528 100644[m
+[1m--- a/data/unique-items.ts[m
+[1m+++ b/data/unique-items.ts[m
+[36m@@ -591,6 +591,196 @@[m [mexport const uniqueItems: UniqueItemDefinition[] = [[m
+       notes: "Its varying enhanced defense is not normally the deciding trade factor in quick triage."[m
+     }[m
+   },[m
+[32m+[m[32m  {[m
+[32m+[m[32m    id: "harlequin-crest",[m
+[32m+[m[32m    name: "Harlequin Crest",[m
+[32m+[m[32m    category: "Helm",[m
+[32m+[m[32m    hasVariableRolls: false,[m
+[32m+[m[32m    keyRollFields: [],[m
+[32m+[m[32m    scnlPriority: "high",[m
+[32m+[m[32m    sclPriority: "high",[m
+[32m+[m[32m    liquidity: "High",[m
+[32m+[m[32m    notes: "Commonly called Shako. Staple all-around helm with broad caster, MF, and general PvM demand; defense is not the main quick-triage value driver.",[m
+[32m+[m[32m    source: "diablo2.io / Arreat Summit",[m
+[32m+[m[32m    sources: {[m
+[32m+[m[32m      baselineSource: {[m
+[32m+[m[32m        label: "diablo2.io - Harlequin Crest",[m
+[32m+[m[32m        url: "https://diablo2.io/uniques/harlequin-crest-t37.html"[m
+[32m+[m[32m      },[m
+[32m+[m[32m      validationSource: validationIndex,[m
+[32m+[m[32m      notes: "Defense varies, but the current triage model treats Shako as a staple-demand unique rather than a roll-sensitive item."[m
+[32m+[m[32m    }[m
+[32m+[m[32m  },[m
+[32m+[m[32m  {[m
+[32m+[m[32m    id: "the-oculus",[m
+[32m+[m[32m    name: "The Oculus",[m
+[32m+[m[32m    category: "Weapon",[m
+[32m+[m[32m    hasVariableRolls: false,[m
+[32m+[m[32m    keyRollFields: [],[m
+[32m+[m[32m    scnlPriority: "high",[m
+[32m+[m[32m    sclPriority: "high",[m
+[32m+[m[32m    liquidity: "High",[m
+[32m+[m[32m    notes: "Staple sorceress orb with easy-to-recognize caster and MF demand. Its value is mostly the item identity, not a variable roll check.",[m
+[32m+[m[32m    source: "Arreat Summit / Diablo Wiki",[m
+[32m+[m[32m    sources: {[m
+[32m+[m[32m      baselineSource: {[m
+[32m+[m[32m        label: "Diablo Wiki - The Oculus",[m
+[32m+[m[32m        url: "https://diablo.fandom.com/wiki/The_Oculus_(Diablo_II)"[m
+[32m+[m[32m      },[m
+[32m+[m[32m      validationSource: validationIndex,[m
+[32m+[m[32m      notes: "The Oculus has fixed high-signal caster stats for this triage scope, so no roll fields are exposed."[m
+[32m+[m[32m    }[m
+[32m+[m[32m  },[m
+[32m+[m[32m  {[m
+[32m+[m[32m    id: "gheeds-fortune",[m
+[32m+[m[32m    name: "Gheed's Fortune",[m
+[32m+[m[32m    category: "Charm",[m
+[32m+[m[32m    hasVariableRolls: true,[m
+[32m+[m[32m    keyRollFields: ["magicFind"],[m
+[32m+[m[32m    scnlPriority: "medium",[m
+[32m+[m[32m    sclPriority: "high",[m
+[32m+[m[32m    liquidity: "High",[m
+[32m+[m[32m    notes: "Staple magic-find grand charm. Magic Find is the fastest value check; low rolls are common, while high MF rolls are much easier to justify keeping or listing.",[m
+[32m+[m[32m    source: "Gamer Guides / Diablo Wiki",[m
+[32m+[m[32m    rollDefinitions: [[m
+[32m+[m[32m      {[m
+[32m+[m[32m        key: "magicFind",[m
+[32m+[m[32m        label: "Magic Find",[m
+[32m+[m[32m        min: 20,[m
+[32m+[m[32m        max: 40,[m
+[32m+[m[32m        higherIsBetter: true,[m
+[32m+[m[32m        thresholds: { low: 25, mid: 35, high: 40 },[m
+[32m+[m[32m        note: "Gold find and vendor reduction also vary, but MF is the most important quick triage roll."[m
+[32m+[m[32m      }[m
+[32m+[m[32m    ],[m
+[32m+[m[32m    sources: {[m
+[32m+[m[32m      baselineSource: {[m
+[32m+[m[32m        label: "Gamer Guides - Gheed's Fortune",[m
+[32m+[m[32m        url: "https://www.gamerguides.com/diablo-ii-resurrected/guide/equipment/charms/gheeds-fortune"[m
+[32m+[m[32m      },[m
+[32m+[m[32m      validationSource: validationIndex,[m
+[32m+[m[32m      notes: "Only Magic Find is exposed for the MVP because it drives the most common farming decision."[m
+[32m+[m[32m    }[m
+[32m+[m[32m  },[m
+[32m+[m[32m  {[m
+[32m+[m[32m    id: "draculs-grasp",[m
+[32m+[m[32m    name: "Dracul's Grasp",[m
+[32m+[m[32m    category: "Gloves",[m
+[32m+[m[32m    hasVariableRolls: true,[m
+[32m+[m[32m    keyRollFields: ["lifeLeech", "strength"],[m
+[32m+[m[32m    scnlPriority: "low",[m
+[32m+[m[32m    sclPriority: "medium",[m
+[32m+[m[32m    liquidity: "Medium",[m
+[32m+[m[32m    notes: "Useful melee and Uber-focused gloves. Life Tap is fixed, while life leech and strength separate weak utility copies from stronger tradable ones.",[m
+[32m+[m[32m    source: "Diablo Wiki / diablo2.io",[m
+[32m+[m[32m    rollDefinitions: [[m
+[32m+[m[32m      {[m
+[32m+[m[32m        key: "lifeLeech",[m
+[32m+[m[32m        label: "Life Leech",[m
+[32m+[m[32m        min: 7,[m
+[32m+[m[32m        max: 10,[m
+[32m+[m[32m        higherIsBetter: true,[m
+[32m+[m[32m        thresholds: { low: 7, mid: 9, high: 10 }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      {[m
+[32m+[m[32m        key: "strength",[m
+[32m+[m[32m        label: "Strength",[m
+[32m+[m[32m        min: 10,[m
+[32m+[m[32m        max: 15,[m
+[32m+[m[32m        higherIsBetter: true,[m
+[32m+[m[32m        thresholds: { low: 11, mid: 14, high: 15 },[m
+[32m+[m[32m        note: "Strength is a secondary quality roll behind life leech."[m
+[32m+[m[32m      }[m
+[32m+[m[32m    ],[m
+[32m+[m[32m    sources: {[m
+[32m+[m[32m      baselineSource: {[m
+[32m+[m[32m        label: "Diablo Wiki - Dracul's Grasp",[m
+[32m+[m[32m        url: "https://diablo.fandom.com/wiki/Dracul%27s_Grasp"[m
+[32m+[m[32m      },[m
+[32m+[m[32m      validationSource: validationIndex,[m
+[32m+[m[32m      notes: "Life after each kill also varies, but it is intentionally omitted from fast triage."[m
+[32m+[m[32m    }[m
+[32m+[m[32m  },[m
+[32m+[m[32m  {[m
+[32m+[m[32m    id: "steelrend",[m
+[32m+[m[32m    name: "Steelrend",[m
+[32m+[m[32m    category: "Gloves",[m
+[32m+[m[32m    hasVariableRolls: true,[m
+[32m+[m[32m    keyRollFields: ["enhancedDamage", "strength"],[m
+[32m+[m[32m    scnlPriority: "low",[m
+[32m+[m[32m    sclPriority: "medium",[m
+[32m+[m[32m    liquidity: "Medium",[m
+[32m+[m[32m    notes: "Niche melee gloves where enhanced damage and strength carry most of the trade signal. Weak rolls should read as selective or self-use.",[m
+[32m+[m[32m    source: "Diablo Wiki / diablo2.io",[m
+[32m+[m[32m    rollDefinitions: [[m
+[32m+[m[32m      {[m
+[32m+[m[32m        key: "enhancedDamage",[m
+[32m+[m[32m        label: "Enhanced Damage",[m
+[32m+[m[32m        min: 30,[m
+[32m+[m[32m        max: 60,[m
+[32m+[m[32m        higherIsBetter: true,[m
+[32m+[m[32m        thresholds: { low: 40, mid: 50, high: 60 }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      {[m
+[32m+[m[32m        key: "strength",[m
+[32m+[m[32m        label: "Strength",[m
+[32m+[m[32m        min: 15,[m
+[32m+[m[32m        max: 20,[m
+[32m+[m[32m        higherIsBetter: true,[m
+[32m+[m[32m        thresholds: { low: 16, mid: 19, high: 20 }[m
+[32m+[m[32m      }[m
+[32m+[m[32m    ],[m
+[32m+[m[32m    sources: {[m
+[32m+[m[32m      baselineSource: {[m
+[32m+[m[32m        label: "Diablo Wiki - Steelrend",[m
+[32m+[m[32m        url: "https://diablo.fandom.com/wiki/Steelrend"[m
+[32m+[m[32m      },[m
+[32m+[m[32m      validationSource: validationIndex,[m
+[32m+[m[32m      notes: "Defense also varies, but ED and strength are the meaningful trade-quality checks."[m
+[32m+[m[32m    }[m
+[32m+[m[32m  },[m
+[32m+[m[32m  {[m
+[32m+[m[32m    id: "wisp-projector",[m
+[32m+[m[32m    name: "Wisp Projector",[m
+[32m+[m[32m    category: "Ring",[m
+[32m+[m[32m    hasVariableRolls: true,[m
+[32m+[m[32m    keyRollFields: ["lightningAbsorb", "magicFind"],[m
+[32m+[m[32m    scnlPriority: "medium",[m
+[32m+[m[32m    sclPriority: "medium",[m
+[32m+[m[32m    liquidity: "Medium",[m
+[32m+[m[32m    notes: "Rare absorb ring with niche but real demand. Lightning absorb drives value first, with Magic Find as a secondary quality roll.",[m
+[32m+[m[32m    source: "diablo2.io / Diablo Wiki",[m
+[32m+[m[32m    rollDefinitions: [[m
+[32m+[m[32m      {[m
+[32m+[m[32m        key: "lightningAbsorb",[m
+[32m+[m[32m        label: "Lightning Absorb",[m
+[32m+[m[32m        min: 10,[m
+[32m+[m[32m        max: 20,[m
+[32m+[m[32m        higherIsBetter: true,[m
+[32m+[m[32m        thresholds: { low: 13, mid: 17, high: 20 }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      {[m
+[32m+[m[32m        key: "magicFind",[m
+[32m+[m[32m        label: "Magic Find",[m
+[32m+[m[32m        min: 10,[m
+[32m+[m[32m        max: 20,[m
+[32m+[m[32m        higherIsBetter: true,[m
+[32m+[m[32m        thresholds: { low: 13, mid: 17, high: 20 },[m
+[32m+[m[32m        note: "Useful secondary roll, but lightning absorb is the primary value driver."[m
+[32m+[m[32m      }[m
+[32m+[m[32m    ],[m
+[32m+[m[32m    sources: {[m
+[32m+[m[32m      baselineSource: {[m
+[32m+[m[32m        label: "diablo2.io - Wisp Projector",[m
+[32m+[m[32m        url: "https://diablo2.io/uniques/wisp-projector-t1023.html"[m
+[32m+[m[32m      },[m
+[32m+[m[32m      validationSource: {[m
+[32m+[m[32m        label: "Diablo Wiki - Wisp Projector",[m
+[32m+[m[32m        url: "https://diablo.fandom.com/wiki/Wisp_Projector"[m
+[32m+[m[32m      },[m
+[32m+[m[32m      notes: "Summon charges are intentionally omitted because lightning absorb and MF are the fast triage rolls."[m
+[32m+[m[32m    }[m
+[32m+[m[32m  },[m
+   {[m
+     id: "string-of-ears",[m
+     name: "String of Ears",[m
+[1mdiff --git a/lib/types.ts b/lib/types.ts[m
+[1mindex 14345f8..ef38ee0 100644[m
+[1m--- a/lib/types.ts[m
+[1m+++ b/lib/types.ts[m
+[36m@@ -356,7 +356,8 @@[m [mexport type UniqueRollField =[m
+   | "poisonAndBoneSkills"[m
+   | "energy"[m
+   | "coldSkillDamage"[m
+[31m-  | "allSkills";[m
+[32m+[m[32m  | "allSkills"[m
+[32m+[m[32m  | "lightningAbsorb";[m
+ [m
+ export interface UniqueRollThresholdBand {[m
+   low?: number;[m
+[36m@@ -425,6 +426,7 @@[m [mexport interface UniqueCheckInput {[m
+   energy?: number;[m
+   coldSkillDamage?: number;[m
+   allSkills?: number;[m
+[32m+[m[32m  lightningAbsorb?: number;[m
+ }[m
+ [m
+ export interface UniqueCheckResult {[m
