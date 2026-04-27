@@ -33,7 +33,7 @@ export interface AmuletSynergyRule {
 export const amuletStatWeights: AmuletWeightRule[] = [
   { key: "classSkills", label: "class skills", thresholds: [{ min: 2, score: 6 }, { min: 1, score: 3 }] },
   { key: "skillTreeSkills", label: "skill tree skills", thresholds: [{ min: 2, score: 4 }, { min: 1, score: 2 }] },
-  { key: "fasterCastRate", label: "FCR", thresholds: [{ min: 20, score: 6 }, { min: 10, score: 4 }, { min: 5, score: 2 }] },
+  { key: "fasterCastRate", label: "FCR", thresholds: [{ min: 20, score: 6 }, { min: 15, score: 5 }, { min: 10, score: 4 }, { min: 5, score: 2 }] },
   { key: "strength", label: "strength", thresholds: [{ min: 20, score: 3 }, { min: 10, score: 2 }, { min: 5, score: 1 }] },
   { key: "dexterity", label: "dexterity", thresholds: [{ min: 15, score: 3 }, { min: 10, score: 2 }, { min: 5, score: 1 }] },
   { key: "life", label: "life", thresholds: [{ min: 50, score: 4 }, { min: 30, score: 3 }, { min: 15, score: 1 }] },

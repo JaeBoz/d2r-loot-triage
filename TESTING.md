@@ -26,6 +26,16 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - Test ethereal mercenary bases such as eth polearms; expected: eth status improves relevant merc/runeword value.
 - Test weak or wrong-socket bases; expected: output explains why trade value is limited.
 
+## Rare / Crafted Jewelry
+
+- Test a weak rare-style FCR ring; expected: one useful FCR line alone does not inflate into a strong trade item.
+- Test a strong rare-style FCR ring with stats and resists; expected: reads as a real caster ring worth checking.
+- Test a blood-style ring with high life leech but weak support; expected: high leech is represented but does not carry the ring by itself.
+- Test a blood-style ring with high life leech, attack rating, and melee support; expected: reads as a stronger melee/blood craft candidate.
+- Test a weak `+skills / 10 FCR` amulet; expected: partial hit, not an automatic premium.
+- Test a strong `+skills / 10 FCR` rare-style amulet; expected: strong caster result when support stats are present.
+- Test crafted-style `15 FCR` and `20 FCR` caster amulets; expected: higher FCR is represented and explained, but still needs support to become a true winner.
+
 ## Uniques
 
 - Test roll-sensitive uniques with low, mid, and top rolls, such as `War Travelers`, `Nagelring`, `Raven Frost`, `Griffon's Eye`, and `Death's Fathom`.

@@ -108,8 +108,11 @@ export function RingChecker({ mode }: { mode: GameMode }) {
       <Card>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-400">Rare Ring Triage</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-400">Rare / Crafted Ring Triage</p>
             <h2 className="mt-2 text-2xl font-bold text-white">Fast ring checks with core stats up front</h2>
+            <p className="mt-2 max-w-xl text-xs leading-5 text-zinc-400">
+              Supports rare and crafted rings. Blood craft leech ranges are included where they matter.
+            </p>
           </div>
           <div className="flex items-center gap-2">
             <Pill active>{mode}</Pill>

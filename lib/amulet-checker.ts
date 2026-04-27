@@ -448,28 +448,32 @@ function explanationFor(
   const summaryBits = topRated.slice(0, 3).map((entry) => `+${entry.value} ${labelForStat(entry.key, input)}`);
   const summaryText = summaryBits.length > 0 ? summaryBits.join(", ") : "very little usable value";
   const comboText = comboTextFor(highlights);
+  const craftedFcrNote =
+    topRated.some((entry) => entry.key === "fasterCastRate" && entry.value >= 15)
+      ? "High FCR usually means caster craft territory. "
+      : "";
 
   if (verdict === "Ignore") {
     return `Charsi-level amulet. ${summaryText} is not enough for ${input.mode}.`;
   }
 
   if (verdict === "Low Priority") {
-    return `Some useful stats, but not enough together. This ${leadTag} amulet is mostly self-use or niche.`;
+    return `Some useful stats, but not enough together. ${craftedFcrNote}This ${leadTag} amulet is mostly self-use or niche.`;
   }
 
   if (verdict === "Check") {
-    return `Decent partial hit. ${summaryText} gives it ${leadTag} appeal. Check because of ${comboText}.`;
+    return `Decent partial hit. ${craftedFcrNote}${summaryText} gives it ${leadTag} appeal. Check because of ${comboText}.`;
   }
 
   if (verdict === "Keep") {
-    return `Solid ${leadTag} amulet. You're mainly paying for ${summaryText}. ${comboText} is the reason.`;
+    return `Solid ${leadTag} amulet. ${craftedFcrNote}You're mainly paying for ${summaryText}. ${comboText} is the reason.`;
   }
 
   if (verdict === "List") {
-    return `Good ${leadTag} amulet. ${summaryText}. ${comboText} is the value here.`;
+    return `Good ${leadTag} amulet. ${craftedFcrNote}${summaryText}. ${comboText} is the value here.`;
   }
 
-  return `Premium ${leadTag} amulet. ${summaryText}. ${comboText} is the hit.`;
+  return `Premium ${leadTag} amulet. ${craftedFcrNote}${summaryText}. ${comboText} is the hit.`;
 }
 
 function recommendedActionFor(verdict: Verdict, mode: AmuletCheckInput["mode"]) {

@@ -3,6 +3,23 @@
 [2026-04-27]
 
 Change:
+- Reframed Ring and Amulet checkers as Rare / Crafted Jewelry triage and added practical crafted-range support for blood ring leech and caster amulet FCR.
+
+Type:
+- Data / Checker / UX
+
+Why:
+- Rare and crafted jewelry are evaluated in the same farming and crafting workflow, but crafted-only ranges were not clearly represented.
+
+Impact:
+- Players can enter high blood-ring life leech and 15-20 FCR caster amulets without a separate crafting system.
+
+Notes:
+- No pricing, new checker, broad affix expansion, Trade Value tier change, or decision-output mapping change was added.
+
+[2026-04-27]
+
+Change:
 - Expanded Unique Checker coverage with a small curated Standard D2R batch: Highlord's Wrath, Kira's Guardian, Vampire Gaze, Verdungo's Hearty Cord, and Thunderstroke.
 
 Type:

@@ -43,7 +43,7 @@ export const ringStatWeights: RingWeightRule[] = [
   { key: "coldResist", label: "cold resist", thresholds: [{ min: 25, score: 2 }, { min: 15, score: 1 }] },
   { key: "poisonResist", label: "poison resist", thresholds: [{ min: 25, score: 1 }, { min: 15, score: 1 }] },
   { key: "magicFind", label: "magic find", thresholds: [{ min: 20, score: 3 }, { min: 10, score: 2 }, { min: 5, score: 1 }] },
-  { key: "lifeLeech", label: "life leech", thresholds: [{ min: 6, score: 3 }, { min: 4, score: 2 }, { min: 2, score: 1 }] },
+  { key: "lifeLeech", label: "life leech", thresholds: [{ min: 10, score: 4 }, { min: 6, score: 3 }, { min: 4, score: 2 }, { min: 2, score: 1 }] },
   { key: "manaLeech", label: "mana leech", thresholds: [{ min: 6, score: 3 }, { min: 4, score: 2 }, { min: 2, score: 1 }] },
   { key: "minDamage", label: "min damage", thresholds: [{ min: 5, score: 2 }, { min: 3, score: 1 }] },
   { key: "maxDamage", label: "max damage", thresholds: [{ min: 10, score: 2 }, { min: 5, score: 1 }] }
@@ -79,6 +79,16 @@ export const ringSynergies: RingSynergyRule[] = [
     score: 4,
     archetypes: ["melee", "PvM"],
     check: (stats) => (stats.lifeLeech ?? 0) >= 4 && (stats.manaLeech ?? 0) >= 4 && (stats.attackRating ?? 0) >= 60
+  },
+  {
+    id: "blood-leech-support",
+    label: "high blood leech with melee support",
+    score: 2,
+    archetypes: ["melee", "PvM"],
+    check: (stats) =>
+      (stats.lifeLeech ?? 0) >= 9 &&
+      (stats.attackRating ?? 0) >= 60 &&
+      ((stats.strength ?? 0) >= 8 || (stats.dexterity ?? 0) >= 8 || (stats.maxDamage ?? 0) >= 5)
   },
   {
     id: "melee-attributes",

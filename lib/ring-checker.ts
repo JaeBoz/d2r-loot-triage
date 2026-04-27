@@ -205,6 +205,7 @@ function displayHighlight(highlight: string) {
     "FCR with all resist": "FCR + all res",
     "FCR with dual useful resists": "FCR + dual res",
     "dual leech with attack rating": "dual leech + AR",
+    "high blood leech with melee support": "high leech + melee support",
     "strength, dexterity, and AR": "strength/dex/AR",
     "magic find with resist support": "MF + res",
     "life with resist support": "life + res",
@@ -307,29 +308,33 @@ function explanationFor(
   const comboText = comboTextFor(highlights);
   const highCount = rated.filter((entry) => entry.score >= 4).length;
   const lowOnly = rated.length > 0 && rated.every((entry) => entry.score <= 1);
+  const craftedLeechNote =
+    topRated.some((entry) => entry.key === "lifeLeech" && entry.value >= 9)
+      ? "High leech can matter on blood rings, but the rest still needs to be good. "
+      : "";
 
   if (verdict === "Ignore") {
     return `Charsi-level ring. ${summaryText} is not enough for ${input.mode}.`;
   }
 
   if (verdict === "Low Priority") {
-    return `Some useful stats, but not enough together. ${summaryText} is mostly self-use or niche.`;
+    return `Some useful stats, but not enough together. ${craftedLeechNote}${summaryText} is mostly self-use or niche.`;
   }
 
   if (verdict === "Check") {
-    return `Decent partial hit. ${summaryText} gives it some ${leadTag} appeal, but it is not a clean winner. Check because of ${comboText}.`;
+    return `Decent partial hit. ${craftedLeechNote}${summaryText} gives it some ${leadTag} appeal, but it is not a clean winner. Check because of ${comboText}.`;
   }
 
   if (verdict === "Keep") {
-    return `Solid ${leadTag} ring. ${summaryText}. ${comboText} is the reason to keep it.`;
+    return `Solid ${leadTag} ring. ${craftedLeechNote}${summaryText}. ${comboText} is the reason to keep it.`;
   }
 
   if (verdict === "List") {
-    return `Good ${leadTag} ring. ${summaryText}. ${comboText} is the value here.`;
+    return `Good ${leadTag} ring. ${craftedLeechNote}${summaryText}. ${comboText} is the value here.`;
   }
 
   if (highCount >= 2 && !lowOnly) {
-    return `Premium ${leadTag} ring. ${summaryText}. ${comboText} is the hit.`;
+    return `Premium ${leadTag} ring. ${craftedLeechNote}${summaryText}. ${comboText} is the hit.`;
   }
 
   return "Looks premium at a glance. Check the full stat mix before calling it a true trophy.";
