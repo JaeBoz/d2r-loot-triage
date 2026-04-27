@@ -3,6 +3,23 @@
 [2026-04-26]
 
 Change:
+- Tightened result-card hierarchy, compressed checker spacing, and added restrained Diablo-inspired warm accents to the main farming UI.
+
+Type:
+- UX
+
+Why:
+- The decision-first UI was useful but felt too much like a generic dashboard, with extra spacing and weaker visual emphasis on the final action.
+
+Impact:
+- Result cards are faster to scan during repeated farming checks, with the primary decision more prominent and supporting Trade Value details kept secondary.
+
+Notes:
+- Evaluation logic, decision mapping, Trade Value tiers, and item data were unchanged.
+
+[2026-04-26]
+
+Change:
 - Mapped no-roll staple/chase uniques with strong Trade Value to `Keep` in the decision-first result layer instead of `Check Before Tossing`.
 
 Type:

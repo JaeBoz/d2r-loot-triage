@@ -21,10 +21,10 @@ export function AppShell() {
   const [category, setCategory] = useState<ItemCategory>("Bases");
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-7xl flex-col gap-5 px-4 py-6 sm:px-6 lg:px-8">
+    <main className="mx-auto flex min-h-screen max-w-7xl flex-col gap-3 px-3 py-4 sm:px-5 lg:px-8">
       <header>
         <Card className="overflow-hidden">
-          <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap items-center gap-2">
               <Pill active>D2R Loot Triage</Pill>
               <Pill>{mode}</Pill>
@@ -32,7 +32,7 @@ export function AppShell() {
             </div>
             <div className="flex flex-wrap items-center gap-2">
               <a
-                className="rounded-xl border border-border bg-black/20 px-4 py-2 text-sm font-semibold text-zinc-200 transition hover:border-zinc-500 hover:text-white"
+                className="rounded-xl border border-border bg-black/20 px-3 py-2 text-sm font-semibold text-zinc-200 transition hover:border-amber-500/60 hover:text-white"
                 href="https://forms.gle/TPfgMKG5xeRPPZqw6"
                 target="_blank"
                 rel="noreferrer noopener"
@@ -40,7 +40,7 @@ export function AppShell() {
                 Report Evaluation Issue
               </a>
               <Link
-                className="rounded-xl border border-border bg-black/20 px-4 py-2 text-sm font-semibold text-zinc-200 transition hover:border-zinc-500 hover:text-white"
+                className="rounded-xl border border-border bg-black/20 px-3 py-2 text-sm font-semibold text-zinc-200 transition hover:border-amber-500/60 hover:text-white"
                 href="/reference"
               >
                 Open Guides
@@ -48,14 +48,14 @@ export function AppShell() {
             </div>
           </div>
 
-          <div className="mt-4 flex flex-wrap gap-3">
+          <div className="mt-3 flex flex-wrap gap-2">
             {MODE_OPTIONS.map((option) => (
               <button
                 key={option.value}
-                className={`rounded-xl border px-4 py-2 text-sm font-semibold transition ${
+                className={`rounded-xl border px-3 py-1.5 text-sm font-semibold transition ${
                   mode === option.value
                     ? "border-accent bg-accent/15 text-accent"
-                    : "border-border bg-black/20 text-zinc-300 hover:border-zinc-500 hover:text-white"
+                    : "border-border bg-black/20 text-zinc-300 hover:border-amber-500/60 hover:text-white"
                 }`}
                 onClick={() => setMode(option.value)}
                 type="button"
@@ -72,10 +72,10 @@ export function AppShell() {
           {CATEGORY_TABS.map((tab) => (
             <button
               key={tab}
-              className={`rounded-xl px-4 py-2 text-sm font-semibold transition ${
+              className={`rounded-xl px-3 py-1.5 text-sm font-semibold transition ${
                 category === tab
-                  ? "bg-zinc-100 text-zinc-950"
-                  : "border border-border bg-black/20 text-zinc-300 hover:border-zinc-500 hover:text-white"
+                  ? "bg-amber-100 text-zinc-950 shadow-[0_0_18px_rgba(245,158,11,0.18)]"
+                  : "border border-border bg-black/20 text-zinc-300 hover:border-amber-500/60 hover:text-white"
               }`}
               onClick={() => setCategory(tab)}
               type="button"

@@ -18,8 +18,9 @@ body {
   margin: 0;
   min-height: 100vh;
   background:
-    radial-gradient(circle at top, rgba(125, 211, 252, 0.12), transparent 28%),
-    linear-gradient(180deg, #09090b 0%, #0f1218 50%, #09090b 100%);
+    radial-gradient(circle at 18% 0%, rgba(245, 158, 11, 0.14), transparent 28%),
+    radial-gradient(circle at 82% 10%, rgba(120, 53, 15, 0.18), transparent 30%),
+    linear-gradient(180deg, #080706 0%, #11100d 48%, #080706 100%);
   color: #f4f4f5;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -36,5 +37,5 @@ select {
 }
 
 ::selection {
-  background: rgba(125, 211, 252, 0.35);
+  background: rgba(245, 158, 11, 0.35);
 }

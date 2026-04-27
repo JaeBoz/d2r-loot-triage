@@ -106,17 +106,17 @@ export function UniqueChecker({ mode }: { mode: GameMode }) {
   };
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+    <div className="grid gap-3 lg:grid-cols-[1.02fr_0.98fr]">
       <Card>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-400">Unique Triage</p>
-            <h2 className="mt-2 text-2xl font-bold text-white">Select a curated unique and check key rolls</h2>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-200/80">Unique Triage</p>
+            <h2 className="mt-1 text-xl font-bold text-white sm:text-2xl">Identify the unique, then check only meaningful rolls</h2>
           </div>
           <div className="flex items-center gap-2">
             <Pill active>{mode}</Pill>
             <button
-              className="rounded-xl border border-border bg-black/20 px-3 py-2 text-sm font-semibold text-zinc-200 transition hover:border-zinc-500 hover:text-white"
+              className="rounded-xl border border-border bg-black/20 px-3 py-2 text-sm font-semibold text-zinc-200 transition hover:border-amber-500/60 hover:text-white"
               onClick={handleReset}
               type="button"
             >
@@ -125,7 +125,7 @@ export function UniqueChecker({ mode }: { mode: GameMode }) {
           </div>
         </div>
 
-        <div className="mt-6 grid gap-4 md:grid-cols-2">
+        <div className="mt-4 grid gap-3 md:grid-cols-2">
           <label className="grid gap-2 text-sm text-zinc-300 md:col-span-2">
             Unique item
             <select
@@ -142,7 +142,7 @@ export function UniqueChecker({ mode }: { mode: GameMode }) {
           </label>
 
           {selectedItem?.etherealRelevant ? (
-            <label className="flex items-center gap-3 rounded-xl border border-border bg-black/10 px-3 py-3 text-sm text-zinc-200 md:col-span-2">
+            <label className="flex items-center gap-3 rounded-xl border border-border bg-black/10 px-3 py-2.5 text-sm text-zinc-200 md:col-span-2">
               <input
                 className="h-4 w-4 rounded border-border bg-black/20 text-accent focus:ring-accent"
                 type="checkbox"
@@ -175,20 +175,22 @@ export function UniqueChecker({ mode }: { mode: GameMode }) {
               </label>
             ))
           ) : (
-            <div className="rounded-xl border border-dashed border-border bg-black/10 px-4 py-3 text-sm leading-6 text-zinc-400 md:col-span-2">
+            <div className="rounded-xl border border-dashed border-border bg-black/10 px-3 py-2.5 text-sm leading-5 text-zinc-400 md:col-span-2">
               This unique is mostly judged by whether it is a staple at all. No roll input is needed for the MVP.
             </div>
           )}
         </div>
 
         {selectedItem ? (
-          <div className="mt-6 rounded-2xl border border-border bg-black/20 p-4">
-            <div className="flex flex-wrap gap-2">
-              <Pill>{selectedItem.category}</Pill>
+          <div className="mt-4 rounded-2xl border border-amber-900/50 bg-gradient-to-br from-black/35 via-amber-950/15 to-black/15 p-3">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-200/70">Identified Unique</p>
+            <h3 className="mt-1 text-xl font-black text-white">{selectedItem.name}</h3>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <Pill>Unique {selectedItem.category}</Pill>
               <Pill>{selectedItem.liquidity} liquidity</Pill>
               <Pill>{mode === "SCNL" ? selectedItem.scnlPriority : selectedItem.sclPriority}</Pill>
             </div>
-            <p className="mt-3 text-sm leading-6 text-zinc-300">{selectedItem.notes}</p>
+            <p className="mt-2 text-sm leading-5 text-zinc-300">{selectedItem.notes}</p>
           </div>
         ) : null}
       </Card>

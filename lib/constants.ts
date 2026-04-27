@@ -19,10 +19,10 @@ export const CATEGORY_TABS: ItemCategory[] = [
 
 export const VERDICT_STYLES: Record<Verdict, string> = {
   Ignore: "border-zinc-700 bg-zinc-900/70 text-zinc-300",
-  "Low Priority": "border-slate-700 bg-slate-900/80 text-slate-200",
-  Check: "border-cyan-500/40 bg-cyan-500/10 text-cyan-200",
-  "Check sockets": "border-sky-500/40 bg-sky-500/10 text-sky-200",
-  Keep: "border-emerald-500/40 bg-emerald-500/10 text-emerald-200",
-  List: "border-amber-500/40 bg-amber-500/10 text-amber-200",
-  Premium: "border-fuchsia-500/40 bg-fuchsia-500/10 text-fuchsia-200"
+  "Low Priority": "border-stone-700 bg-stone-900/80 text-stone-200",
+  Check: "border-amber-700/60 bg-amber-950/35 text-amber-100",
+  "Check sockets": "border-orange-600/50 bg-orange-950/30 text-orange-100",
+  Keep: "border-emerald-500/45 bg-emerald-950/30 text-emerald-100",
+  List: "border-amber-400/55 bg-amber-900/25 text-amber-100",
+  Premium: "border-yellow-300/60 bg-gradient-to-br from-yellow-500/20 via-amber-900/25 to-black/25 text-yellow-100"
 };
