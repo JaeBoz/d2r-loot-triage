@@ -3,6 +3,23 @@
 [2026-04-27]
 
 Change:
+- Expanded Unique Checker coverage with a small curated Standard D2R batch: Highlord's Wrath, Kira's Guardian, Vampire Gaze, Verdungo's Hearty Cord, and Thunderstroke.
+
+Type:
+- Checker / Data
+
+Why:
+- These uniques commonly create farming hesitation because they are staples, roll-sensitive, or easy to misread as either junk or guaranteed value.
+
+Impact:
+- More real unique drops can be triaged quickly with minimal roll inputs and clearer low/mid/top roll separation.
+
+Notes:
+- Standard D2R only; no prices, Warlock items, market scraping, decision-output changes, or broad unique database expansion were added.
+
+[2026-04-27]
+
+Change:
 - Replaced the main guide entry point with a compact Quick ID Targets strip on the farming screen.
 
 Type:

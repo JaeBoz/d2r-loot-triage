@@ -357,7 +357,8 @@ export type UniqueRollField =
   | "energy"
   | "coldSkillDamage"
   | "allSkills"
-  | "lightningAbsorb";
+  | "lightningAbsorb"
+  | "vitality";
 
 export interface UniqueRollThresholdBand {
   low?: number;
@@ -427,6 +428,7 @@ export interface UniqueCheckInput {
   coldSkillDamage?: number;
   allSkills?: number;
   lightningAbsorb?: number;
+  vitality?: number;
 }
 
 export interface UniqueCheckResult {

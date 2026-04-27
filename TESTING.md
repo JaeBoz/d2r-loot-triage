@@ -30,6 +30,8 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 
 - Test roll-sensitive uniques with low, mid, and top rolls, such as `War Travelers`, `Nagelring`, `Raven Frost`, `Griffon's Eye`, and `Death's Fathom`.
 - Expected: weak rolls sound common or limited, mid rolls are not overstated, and top rolls stand out clearly.
+- Test newer curated uniques such as `Kira's Guardian`, `Vampire Gaze`, `Verdungo's Hearty Cord`, and `Thunderstroke`; expected: only meaningful roll fields appear and low/top rolls separate clearly.
+- Test `Highlord's Wrath`; expected: no roll input is needed and it reads as a staple keep/check item rather than a roll chase.
 - For eth-sensitive uniques, confirm ethereal state only helps when it makes sense for that item.
 - Test no-roll staple uniques such as `Stone of Jordan` and `Arachnid Mesh`; expected: decision label reads `Keep`, not `Check Before Tossing`.
 - Test a mid roll-sensitive unique; expected: decision label can still read `Check Before Tossing` when roll quality deserves review but is not an automatic keep.

@@ -782,6 +782,175 @@ export const uniqueItems: UniqueItemDefinition[] = [
     }
   },
   {
+    id: "highlords-wrath",
+    name: "Highlord's Wrath",
+    category: "Amulet",
+    hasVariableRolls: false,
+    keyRollFields: [],
+    scnlPriority: "high",
+    sclPriority: "high",
+    liquidity: "High",
+    notes: "Staple melee amulet. The drop itself is the value; IAS, Deadly Strike, and +skill make it worth keeping.",
+    source: "Arreat Summit / diablo2.io",
+    sources: {
+      baselineSource: {
+        label: "The Arreat Summit - Unique Amulets",
+        url: "https://classic.battle.net/diablo2exp/items/normal/uamulets.shtml"
+      },
+      validationSource: validationIndex,
+      notes: "Lightning damage varies, but it is not a meaningful trade-quality roll for fast triage."
+    }
+  },
+  {
+    id: "kiras-guardian",
+    name: "Kira's Guardian",
+    category: "Helm",
+    hasVariableRolls: true,
+    keyRollFields: ["allResist"],
+    scnlPriority: "high",
+    sclPriority: "high",
+    liquidity: "Medium",
+    notes: "Resist/CBF helm. High all res is the reason people pause on it; low rolls are mostly self-use.",
+    source: "Arreat Summit / diablo2.io",
+    rollDefinitions: [
+      {
+        key: "allResist",
+        label: "All Resist",
+        min: 50,
+        max: 70,
+        higherIsBetter: true,
+        thresholds: { low: 55, mid: 65, high: 70 }
+      }
+    ],
+    sources: {
+      baselineSource: {
+        label: "The Arreat Summit - Elite Unique Helms",
+        url: "https://classic.battle.net/diablo2exp/items/elite/uhelms.shtml"
+      },
+      validationSource: validationIndex,
+      notes: "Defense also varies, but all resist is the clean farming-triage field."
+    }
+  },
+  {
+    id: "vampire-gaze",
+    name: "Vampire Gaze",
+    category: "Helm",
+    hasVariableRolls: true,
+    keyRollFields: ["lifeLeech", "damageReduction"],
+    etherealRelevant: true,
+    ethPriority: "medium",
+    scnlPriority: "medium",
+    sclPriority: "medium",
+    liquidity: "Medium",
+    notes: "Merc and melee helm. Leech plus damage reduction are the rolls; eth copies are better for merc use.",
+    source: "Arreat Summit / diablo2.io",
+    rollDefinitions: [
+      {
+        key: "lifeLeech",
+        label: "Life Leech",
+        min: 6,
+        max: 8,
+        higherIsBetter: true,
+        thresholds: { low: 6, mid: 7, high: 8 }
+      },
+      {
+        key: "damageReduction",
+        label: "Damage Reduction",
+        min: 15,
+        max: 20,
+        higherIsBetter: true,
+        thresholds: { low: 16, mid: 18, high: 20 },
+        note: "The DR roll is the bigger value separator for most copies."
+      }
+    ],
+    sources: {
+      baselineSource: {
+        label: "The Arreat Summit - Exceptional Unique Helms",
+        url: "https://classic.battle.net/diablo2exp/items/exceptional/uhelms.shtml"
+      },
+      validationSource: validationIndex,
+      notes: "Magic damage reduction also varies, but leech and physical damage reduction are the fastest useful triage fields."
+    }
+  },
+  {
+    id: "verdungos-hearty-cord",
+    name: "Verdungo's Hearty Cord",
+    category: "Belt",
+    hasVariableRolls: true,
+    keyRollFields: ["damageReduction", "vitality"],
+    scnlPriority: "medium",
+    sclPriority: "high",
+    liquidity: "Medium",
+    notes: "PvP-style defensive belt. Damage reduction and vitality decide whether it is just usable or actually worth checking.",
+    source: "Arreat Summit / diablo2.io",
+    rollDefinitions: [
+      {
+        key: "damageReduction",
+        label: "Damage Reduction",
+        min: 10,
+        max: 15,
+        higherIsBetter: true,
+        thresholds: { low: 11, mid: 13, high: 15 }
+      },
+      {
+        key: "vitality",
+        label: "Vitality",
+        min: 30,
+        max: 40,
+        higherIsBetter: true,
+        thresholds: { low: 32, mid: 37, high: 40 },
+        note: "Vitality is the secondary roll that makes strong DR copies stand out."
+      }
+    ],
+    sources: {
+      baselineSource: {
+        label: "The Arreat Summit - Elite Unique Belts",
+        url: "https://classic.battle.net/diablo2exp/items/elite/ubelts.shtml"
+      },
+      validationSource: validationIndex,
+      notes: "Replenish life also varies, but DR and vitality are the high-signal fast triage rolls."
+    }
+  },
+  {
+    id: "thunderstroke",
+    name: "Thunderstroke",
+    category: "Javelin",
+    hasVariableRolls: true,
+    keyRollFields: ["allSkills", "enhancedDamage"],
+    scnlPriority: "medium",
+    sclPriority: "high",
+    liquidity: "Medium",
+    notes: "Lightning javazon option. +Javelin skills matter first; ED is a secondary quality roll.",
+    source: "Arreat Summit / diablo2.io",
+    rollDefinitions: [
+      {
+        key: "allSkills",
+        label: "Javelin and Spear Skills",
+        min: 2,
+        max: 4,
+        higherIsBetter: true,
+        thresholds: { low: 2, mid: 3, high: 4 }
+      },
+      {
+        key: "enhancedDamage",
+        label: "Enhanced Damage",
+        min: 150,
+        max: 200,
+        higherIsBetter: true,
+        thresholds: { low: 165, mid: 185, high: 200 },
+        note: "ED helps, but the skill roll is the main reason to check the item."
+      }
+    ],
+    sources: {
+      baselineSource: {
+        label: "The Arreat Summit - Unique Class-specific Items",
+        url: "https://classic.battle.net/diablo2exp/items/normal/uclass.shtml"
+      },
+      validationSource: validationIndex,
+      notes: "Lightning damage is fixed; the MVP models +Javelin skills and ED as the meaningful roll checks."
+    }
+  },
+  {
     id: "string-of-ears",
     name: "String of Ears",
     category: "Belt",
