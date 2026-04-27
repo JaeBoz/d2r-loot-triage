@@ -67,6 +67,11 @@ function toOptionalNumber(value: string) {
   return value.trim() === "" ? undefined : Number(value);
 }
 
+function getMagicSocketOptions(family: CircletFamily) {
+  const familyData = circletFamilies.find((entry) => entry.family === family);
+  return Array.from({ length: familyData?.maxMagicSockets ?? 0 }, (_, index) => String(index + 1));
+}
+
 export function CircletChecker({ mode }: { mode: GameMode }) {
   const [family, setFamily] = useState<CircletFamily>("Diadem");
   const [quality, setQuality] = useState<CircletQuality>("Rare");
@@ -77,11 +82,7 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
   const [skillTreeValue, setSkillTreeValue] = useState<CircletSkillTier>(3);
   const [form, setForm] = useState<CircletFormState>(emptyForm);
 
-  const familyData = useMemo(() => circletFamilies.find((entry) => entry.family === family), [family]);
-  const availableSocketOptions =
-    quality === "Magic"
-      ? Array.from({ length: familyData?.maxMagicSockets ?? 0 }, (_, index) => String(index + 1))
-      : ["1"];
+  const availableSocketOptions = quality === "Magic" ? getMagicSocketOptions(family) : ["1"];
   const hasInput =
     quality !== "Rare" ||
     family !== "Diadem" ||
@@ -136,14 +137,19 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
     }));
   };
 
+  const handleFamilyChange = (nextFamily: CircletFamily) => {
+    setFamily(nextFamily);
+    setForm((current) => {
+      if (quality !== "Magic" || current.sockets === "") {
+        return current;
+      }
+
+      return getMagicSocketOptions(nextFamily).includes(current.sockets) ? current : { ...current, sockets: "" };
+    });
+  };
+
   const handleSkillModeChange = (nextMode: CircletSkillMode) => {
     setSkillMode(nextMode);
-    if (quality === "Magic" && nextMode !== "none") {
-      setForm((current) => ({
-        ...current,
-        sockets: ""
-      }));
-    }
     if (nextMode !== "class") {
       setClassSkillType("");
     }
@@ -178,7 +184,7 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
             <select
               className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
               value={family}
-              onChange={(event) => setFamily(event.target.value as CircletFamily)}
+              onChange={(event) => handleFamilyChange(event.target.value as CircletFamily)}
             >
               {circletFamilies.map((entry) => (
                 <option key={entry.family} value={entry.family}>
@@ -309,7 +315,7 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
             />
           </label>
 
-          {quality === "Rare" || (quality === "Magic" && skillMode === "none") ? (
+          {quality === "Rare" || quality === "Magic" ? (
             <label className="grid gap-2 text-sm text-zinc-300">
               Sockets
               <select

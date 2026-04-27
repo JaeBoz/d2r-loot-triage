@@ -352,9 +352,11 @@ export function evaluateUnique(input: UniqueCheckInput): UniqueCheckResult {
         : "Keep it if you have stash room. This is useful, but demand may be selective.";
   } else if (verdict === "List") {
     recommendedAction =
-      item.liquidity === "High"
-        ? "Check market activity or list it. It is easy to understand and commonly traded, but roll quality still matters."
-        : "Check market activity or list it only if the roll is competitive; demand is more niche.";
+      !item.hasVariableRolls && item.liquidity === "High"
+        ? "Keep it. It is easy to understand and commonly traded; no roll check is needed."
+        : item.liquidity === "High"
+          ? "Check market activity or list it. It is easy to understand and commonly traded, but roll quality still matters."
+          : "Check market activity or list it only if the roll is competitive; demand is more niche.";
   } else {
     recommendedAction = "Treat this as premium and compare it against top-end listings.";
   }

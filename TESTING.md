@@ -15,6 +15,9 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - Test a rare circlet with `+2 class skills + 20 FCR`; expected: strong caster result with trade-aware explanation.
 - Add a socket to a rare circlet with useful support; expected: socket utility is mentioned and improves the result.
 - Test a magic circlet with multiple sockets and FRW or other support; expected: sockets are treated as an important value driver.
+- Test magic circlet-family socket options by family; expected: Circlet/Coronet allow up to 2 sockets, Tiara/Diadem allow up to 3 sockets, and no impossible socket states appear.
+- Test a socketless weak magic circlet; expected: sockets being available does not inflate weak/no-support magic circlets.
+- Re-check rare `+2 skills only` and rare `2/20` style circlets after magic socket testing; expected: rare circlet behavior remains unchanged.
 
 ## Bases
 

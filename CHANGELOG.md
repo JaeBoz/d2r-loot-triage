@@ -3,6 +3,40 @@
 [2026-04-26]
 
 Change:
+- Exposed valid socket states for magic circlet-family items in the Circlet Checker, including family-aware socket limits.
+
+Type:
+- Checker
+
+Why:
+- Farming-session QA found magic circlet socket/support outcomes could not be represented cleanly even though the evaluator already handled socket-aware magic circlet patterns.
+
+Impact:
+- Players can now enter magic Circlet/Coronet/Tiara/Diadem socket outcomes for jackpot-pattern triage without impossible socket options.
+
+Notes:
+- Evaluation remains deterministic; no pricing, broad affix expansion, rare circlet retuning, or architecture refactor was added.
+
+[2026-04-26]
+
+Change:
+- Corrected no-roll staple unique recommended-action wording so obvious keep items no longer mention roll quality.
+
+Type:
+- UX
+
+Why:
+- Farming-session QA showed Stone of Jordan and Arachnid Mesh displayed the right `Keep` decision but still used roll-sensitive action wording.
+
+Impact:
+- No-roll staple uniques now give a cleaner immediate keep/check signal without implying hidden roll evaluation.
+
+Notes:
+- Scoring, Trade Value tiers, item data, and decision mapping were unchanged.
+
+[2026-04-26]
+
+Change:
 - Tightened result-card hierarchy, compressed checker spacing, and added restrained Diablo-inspired warm accents to the main farming UI.
 
 Type:
