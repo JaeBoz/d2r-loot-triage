@@ -342,7 +342,10 @@ export interface VarianceAffixDefinition {
 export type UniqueRollField =
   | "magicFind"
   | "fasterCastRate"
+  | "fasterRunWalk"
+  | "fasterHitRecovery"
   | "damage"
+  | "defense"
   | "dexterity"
   | "attackRating"
   | "allResist"
@@ -358,11 +361,20 @@ export type UniqueRollField =
   | "lifeLeech"
   | "damageReduction"
   | "fireResist"
+  | "lightningResist"
+  | "manaLeech"
+  | "maxLifePercent"
+  | "maxManaPercent"
+  | "magicSkillDamage"
+  | "magicDamageReduced"
+  | "extraGold"
   | "manaAfterKill"
   | "lifeAfterKill"
   | "apocalypse"
+  | "bindDemon"
   | "consume"
   | "bloodBoil"
+  | "bloodOath"
   | "engorge"
   | "demonicMastery"
   | "minusEnemyMagicResist"
@@ -430,7 +442,10 @@ export interface UniqueCheckInput {
   ethereal?: boolean;
   magicFind?: number;
   fasterCastRate?: number;
+  fasterRunWalk?: number;
+  fasterHitRecovery?: number;
   damage?: number;
+  defense?: number;
   dexterity?: number;
   attackRating?: number;
   allResist?: number;
@@ -446,11 +461,20 @@ export interface UniqueCheckInput {
   lifeLeech?: number;
   damageReduction?: number;
   fireResist?: number;
+  lightningResist?: number;
+  manaLeech?: number;
+  maxLifePercent?: number;
+  maxManaPercent?: number;
+  magicSkillDamage?: number;
+  magicDamageReduced?: number;
+  extraGold?: number;
   manaAfterKill?: number;
   lifeAfterKill?: number;
   apocalypse?: number;
+  bindDemon?: number;
   consume?: number;
   bloodBoil?: number;
+  bloodOath?: number;
   engorge?: number;
   demonicMastery?: number;
   minusEnemyMagicResist?: number;

@@ -1322,16 +1322,32 @@ export const uniqueItems: UniqueItemDefinition[] = [
     name: "Dreadfang",
     category: "Warlock Unique",
     ruleset: "warlock",
-    hasVariableRolls: false,
-    keyRollFields: [],
+    hasVariableRolls: true,
+    keyRollFields: ["enhancedDamage", "manaLeech"],
     scnlPriority: "low",
     sclPriority: "low",
     liquidity: "Low",
-    notes: "Warlock-only item. Roll data was not included in the provided dataset excerpt.",
+    notes: "Warlock-only item. ED and mana leech are the listed variable rolls.",
     source: "User-provided Warlock dataset",
+    rollDefinitions: [
+      {
+        key: "enhancedDamage",
+        label: "Enhanced Damage",
+        min: 133,
+        max: 166,
+        higherIsBetter: true
+      },
+      {
+        key: "manaLeech",
+        label: "Mana Stolen Per Hit",
+        min: 3,
+        max: 6,
+        higherIsBetter: true
+      }
+    ],
     sources: {
       baselineSource: userWarlockDatasetSource,
-      notes: "Added as a conservative name-only entry because no base item or roll ranges were included in the pasted prompt."
+      notes: "Uses only the Dreadfang ranges pasted in the authoritative dataset."
     }
   },
   {
@@ -1339,16 +1355,53 @@ export const uniqueItems: UniqueItemDefinition[] = [
     name: "Bloodpact Shard",
     category: "Warlock Unique",
     ruleset: "warlock",
-    hasVariableRolls: false,
-    keyRollFields: [],
+    hasVariableRolls: true,
+    keyRollFields: ["bindDemon", "bloodBoil", "bloodOath", "maxLifePercent", "magicFind"],
     scnlPriority: "low",
     sclPriority: "low",
     liquidity: "Low",
-    notes: "Warlock-only item. Roll data was not included in the provided dataset excerpt.",
+    notes: "Warlock-only item. Skill rolls, max life, and MF are the listed variable rolls.",
     source: "User-provided Warlock dataset",
+    rollDefinitions: [
+      {
+        key: "bindDemon",
+        label: "Bind Demon",
+        min: 1,
+        max: 3,
+        higherIsBetter: true
+      },
+      {
+        key: "bloodBoil",
+        label: "Blood Boil",
+        min: 2,
+        max: 3,
+        higherIsBetter: true
+      },
+      {
+        key: "bloodOath",
+        label: "Blood Oath",
+        min: 2,
+        max: 3,
+        higherIsBetter: true
+      },
+      {
+        key: "maxLifePercent",
+        label: "Increased Maximum Life",
+        min: 10,
+        max: 15,
+        higherIsBetter: true
+      },
+      {
+        key: "magicFind",
+        label: "Magic Find",
+        min: 20,
+        max: 35,
+        higherIsBetter: true
+      }
+    ],
     sources: {
       baselineSource: userWarlockDatasetSource,
-      notes: "Added as a conservative name-only entry because no base item or roll ranges were included in the pasted prompt."
+      notes: "Uses only the Bloodpact Shard ranges pasted in the authoritative dataset."
     }
   },
   {
@@ -1356,16 +1409,39 @@ export const uniqueItems: UniqueItemDefinition[] = [
     name: "Wraithstep",
     category: "Warlock Unique",
     ruleset: "warlock",
-    hasVariableRolls: false,
-    keyRollFields: [],
+    hasVariableRolls: true,
+    keyRollFields: ["defense", "dexterity", "energy"],
     scnlPriority: "low",
     sclPriority: "low",
     liquidity: "Low",
-    notes: "Warlock-only item. Roll data was not included in the provided dataset excerpt.",
+    notes: "Warlock-only item. Defense, dexterity, and energy are the listed variable rolls.",
     source: "User-provided Warlock dataset",
+    rollDefinitions: [
+      {
+        key: "defense",
+        label: "Defense",
+        min: 40,
+        max: 60,
+        higherIsBetter: true
+      },
+      {
+        key: "dexterity",
+        label: "Dexterity",
+        min: 10,
+        max: 15,
+        higherIsBetter: true
+      },
+      {
+        key: "energy",
+        label: "Energy",
+        min: 10,
+        max: 15,
+        higherIsBetter: true
+      }
+    ],
     sources: {
       baselineSource: userWarlockDatasetSource,
-      notes: "Added as a conservative name-only entry because no base item or roll ranges were included in the pasted prompt."
+      notes: "Uses only the Wraithstep ranges pasted in the authoritative dataset."
     }
   },
   {
@@ -1373,16 +1449,39 @@ export const uniqueItems: UniqueItemDefinition[] = [
     name: "Sling",
     category: "Warlock Unique",
     ruleset: "warlock",
-    hasVariableRolls: false,
-    keyRollFields: [],
+    hasVariableRolls: true,
+    keyRollFields: ["minusEnemyMagicResist", "energy", "magicFind"],
     scnlPriority: "low",
     sclPriority: "low",
     liquidity: "Low",
-    notes: "Warlock-only item. Roll data was not included in the provided dataset excerpt.",
+    notes: "Warlock-only item. Enemy magic res, energy, and MF are the listed variable rolls.",
     source: "User-provided Warlock dataset",
+    rollDefinitions: [
+      {
+        key: "minusEnemyMagicResist",
+        label: "-Enemy Magic Resistance",
+        min: 3,
+        max: 5,
+        higherIsBetter: true
+      },
+      {
+        key: "energy",
+        label: "Energy",
+        min: 10,
+        max: 15,
+        higherIsBetter: true
+      },
+      {
+        key: "magicFind",
+        label: "Magic Find",
+        min: 10,
+        max: 20,
+        higherIsBetter: true
+      }
+    ],
     sources: {
       baselineSource: userWarlockDatasetSource,
-      notes: "Added as a conservative name-only entry because no base item or roll ranges were included in the pasted prompt."
+      notes: "Uses only the Sling ranges pasted in the authoritative dataset."
     }
   },
   {
@@ -1390,16 +1489,39 @@ export const uniqueItems: UniqueItemDefinition[] = [
     name: "Opalvein",
     category: "Warlock Unique",
     ruleset: "warlock",
-    hasVariableRolls: false,
-    keyRollFields: [],
+    hasVariableRolls: true,
+    keyRollFields: ["fireResist", "manaAfterKill", "lifeAfterKill"],
     scnlPriority: "low",
     sclPriority: "low",
     liquidity: "Low",
-    notes: "Warlock-only item. Roll data was not included in the provided dataset excerpt.",
+    notes: "Warlock-only item. Fire res and after-kill rolls are the listed variable rolls.",
     source: "User-provided Warlock dataset",
+    rollDefinitions: [
+      {
+        key: "fireResist",
+        label: "Fire Resist",
+        min: 6,
+        max: 8,
+        higherIsBetter: true
+      },
+      {
+        key: "manaAfterKill",
+        label: "Mana After Each Kill",
+        min: 1,
+        max: 3,
+        higherIsBetter: true
+      },
+      {
+        key: "lifeAfterKill",
+        label: "Life After Each Kill",
+        min: 1,
+        max: 3,
+        higherIsBetter: true
+      }
+    ],
     sources: {
       baselineSource: userWarlockDatasetSource,
-      notes: "Added as a conservative name-only entry because no base item or roll ranges were included in the pasted prompt."
+      notes: "Uses only the Opalvein ranges pasted in the authoritative dataset."
     }
   },
   {
@@ -1407,16 +1529,59 @@ export const uniqueItems: UniqueItemDefinition[] = [
     name: "Entropy Locket",
     category: "Warlock Unique",
     ruleset: "warlock",
-    hasVariableRolls: false,
-    keyRollFields: [],
+    hasVariableRolls: true,
+    keyRollFields: [
+      "fasterCastRate",
+      "magicSkillDamage",
+      "maxManaPercent",
+      "lightningResist",
+      "magicDamageReduced"
+    ],
     scnlPriority: "low",
     sclPriority: "low",
     liquidity: "Low",
-    notes: "Warlock-only item. Roll data was not included in the provided dataset excerpt.",
+    notes: "Warlock-only item. FCR, magic skill damage, max mana, lightning res, and MDR are the listed variable rolls.",
     source: "User-provided Warlock dataset",
+    rollDefinitions: [
+      {
+        key: "fasterCastRate",
+        label: "Faster Cast Rate",
+        min: 5,
+        max: 10,
+        higherIsBetter: true
+      },
+      {
+        key: "magicSkillDamage",
+        label: "Magic Skill Damage",
+        min: 5,
+        max: 10,
+        higherIsBetter: true
+      },
+      {
+        key: "maxManaPercent",
+        label: "Increased Maximum Mana",
+        min: 10,
+        max: 15,
+        higherIsBetter: true
+      },
+      {
+        key: "lightningResist",
+        label: "Lightning Resist",
+        min: 25,
+        max: 40,
+        higherIsBetter: true
+      },
+      {
+        key: "magicDamageReduced",
+        label: "Magic Damage Reduced",
+        min: 8,
+        max: 12,
+        higherIsBetter: true
+      }
+    ],
     sources: {
       baselineSource: userWarlockDatasetSource,
-      notes: "Added as a conservative name-only entry because no base item or roll ranges were included in the pasted prompt."
+      notes: "Uses only the Entropy Locket ranges pasted in the authoritative dataset."
     }
   },
   {
@@ -1424,16 +1589,75 @@ export const uniqueItems: UniqueItemDefinition[] = [
     name: "Gheed's Wager",
     category: "Warlock Unique",
     ruleset: "warlock",
-    hasVariableRolls: false,
-    keyRollFields: [],
+    hasVariableRolls: true,
+    keyRollFields: [
+      "fasterRunWalk",
+      "fasterCastRate",
+      "fasterHitRecovery",
+      "minusEnemyMagicResist",
+      "enhancedDefense",
+      "fireResist",
+      "extraGold"
+    ],
     scnlPriority: "low",
     sclPriority: "low",
     liquidity: "Low",
-    notes: "Warlock-only item. Roll data was not included in the provided dataset excerpt.",
+    notes: "Warlock-only item. Movement, cast, hit recovery, magic pierce, defense, fire res, and gold rolls are listed.",
     source: "User-provided Warlock dataset",
+    rollDefinitions: [
+      {
+        key: "fasterRunWalk",
+        label: "Faster Run/Walk",
+        min: 10,
+        max: 20,
+        higherIsBetter: true
+      },
+      {
+        key: "fasterCastRate",
+        label: "Faster Cast Rate",
+        min: 10,
+        max: 20,
+        higherIsBetter: true
+      },
+      {
+        key: "fasterHitRecovery",
+        label: "Faster Hit Recovery",
+        min: 10,
+        max: 20,
+        higherIsBetter: true
+      },
+      {
+        key: "minusEnemyMagicResist",
+        label: "-Enemy Magic Resistance",
+        min: 3,
+        max: 7,
+        higherIsBetter: true
+      },
+      {
+        key: "enhancedDefense",
+        label: "Enhanced Defense",
+        min: 90,
+        max: 150,
+        higherIsBetter: true
+      },
+      {
+        key: "fireResist",
+        label: "Fire Resist",
+        min: 5,
+        max: 15,
+        higherIsBetter: true
+      },
+      {
+        key: "extraGold",
+        label: "Extra Gold",
+        min: 44,
+        max: 75,
+        higherIsBetter: true
+      }
+    ],
     sources: {
       baselineSource: userWarlockDatasetSource,
-      notes: "Added as a conservative name-only entry because no base item or roll ranges were included in the pasted prompt."
+      notes: "Uses only the Gheed's Wager ranges pasted in the authoritative dataset."
     }
   },
   {
@@ -1441,16 +1665,46 @@ export const uniqueItems: UniqueItemDefinition[] = [
     name: "Hellwarden's Will",
     category: "Warlock Unique",
     ruleset: "warlock",
-    hasVariableRolls: false,
-    keyRollFields: [],
+    hasVariableRolls: true,
+    keyRollFields: ["minusEnemyMagicResist", "minusEnemyFireResist", "enhancedDefense", "manaAfterKill"],
     scnlPriority: "low",
     sclPriority: "low",
     liquidity: "Low",
-    notes: "Warlock-only item. Roll data was not included in the provided dataset excerpt.",
+    notes: "Warlock-only item. Enemy magic/fire res, defense, and mana after kill are the listed variable rolls.",
     source: "User-provided Warlock dataset",
+    rollDefinitions: [
+      {
+        key: "minusEnemyMagicResist",
+        label: "-Enemy Magic Resistance",
+        min: 5,
+        max: 8,
+        higherIsBetter: true
+      },
+      {
+        key: "minusEnemyFireResist",
+        label: "-Enemy Fire Resistance",
+        min: 5,
+        max: 8,
+        higherIsBetter: true
+      },
+      {
+        key: "enhancedDefense",
+        label: "Enhanced Defense",
+        min: 150,
+        max: 215,
+        higherIsBetter: true
+      },
+      {
+        key: "manaAfterKill",
+        label: "Mana After Each Kill",
+        min: 4,
+        max: 6,
+        higherIsBetter: true
+      }
+    ],
     sources: {
       baselineSource: userWarlockDatasetSource,
-      notes: "Added as a conservative name-only entry because no base item or roll ranges were included in the pasted prompt."
+      notes: "Uses only the Hellwarden's Will ranges pasted in the authoritative dataset."
     }
   },
   {

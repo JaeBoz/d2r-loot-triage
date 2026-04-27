@@ -3,6 +3,23 @@
 [2026-04-27]
 
 Change:
+- Added verified variable roll fields for the non-Grimoire Warlock uniques already in Unique Triage.
+
+Type:
+- Data
+
+Why:
+- The non-Grimoire Warlock uniques were still name-only after the initial data correction.
+
+Impact:
+- Dreadfang, Bloodpact Shard, Wraithstep, Sling, Opalvein, Entropy Locket, Gheed's Wager, and Hellwarden's Will now expose their pasted numeric roll ranges in Warlock mode.
+
+Notes:
+- Uses only the authoritative dataset from the task; no scoring logic, Trade Value tiers, decision mapping, LOD data, or item coverage changed.
+
+[2026-04-27]
+
+Change:
 - Replaced generated Warlock unique data with prompt-sourced Warlock unique names and Grimoire roll ranges.
 
 Type:

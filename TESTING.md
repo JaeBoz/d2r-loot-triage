@@ -15,6 +15,9 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - In `LOD`, confirm those Warlock names are hidden.
 - Confirm old inaccurate Warlock names no longer appear: `Diablo's Deception`, `Baal's Betrayal`, and `Mephisto's Manipulation`.
 - Select one Grimoire such as `Ars Al'Diabolos` and one non-Grimoire such as `Dreadfang`; expected: both are Warlock-only Unique Checker entries.
+- Test `Dreadfang`; expected: `Enhanced Damage` and `Mana Stolen Per Hit` roll inputs are available.
+- Test `Bloodpact Shard`; expected: `Bind Demon`, `Blood Boil`, `Blood Oath`, `Increased Maximum Life`, and `Magic Find` roll inputs are available.
+- Test `Entropy Locket` or `Gheed's Wager`; expected: their listed Warlock roll inputs are available and no unlisted rolls appear.
 
 ## Rare Boots
 
