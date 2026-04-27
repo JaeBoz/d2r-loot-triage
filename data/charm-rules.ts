@@ -77,7 +77,7 @@ export const charmPatterns: CharmPatternRule[] = [
   {
     id: "sc-poison",
     size: "Small Charm",
-    label: "high poison damage",
+    label: "moderate poison damage",
     score: 5,
     verdictFloor: "Check",
     archetypes: ["PvP", "niche"],

@@ -98,8 +98,12 @@ function baseDemandPhrase(item: BaseItem, input: BaseCheckInput) {
   }
 
   if (item.socketSensitive && item.desiredSockets.includes(input.sockets)) {
-    if (item.tags.includes("spirit") || item.tags.includes("caster") || item.tags.includes("merc")) {
-      return "Correct sockets make this a commonly sought-after trade candidate.";
+    if (item.tags.includes("spirit")) {
+      return "Correct sockets make this a commonly traded utility base, but broad supply can keep demand selective.";
+    }
+
+    if (item.tags.includes("caster") || item.tags.includes("merc")) {
+      return "Correct sockets make this a recognizable trade candidate, with demand depending on supply and buyer need.";
     }
 
     return "Correct sockets are the main reason this has trade appeal.";

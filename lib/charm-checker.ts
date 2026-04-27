@@ -346,6 +346,8 @@ export function evaluateCharm(input: CharmCheckInput): CharmCheckResult {
   if (matchedPatterns.length > 0) {
     if (isTopPoisonSmallCharm(input, matchedPatternIds)) {
       explanation = `${summary} is a top poison small charm roll. High-end poison small charms have strong standalone trade relevance and should be treated as premium hits.`;
+    } else if (matchedPatternIds.includes("sc-poison")) {
+      explanation = `${summary} is a moderate poison small charm. Poison rolls in this range are niche or conditional rather than standout trade hits.`;
     } else if (input.size === "Grand Charm" && isPlainSkiller(matchedPatternIds)) {
       explanation = `${summary} fits a valuable ${input.size.toLowerCase()} pattern. Plain skiller grand charms are often tradable, though value depends on the skill tree and current demand.`;
     } else if (input.size === "Grand Charm" && input.skill?.trim()) {

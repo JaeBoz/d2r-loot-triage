@@ -3,6 +3,23 @@
 [2026-04-26]
 
 Change:
+- Calibrated Base and Charm explanation wording to avoid demand contradictions and mid-roll poison overstatement.
+
+Type:
+- UX
+
+Why:
+- Farming-session QA found minor wording inconsistencies, such as 4os Monarch sounding both low-demand and commonly sought-after, and mid poison charms sounding higher-value than their Trade Value tier.
+
+Impact:
+- Explanations now better separate widely used but saturated bases from scarce demand, and describe mid poison small charms as niche/conditional rather than standout hits.
+
+Notes:
+- Wording-only change; scoring, Trade Value tiers, decision mapping, and item data coverage were unchanged.
+
+[2026-04-26]
+
+Change:
 - Exposed valid socket states for magic circlet-family items in the Circlet Checker, including family-aware socket limits.
 
 Type:
