@@ -5,14 +5,9 @@ const validationIndex = {
   url: "https://diablo2.io/uniques"
 } as const;
 
-const warlockOverviewSource = {
-  label: "Blizzard News - Reign of the Warlock",
-  url: "https://news.blizzard.com/en-us/article/24243863/rain-annihilation-in-reign-of-the-warlock"
-} as const;
-
-const warlockPatchNotesSource = {
-  label: "Blizzard Forums - Reign of the Warlock patch notes",
-  url: "https://us.forums.blizzard.com/en/d2r/t/unofficial-30-patch-notes-reign-of-the-warlock/171280"
+const userWarlockDatasetSource = {
+  label: "User-provided Reign of the Warlock unique dataset",
+  url: ""
 } as const;
 
 export const uniqueItems: UniqueItemDefinition[] = [
@@ -1055,135 +1050,407 @@ export const uniqueItems: UniqueItemDefinition[] = [
     }
   },
   {
-    id: "diablos-deception",
-    name: "Diablo's Deception",
-    category: "Book",
+    id: "ars-al-diabolos",
+    name: "Ars Al'Diabolos",
+    category: "Grimoire",
     ruleset: "warlock",
     hasVariableRolls: true,
-    keyRollFields: ["allSkills", "fireSkillDamage", "minusEnemyFireResist"],
-    scnlPriority: "high",
-    sclPriority: "high",
+    keyRollFields: ["fireSkillDamage", "apocalypse", "enhancedDefense", "fireResist", "manaAfterKill"],
+    scnlPriority: "medium",
+    sclPriority: "medium",
     liquidity: "Medium",
-    notes: "Warlock-only item. Fire book rolls matter; skills, fire damage, and -enemy fire res are the check.",
-    source: "Blizzard News / community patch notes",
+    notes: "Warlock-only item. Fire damage and Apocalypse are the main checks.",
+    source: "User-provided Warlock dataset",
     rollDefinitions: [
-      {
-        key: "allSkills",
-        label: "Fire Skills",
-        min: 1,
-        max: 3,
-        higherIsBetter: true,
-        thresholds: { low: 1, mid: 2, high: 3 }
-      },
       {
         key: "fireSkillDamage",
         label: "Fire Skill Damage",
-        min: 10,
-        max: 30,
+        min: 15,
+        max: 25,
         higherIsBetter: true,
-        thresholds: { low: 15, mid: 25, high: 30 }
+        thresholds: { low: 17, mid: 22, high: 25 }
       },
       {
-        key: "minusEnemyFireResist",
-        label: "-Enemy Fire Resist",
-        min: 5,
-        max: 20,
+        key: "apocalypse",
+        label: "Apocalypse",
+        min: 3,
+        max: 5,
         higherIsBetter: true,
-        thresholds: { low: 8, mid: 15, high: 20 }
+        thresholds: { low: 3, mid: 4, high: 5 }
+      },
+      {
+        key: "enhancedDefense",
+        label: "Enhanced Defense",
+        min: 170,
+        max: 200,
+        higherIsBetter: true,
+        thresholds: { low: 180, mid: 190, high: 200 }
+      },
+      {
+        key: "fireResist",
+        label: "Fire Resist",
+        min: 20,
+        max: 30,
+        higherIsBetter: true,
+        thresholds: { low: 23, mid: 27, high: 30 }
+      },
+      {
+        key: "manaAfterKill",
+        label: "Mana After Each Kill",
+        min: 5,
+        max: 10,
+        higherIsBetter: true,
+        thresholds: { low: 6, mid: 8, high: 10 }
       }
     ],
     sources: {
-      baselineSource: warlockOverviewSource,
-      validationSource: warlockPatchNotesSource,
-      notes: "Warlock-only unique book. Roll ranges are seeded from the community patch-note compilation and should stay mode-gated."
+      baselineSource: userWarlockDatasetSource,
+      notes: "Source prompt also listed Light Radius 5-10; it is omitted because the current Unique Checker does not treat it as a meaningful triage roll."
     }
   },
   {
-    id: "baals-betrayal",
-    name: "Baal's Betrayal",
-    category: "Book",
+    id: "ars-tor-baalos",
+    name: "Ars Tor'Baalos",
+    category: "Grimoire",
     ruleset: "warlock",
     hasVariableRolls: true,
-    keyRollFields: ["allSkills", "coldSkillDamage", "minusEnemyColdResist"],
-    scnlPriority: "high",
-    sclPriority: "high",
+    keyRollFields: ["consume", "bloodBoil", "engorge", "demonicMastery", "enhancedDefense", "damageReduction"],
+    scnlPriority: "medium",
+    sclPriority: "medium",
     liquidity: "Medium",
-    notes: "Warlock-only item. Cold book rolls matter; skills, cold damage, and -enemy cold res are the check.",
-    source: "Blizzard News / community patch notes",
+    notes: "Warlock-only item. Check the skill rolls first; defense and PDR are secondary.",
+    source: "User-provided Warlock dataset",
     rollDefinitions: [
       {
-        key: "allSkills",
-        label: "Cold Skills",
+        key: "consume",
+        label: "Consume",
+        min: 2,
+        max: 3,
+        higherIsBetter: true,
+        thresholds: { low: 2, mid: 3, high: 3 }
+      },
+      {
+        key: "bloodBoil",
+        label: "Blood Boil",
+        min: 2,
+        max: 4,
+        higherIsBetter: true,
+        thresholds: { low: 2, mid: 3, high: 4 }
+      },
+      {
+        key: "engorge",
+        label: "Engorge",
+        min: 2,
+        max: 3,
+        higherIsBetter: true,
+        thresholds: { low: 2, mid: 3, high: 3 }
+      },
+      {
+        key: "demonicMastery",
+        label: "Demonic Mastery",
+        min: 2,
+        max: 3,
+        higherIsBetter: true,
+        thresholds: { low: 2, mid: 3, high: 3 }
+      },
+      {
+        key: "enhancedDefense",
+        label: "Enhanced Defense",
+        min: 120,
+        max: 150,
+        higherIsBetter: true,
+        thresholds: { low: 130, mid: 140, high: 150 }
+      },
+      {
+        key: "damageReduction",
+        label: "Physical Damage Reduction",
+        min: 5,
+        max: 10,
+        higherIsBetter: true,
+        thresholds: { low: 6, mid: 8, high: 10 }
+      }
+    ],
+    sources: {
+      baselineSource: userWarlockDatasetSource,
+      notes: "Only the roll ranges pasted in the task are modeled."
+    }
+  },
+  {
+    id: "ars-dul-mephistos",
+    name: "Ars Dul'Mephistos",
+    category: "Grimoire",
+    ruleset: "warlock",
+    hasVariableRolls: true,
+    keyRollFields: ["fasterCastRate", "enhancedDamage", "attackRating", "minusEnemyMagicResist", "enhancedDefense", "magicFind"],
+    scnlPriority: "medium",
+    sclPriority: "medium",
+    liquidity: "Medium",
+    notes: "Warlock-only item. FCR and -enemy magic res are the main checks.",
+    source: "User-provided Warlock dataset",
+    rollDefinitions: [
+      {
+        key: "fasterCastRate",
+        label: "Faster Cast Rate",
+        min: 20,
+        max: 30,
+        higherIsBetter: true,
+        thresholds: { low: 22, mid: 27, high: 30 }
+      },
+      {
+        key: "enhancedDamage",
+        label: "Enhanced Damage",
+        min: 70,
+        max: 115,
+        higherIsBetter: true,
+        thresholds: { low: 85, mid: 100, high: 115 }
+      },
+      {
+        key: "attackRating",
+        label: "Bonus Attack Rating",
+        min: 50,
+        max: 70,
+        higherIsBetter: true,
+        thresholds: { low: 55, mid: 65, high: 70 }
+      },
+      {
+        key: "minusEnemyMagicResist",
+        label: "-Enemy Magic Resistance",
+        min: 10,
+        max: 20,
+        higherIsBetter: true,
+        thresholds: { low: 12, mid: 17, high: 20 }
+      },
+      {
+        key: "enhancedDefense",
+        label: "Enhanced Defense",
+        min: 140,
+        max: 170,
+        higherIsBetter: true,
+        thresholds: { low: 150, mid: 160, high: 170 }
+      },
+      {
+        key: "magicFind",
+        label: "Magic Find",
+        min: 10,
+        max: 25,
+        higherIsBetter: true,
+        thresholds: { low: 14, mid: 20, high: 25 }
+      }
+    ],
+    sources: {
+      baselineSource: userWarlockDatasetSource,
+      notes: "Only the roll ranges pasted in the task are modeled."
+    }
+  },
+  {
+    id: "measured-wrath",
+    name: "Measured Wrath",
+    category: "Grimoire",
+    ruleset: "warlock",
+    hasVariableRolls: true,
+    keyRollFields: ["flameWave", "ringOfFire", "summonTainted", "enhancedDefense", "vitality", "fireResist", "lifeAfterKill"],
+    scnlPriority: "medium",
+    sclPriority: "medium",
+    liquidity: "Medium",
+    notes: "Warlock-only item. Skill rolls plus vitality and fire res are the checks.",
+    source: "User-provided Warlock dataset",
+    rollDefinitions: [
+      {
+        key: "flameWave",
+        label: "Flame Wave",
         min: 1,
         max: 3,
         higherIsBetter: true,
         thresholds: { low: 1, mid: 2, high: 3 }
       },
       {
-        key: "coldSkillDamage",
-        label: "Cold Skill Damage",
-        min: 10,
-        max: 30,
-        higherIsBetter: true,
-        thresholds: { low: 15, mid: 25, high: 30 }
-      },
-      {
-        key: "minusEnemyColdResist",
-        label: "-Enemy Cold Resist",
-        min: 5,
-        max: 20,
-        higherIsBetter: true,
-        thresholds: { low: 8, mid: 15, high: 20 }
-      }
-    ],
-    sources: {
-      baselineSource: warlockOverviewSource,
-      validationSource: warlockPatchNotesSource,
-      notes: "Warlock-only unique book. Roll ranges are seeded from the community patch-note compilation and should stay mode-gated."
-    }
-  },
-  {
-    id: "mephistos-manipulation",
-    name: "Mephisto's Manipulation",
-    category: "Book",
-    ruleset: "warlock",
-    hasVariableRolls: true,
-    keyRollFields: ["allSkills", "lightningSkillDamage", "minusEnemyLightningResist"],
-    scnlPriority: "high",
-    sclPriority: "high",
-    liquidity: "Medium",
-    notes: "Warlock-only item. Lightning book rolls matter; skills, lightning damage, and -enemy lightning res are the check.",
-    source: "Blizzard News / community patch notes",
-    rollDefinitions: [
-      {
-        key: "allSkills",
-        label: "Lightning Skills",
+        key: "ringOfFire",
+        label: "Ring of Fire",
         min: 1,
         max: 3,
         higherIsBetter: true,
         thresholds: { low: 1, mid: 2, high: 3 }
       },
       {
-        key: "lightningSkillDamage",
-        label: "Lightning Skill Damage",
-        min: 10,
-        max: 30,
+        key: "summonTainted",
+        label: "Summon Tainted",
+        min: 1,
+        max: 3,
         higherIsBetter: true,
-        thresholds: { low: 15, mid: 25, high: 30 }
+        thresholds: { low: 1, mid: 2, high: 3 }
       },
       {
-        key: "minusEnemyLightningResist",
-        label: "-Enemy Lightning Resist",
-        min: 5,
+        key: "enhancedDefense",
+        label: "Enhanced Defense",
+        min: 130,
+        max: 180,
+        higherIsBetter: true,
+        thresholds: { low: 145, mid: 165, high: 180 }
+      },
+      {
+        key: "vitality",
+        label: "Vitality",
+        min: 10,
         max: 20,
         higherIsBetter: true,
-        thresholds: { low: 8, mid: 15, high: 20 }
+        thresholds: { low: 13, mid: 17, high: 20 }
+      },
+      {
+        key: "fireResist",
+        label: "Fire Resist",
+        min: 20,
+        max: 30,
+        higherIsBetter: true,
+        thresholds: { low: 23, mid: 27, high: 30 }
+      },
+      {
+        key: "lifeAfterKill",
+        label: "Life After Each Kill",
+        min: 3,
+        max: 5,
+        higherIsBetter: true,
+        thresholds: { low: 3, mid: 4, high: 5 }
       }
     ],
     sources: {
-      baselineSource: warlockOverviewSource,
-      validationSource: warlockPatchNotesSource,
-      notes: "Warlock-only unique book. Roll ranges are seeded from the community patch-note compilation and should stay mode-gated."
+      baselineSource: userWarlockDatasetSource,
+      notes: "Only the roll ranges pasted in the task are modeled."
+    }
+  },
+  {
+    id: "dreadfang",
+    name: "Dreadfang",
+    category: "Warlock Unique",
+    ruleset: "warlock",
+    hasVariableRolls: false,
+    keyRollFields: [],
+    scnlPriority: "low",
+    sclPriority: "low",
+    liquidity: "Low",
+    notes: "Warlock-only item. Roll data was not included in the provided dataset excerpt.",
+    source: "User-provided Warlock dataset",
+    sources: {
+      baselineSource: userWarlockDatasetSource,
+      notes: "Added as a conservative name-only entry because no base item or roll ranges were included in the pasted prompt."
+    }
+  },
+  {
+    id: "bloodpact-shard",
+    name: "Bloodpact Shard",
+    category: "Warlock Unique",
+    ruleset: "warlock",
+    hasVariableRolls: false,
+    keyRollFields: [],
+    scnlPriority: "low",
+    sclPriority: "low",
+    liquidity: "Low",
+    notes: "Warlock-only item. Roll data was not included in the provided dataset excerpt.",
+    source: "User-provided Warlock dataset",
+    sources: {
+      baselineSource: userWarlockDatasetSource,
+      notes: "Added as a conservative name-only entry because no base item or roll ranges were included in the pasted prompt."
+    }
+  },
+  {
+    id: "wraithstep",
+    name: "Wraithstep",
+    category: "Warlock Unique",
+    ruleset: "warlock",
+    hasVariableRolls: false,
+    keyRollFields: [],
+    scnlPriority: "low",
+    sclPriority: "low",
+    liquidity: "Low",
+    notes: "Warlock-only item. Roll data was not included in the provided dataset excerpt.",
+    source: "User-provided Warlock dataset",
+    sources: {
+      baselineSource: userWarlockDatasetSource,
+      notes: "Added as a conservative name-only entry because no base item or roll ranges were included in the pasted prompt."
+    }
+  },
+  {
+    id: "sling",
+    name: "Sling",
+    category: "Warlock Unique",
+    ruleset: "warlock",
+    hasVariableRolls: false,
+    keyRollFields: [],
+    scnlPriority: "low",
+    sclPriority: "low",
+    liquidity: "Low",
+    notes: "Warlock-only item. Roll data was not included in the provided dataset excerpt.",
+    source: "User-provided Warlock dataset",
+    sources: {
+      baselineSource: userWarlockDatasetSource,
+      notes: "Added as a conservative name-only entry because no base item or roll ranges were included in the pasted prompt."
+    }
+  },
+  {
+    id: "opalvein",
+    name: "Opalvein",
+    category: "Warlock Unique",
+    ruleset: "warlock",
+    hasVariableRolls: false,
+    keyRollFields: [],
+    scnlPriority: "low",
+    sclPriority: "low",
+    liquidity: "Low",
+    notes: "Warlock-only item. Roll data was not included in the provided dataset excerpt.",
+    source: "User-provided Warlock dataset",
+    sources: {
+      baselineSource: userWarlockDatasetSource,
+      notes: "Added as a conservative name-only entry because no base item or roll ranges were included in the pasted prompt."
+    }
+  },
+  {
+    id: "entropy-locket",
+    name: "Entropy Locket",
+    category: "Warlock Unique",
+    ruleset: "warlock",
+    hasVariableRolls: false,
+    keyRollFields: [],
+    scnlPriority: "low",
+    sclPriority: "low",
+    liquidity: "Low",
+    notes: "Warlock-only item. Roll data was not included in the provided dataset excerpt.",
+    source: "User-provided Warlock dataset",
+    sources: {
+      baselineSource: userWarlockDatasetSource,
+      notes: "Added as a conservative name-only entry because no base item or roll ranges were included in the pasted prompt."
+    }
+  },
+  {
+    id: "gheeds-wager",
+    name: "Gheed's Wager",
+    category: "Warlock Unique",
+    ruleset: "warlock",
+    hasVariableRolls: false,
+    keyRollFields: [],
+    scnlPriority: "low",
+    sclPriority: "low",
+    liquidity: "Low",
+    notes: "Warlock-only item. Roll data was not included in the provided dataset excerpt.",
+    source: "User-provided Warlock dataset",
+    sources: {
+      baselineSource: userWarlockDatasetSource,
+      notes: "Added as a conservative name-only entry because no base item or roll ranges were included in the pasted prompt."
+    }
+  },
+  {
+    id: "hellwardens-will",
+    name: "Hellwarden's Will",
+    category: "Warlock Unique",
+    ruleset: "warlock",
+    hasVariableRolls: false,
+    keyRollFields: [],
+    scnlPriority: "low",
+    sclPriority: "low",
+    liquidity: "Low",
+    notes: "Warlock-only item. Roll data was not included in the provided dataset excerpt.",
+    source: "User-provided Warlock dataset",
+    sources: {
+      baselineSource: userWarlockDatasetSource,
+      notes: "Added as a conservative name-only entry because no base item or roll ranges were included in the pasted prompt."
     }
   },
   {

@@ -3,6 +3,40 @@
 [2026-04-27]
 
 Change:
+- Replaced generated Warlock unique data with prompt-sourced Warlock unique names and Grimoire roll ranges.
+
+Type:
+- Data Correction
+
+Why:
+- The initial Warlock unique entries used unreliable generated names and ranges, which was trust-breaking for item triage.
+
+Impact:
+- Warlock Unique Triage now shows the corrected item names and removes the inaccurate Diablo's Deception, Baal's Betrayal, and Mephisto's Manipulation entries.
+
+Notes:
+- Grimoire roll fields use only the ranges pasted in the task; non-Grimoire Warlock uniques were added conservatively without roll fields because no ranges were provided. No Trade Value tiers, decision mapping, or LOD data were changed.
+
+[2026-04-27]
+
+Change:
+- Tuned Warlock unique evaluation so isolated `-enemy res` no longer carries a book by itself.
+
+Type:
+- Evaluation
+
+Why:
+- QA showed `-Enemy Fire/Cold/Lightning Res` could produce Keep / High Trade Value without skill or elemental damage support.
+
+Impact:
+- Warlock books now treat `-enemy res` as an amplifier stat that scales with aligned support instead of a standalone hit.
+
+Notes:
+- Strong supported roll packages can still reach high-end outcomes; Trade Value tiers, decision mapping, and datasets were unchanged.
+
+[2026-04-27]
+
+Change:
 - Added a compact LOD / Reign of the Warlock ruleset toggle.
 
 Type:

@@ -341,6 +341,7 @@ export interface VarianceAffixDefinition {
 
 export type UniqueRollField =
   | "magicFind"
+  | "fasterCastRate"
   | "damage"
   | "dexterity"
   | "attackRating"
@@ -352,9 +353,22 @@ export type UniqueRollField =
   | "lightningSkillDamage"
   | "fireSkillDamage"
   | "enhancedDamage"
+  | "enhancedDefense"
   | "strength"
   | "lifeLeech"
   | "damageReduction"
+  | "fireResist"
+  | "manaAfterKill"
+  | "lifeAfterKill"
+  | "apocalypse"
+  | "consume"
+  | "bloodBoil"
+  | "engorge"
+  | "demonicMastery"
+  | "minusEnemyMagicResist"
+  | "flameWave"
+  | "ringOfFire"
+  | "summonTainted"
   | "sockets"
   | "poisonAndBoneSkills"
   | "energy"
@@ -415,6 +429,7 @@ export interface UniqueCheckInput {
   itemId: string;
   ethereal?: boolean;
   magicFind?: number;
+  fasterCastRate?: number;
   damage?: number;
   dexterity?: number;
   attackRating?: number;
@@ -426,9 +441,22 @@ export interface UniqueCheckInput {
   lightningSkillDamage?: number;
   fireSkillDamage?: number;
   enhancedDamage?: number;
+  enhancedDefense?: number;
   strength?: number;
   lifeLeech?: number;
   damageReduction?: number;
+  fireResist?: number;
+  manaAfterKill?: number;
+  lifeAfterKill?: number;
+  apocalypse?: number;
+  consume?: number;
+  bloodBoil?: number;
+  engorge?: number;
+  demonicMastery?: number;
+  minusEnemyMagicResist?: number;
+  flameWave?: number;
+  ringOfFire?: number;
+  summonTainted?: number;
   sockets?: number;
   poisonAndBoneSkills?: number;
   energy?: number;

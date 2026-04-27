@@ -11,7 +11,10 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - Toggle `SCNL` and `SCL` while in both rulesets; expected: mode switching still works and does not break selected checker navigation.
 - Test `Stone of Jordan` in `LOD`; expected: no-roll staple behavior remains unchanged.
 - Test one newly added LOD unique such as `Chance Guards` or `Magefist`; expected: minimal roll/no-roll fields appear as appropriate.
-- Test one Warlock unique such as `Diablo's Deception`; expected: it is labeled as Warlock-only and only appears in Warlock mode.
+- In Warlock mode, confirm corrected names appear: `Ars Al'Diabolos`, `Ars Tor'Baalos`, `Ars Dul'Mephistos`, `Measured Wrath`, `Dreadfang`, `Bloodpact Shard`, `Wraithstep`, `Sling`, `Opalvein`, `Entropy Locket`, `Gheed's Wager`, and `Hellwarden's Will`.
+- In `LOD`, confirm those Warlock names are hidden.
+- Confirm old inaccurate Warlock names no longer appear: `Diablo's Deception`, `Baal's Betrayal`, and `Mephisto's Manipulation`.
+- Select one Grimoire such as `Ars Al'Diabolos` and one non-Grimoire such as `Dreadfang`; expected: both are Warlock-only Unique Checker entries.
 
 ## Rare Boots
 
