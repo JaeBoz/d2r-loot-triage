@@ -1,4 +1,5 @@
 export type GameMode = "SCNL" | "SCL";
+export type Ruleset = "lod" | "warlock";
 export type BasePriorityTier = "low" | "medium" | "high" | "premium";
 export type EthPriority = "low" | "medium" | "high" | "required";
 export type EvaluationPriority =
@@ -344,6 +345,8 @@ export type UniqueRollField =
   | "dexterity"
   | "attackRating"
   | "allResist"
+  | "minusEnemyFireResist"
+  | "minusEnemyColdResist"
   | "minusEnemyLightningResist"
   | "minusEnemyPoisonResist"
   | "lightningSkillDamage"
@@ -391,6 +394,7 @@ export interface UniqueItemDefinition {
   id: string;
   name: string;
   category: string;
+  ruleset?: Ruleset;
   hasVariableRolls: boolean;
   keyRollFields: UniqueRollField[];
   etherealRelevant?: boolean;
@@ -407,6 +411,7 @@ export interface UniqueItemDefinition {
 
 export interface UniqueCheckInput {
   mode: GameMode;
+  ruleset?: Ruleset;
   itemId: string;
   ethereal?: boolean;
   magicFind?: number;
@@ -414,6 +419,8 @@ export interface UniqueCheckInput {
   dexterity?: number;
   attackRating?: number;
   allResist?: number;
+  minusEnemyFireResist?: number;
+  minusEnemyColdResist?: number;
   minusEnemyLightningResist?: number;
   minusEnemyPoisonResist?: number;
   lightningSkillDamage?: number;

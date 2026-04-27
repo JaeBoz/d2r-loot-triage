@@ -2,6 +2,17 @@
 
 Use this checklist before pushing or deploying. The goal is to catch obvious gameplay-facing regressions, not verify exact scores.
 
+## Rulesets
+
+- Load the app fresh; expected: `LOD` is the default active ruleset.
+- Open Unique Triage in `LOD`; expected: Standard LOD uniques such as `Stone of Jordan` appear and Warlock-only uniques do not.
+- Switch to `Reign of the Warlock`; expected: Warlock-only uniques appear in the Unique Checker.
+- Switch back to `LOD`; expected: Warlock-only uniques are hidden again and LOD uniques are available.
+- Toggle `SCNL` and `SCL` while in both rulesets; expected: mode switching still works and does not break selected checker navigation.
+- Test `Stone of Jordan` in `LOD`; expected: no-roll staple behavior remains unchanged.
+- Test one newly added LOD unique such as `Chance Guards` or `Magefist`; expected: minimal roll/no-roll fields appear as appropriate.
+- Test one Warlock unique such as `Diablo's Deception`; expected: it is labeled as Warlock-only and only appears in Warlock mode.
+
 ## Rare Boots
 
 - Open Rare Boots triage and confirm `All Resist` is not available as a core or optional affix.
@@ -24,6 +35,7 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - Confirm recently added bases such as `Colossus Voulge`, `Great Poleaxe`, `Balrog Skin`, `Long Sword`, and `Flail` appear in Base Checker search.
 - Select each new base and confirm socket options are possible for that base only.
 - Test ethereal mercenary bases such as eth polearms; expected: eth status improves relevant merc/runeword value.
+- Test eth `0os Thresher`; expected: wording says it is a good base with socket potential, but not a finished clean trade piece yet.
 - Test weak or wrong-socket bases; expected: output explains why trade value is limited.
 
 ## Rare / Crafted Jewelry

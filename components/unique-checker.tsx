@@ -1,10 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Card, Pill } from "@/components/ui";
 import { ResultPanel } from "@/components/result-panel";
 import { evaluateUnique, uniqueItems } from "@/lib/unique-checker";
-import { GameMode, UniqueCheckInput, UniqueRollField } from "@/lib/types";
+import { GameMode, Ruleset, UniqueRollField } from "@/lib/types";
 
 const fieldLabels: Record<UniqueRollField, string> = {
   magicFind: "Magic Find",
@@ -12,6 +12,8 @@ const fieldLabels: Record<UniqueRollField, string> = {
   dexterity: "Dexterity",
   attackRating: "Attack Rating",
   allResist: "All Resist",
+  minusEnemyFireResist: "-Enemy Fire Res",
+  minusEnemyColdResist: "-Enemy Cold Res",
   minusEnemyLightningResist: "-Enemy Lightning Res",
   minusEnemyPoisonResist: "-Enemy Poison Res",
   lightningSkillDamage: "Lightning Damage",
@@ -41,6 +43,8 @@ const emptyForm: UniqueFormState = {
   dexterity: "",
   attackRating: "",
   allResist: "",
+  minusEnemyFireResist: "",
+  minusEnemyColdResist: "",
   minusEnemyLightningResist: "",
   minusEnemyPoisonResist: "",
   lightningSkillDamage: "",
@@ -62,13 +66,26 @@ function toOptionalNumber(value: string) {
   return value.trim() === "" ? undefined : Number(value);
 }
 
-export function UniqueChecker({ mode }: { mode: GameMode }) {
-  const defaultItemId = uniqueItems[0]?.id ?? "";
+export function UniqueChecker({ mode, ruleset }: { mode: GameMode; ruleset: Ruleset }) {
+  const availableUniqueItems = useMemo(
+    () => uniqueItems.filter((item) => (item.ruleset ?? "lod") === ruleset),
+    [ruleset]
+  );
+  const defaultItemId = availableUniqueItems[0]?.id ?? "";
   const [itemId, setItemId] = useState(defaultItemId);
   const [form, setForm] = useState<UniqueFormState>(emptyForm);
   const [ethereal, setEthereal] = useState(false);
 
-  const selectedItem = useMemo(() => uniqueItems.find((item) => item.id === itemId), [itemId]);
+  useEffect(() => {
+    setItemId(defaultItemId);
+    setForm(emptyForm);
+    setEthereal(false);
+  }, [defaultItemId, ruleset]);
+
+  const selectedItem = useMemo(
+    () => availableUniqueItems.find((item) => item.id === itemId),
+    [availableUniqueItems, itemId]
+  );
   const hasInput =
     itemId !== defaultItemId || ethereal || Object.values(form).some((value) => value.trim() !== "");
 
@@ -76,6 +93,7 @@ export function UniqueChecker({ mode }: { mode: GameMode }) {
     () =>
       evaluateUnique({
         mode,
+        ruleset,
         itemId,
         ethereal,
         magicFind: toOptionalNumber(form.magicFind),
@@ -83,6 +101,8 @@ export function UniqueChecker({ mode }: { mode: GameMode }) {
         dexterity: toOptionalNumber(form.dexterity),
         attackRating: toOptionalNumber(form.attackRating),
         allResist: toOptionalNumber(form.allResist),
+        minusEnemyFireResist: toOptionalNumber(form.minusEnemyFireResist),
+        minusEnemyColdResist: toOptionalNumber(form.minusEnemyColdResist),
         minusEnemyLightningResist: toOptionalNumber(form.minusEnemyLightningResist),
         minusEnemyPoisonResist: toOptionalNumber(form.minusEnemyPoisonResist),
         lightningSkillDamage: toOptionalNumber(form.lightningSkillDamage),
@@ -99,7 +119,7 @@ export function UniqueChecker({ mode }: { mode: GameMode }) {
         lightningAbsorb: toOptionalNumber(form.lightningAbsorb),
         vitality: toOptionalNumber(form.vitality)
       }),
-    [ethereal, form, itemId, mode]
+    [ethereal, form, itemId, mode, ruleset]
   );
 
   const handleReset = () => {
@@ -118,6 +138,7 @@ export function UniqueChecker({ mode }: { mode: GameMode }) {
           </div>
           <div className="flex items-center gap-2">
             <Pill active>{mode}</Pill>
+            <Pill>{ruleset === "warlock" ? "Warlock" : "LOD"}</Pill>
             <button
               className="rounded-xl border border-border bg-black/20 px-3 py-2 text-sm font-semibold text-zinc-200 transition hover:border-amber-500/60 hover:text-white"
               onClick={handleReset}
@@ -136,7 +157,7 @@ export function UniqueChecker({ mode }: { mode: GameMode }) {
               value={itemId}
               onChange={(event) => setItemId(event.target.value)}
             >
-              {uniqueItems.map((item) => (
+              {availableUniqueItems.map((item) => (
                 <option key={item.id} value={item.id}>
                   {item.name}
                 </option>
@@ -190,6 +211,7 @@ export function UniqueChecker({ mode }: { mode: GameMode }) {
             <h3 className="mt-1 text-xl font-black text-white">{selectedItem.name}</h3>
             <div className="mt-2 flex flex-wrap gap-2">
               <Pill>Unique {selectedItem.category}</Pill>
+              {selectedItem.ruleset === "warlock" ? <Pill>Warlock-only item</Pill> : null}
               <Pill>{selectedItem.liquidity} liquidity</Pill>
               <Pill>{mode === "SCNL" ? selectedItem.scnlPriority : selectedItem.sclPriority}</Pill>
             </div>

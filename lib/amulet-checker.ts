@@ -423,6 +423,19 @@ function comboTextFor(highlights: string[]) {
   return displayHighlights.length > 0 ? displayHighlights.slice(0, 2).join(" and ") : "the overall stat mix";
 }
 
+function summaryTextFor(
+  topRated: Array<{ key: StatKey; value: number }>,
+  input: AmuletCheckInput,
+  hasCasterSkillMismatch: boolean
+) {
+  const summaryBits = topRated
+    .slice(0, 3)
+    .filter((entry) => !(hasCasterSkillMismatch && entry.key === "classSkills"))
+    .map((entry) => `+${entry.value} ${labelForStat(entry.key, input)}`);
+
+  return summaryBits.length > 0 ? summaryBits.join(", ") : "very little usable value";
+}
+
 function liquidityFrom(score: number, mode: AmuletCheckInput["mode"], tags: RingArchetype[], input: AmuletCheckInput): Liquidity {
   let liquidityScore = score + amuletModeAdjustments[mode].liquidityBias;
 
@@ -445,32 +458,47 @@ function explanationFor(
   topRated: Array<{ key: StatKey; value: number }>
 ) {
   const leadTag = tags[0] ?? "niche";
-  const summaryBits = topRated.slice(0, 3).map((entry) => `+${entry.value} ${labelForStat(entry.key, input)}`);
-  const summaryText = summaryBits.length > 0 ? summaryBits.join(", ") : "very little usable value";
+  const hasCasterSkillMismatch = highlights.includes("class skill does not fit the caster-style stats");
+  const summaryText = summaryTextFor(topRated, input, hasCasterSkillMismatch);
   const comboText = comboTextFor(highlights);
   const craftedFcrNote =
     topRated.some((entry) => entry.key === "fasterCastRate" && entry.value >= 15)
       ? "High FCR usually means caster craft territory. "
       : "";
+  const mismatchNote = hasCasterSkillMismatch
+    ? "Good FCR shell, but the class skill does not line up cleanly. "
+    : "";
 
   if (verdict === "Ignore") {
     return `Charsi-level amulet. ${summaryText} is not enough for ${input.mode}.`;
   }
 
   if (verdict === "Low Priority") {
-    return `Some useful stats, but not enough together. ${craftedFcrNote}This ${leadTag} amulet is mostly self-use or niche.`;
+    return `Some useful stats, but not enough together. ${craftedFcrNote}${mismatchNote}This ${leadTag} amulet is mostly self-use or niche.`;
   }
 
   if (verdict === "Check") {
-    return `Decent partial hit. ${craftedFcrNote}${summaryText} gives it ${leadTag} appeal. Check because of ${comboText}.`;
+    return `Decent partial hit. ${craftedFcrNote}${mismatchNote}${summaryText} gives it ${leadTag} appeal. Check because of ${comboText}.`;
   }
 
   if (verdict === "Keep") {
+    if (hasCasterSkillMismatch) {
+      return `Solid ${leadTag} amulet. ${craftedFcrNote}${mismatchNote}You're mainly paying for ${summaryText}.`;
+    }
+
     return `Solid ${leadTag} amulet. ${craftedFcrNote}You're mainly paying for ${summaryText}. ${comboText} is the reason.`;
   }
 
   if (verdict === "List") {
+    if (hasCasterSkillMismatch) {
+      return `Good ${leadTag} amulet. ${craftedFcrNote}${mismatchNote}${summaryText} is the value here.`;
+    }
+
     return `Good ${leadTag} amulet. ${craftedFcrNote}${summaryText}. ${comboText} is the value here.`;
+  }
+
+  if (hasCasterSkillMismatch) {
+    return `Premium ${leadTag} amulet. ${craftedFcrNote}${mismatchNote}${summaryText} is the value here.`;
   }
 
   return `Premium ${leadTag} amulet. ${craftedFcrNote}${summaryText}. ${comboText} is the hit.`;

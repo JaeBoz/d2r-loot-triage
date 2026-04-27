@@ -5,6 +5,16 @@ const validationIndex = {
   url: "https://diablo2.io/uniques"
 } as const;
 
+const warlockOverviewSource = {
+  label: "Blizzard News - Reign of the Warlock",
+  url: "https://news.blizzard.com/en-us/article/24243863/rain-annihilation-in-reign-of-the-warlock"
+} as const;
+
+const warlockPatchNotesSource = {
+  label: "Blizzard Forums - Reign of the Warlock patch notes",
+  url: "https://us.forums.blizzard.com/en/d2r/t/unofficial-30-patch-notes-reign-of-the-warlock/171280"
+} as const;
+
 export const uniqueItems: UniqueItemDefinition[] = [
   {
     id: "war-travelers",
@@ -948,6 +958,232 @@ export const uniqueItems: UniqueItemDefinition[] = [
       },
       validationSource: validationIndex,
       notes: "Lightning damage is fixed; the MVP models +Javelin skills and ED as the meaningful roll checks."
+    }
+  },
+  {
+    id: "chance-guards",
+    name: "Chance Guards",
+    category: "Gloves",
+    ruleset: "lod",
+    hasVariableRolls: true,
+    keyRollFields: ["magicFind"],
+    scnlPriority: "medium",
+    sclPriority: "high",
+    liquidity: "High",
+    notes: "MF gloves. High MF is the reason to care; low rolls are common filler.",
+    source: "Arreat Summit / diablo2.io",
+    rollDefinitions: [
+      {
+        key: "magicFind",
+        label: "Magic Find",
+        min: 25,
+        max: 40,
+        higherIsBetter: true,
+        thresholds: { low: 30, mid: 35, high: 40 }
+      }
+    ],
+    sources: {
+      baselineSource: {
+        label: "The Arreat Summit - Normal Unique Gloves",
+        url: "https://classic.battle.net/diablo2exp/items/normal/ugloves.shtml"
+      },
+      validationSource: validationIndex,
+      notes: "Gold find also varies, but Magic Find is the quick triage roll."
+    }
+  },
+  {
+    id: "magefist",
+    name: "Magefist",
+    category: "Gloves",
+    ruleset: "lod",
+    hasVariableRolls: false,
+    keyRollFields: [],
+    scnlPriority: "medium",
+    sclPriority: "high",
+    liquidity: "High",
+    notes: "Caster glove staple. The drop itself is the value; ED is not the fast call.",
+    source: "Arreat Summit / diablo2.io",
+    sources: {
+      baselineSource: {
+        label: "The Arreat Summit - Normal Unique Gloves",
+        url: "https://classic.battle.net/diablo2exp/items/normal/ugloves.shtml"
+      },
+      validationSource: validationIndex,
+      notes: "Enhanced defense varies, but caster utility is the reason to keep it."
+    }
+  },
+  {
+    id: "wizardspike",
+    name: "Wizardspike",
+    category: "Dagger",
+    ruleset: "lod",
+    hasVariableRolls: false,
+    keyRollFields: [],
+    scnlPriority: "medium",
+    sclPriority: "high",
+    liquidity: "High",
+    notes: "Caster/resist staple. No roll chase here; it is useful because of the fixed package.",
+    source: "Arreat Summit / diablo2.io",
+    sources: {
+      baselineSource: {
+        label: "The Arreat Summit - Elite Unique Daggers",
+        url: "https://classic.battle.net/diablo2exp/items/elite/udaggers.shtml"
+      },
+      validationSource: validationIndex,
+      notes: "Wizardspike is treated as a no-roll staple because its high-signal caster stats are fixed."
+    }
+  },
+  {
+    id: "stormshield",
+    name: "Stormshield",
+    category: "Shield",
+    ruleset: "lod",
+    hasVariableRolls: false,
+    keyRollFields: [],
+    scnlPriority: "medium",
+    sclPriority: "medium",
+    liquidity: "Medium",
+    notes: "Defensive shield staple. Useful, but demand is more specific than caster staples.",
+    source: "Arreat Summit / diablo2.io",
+    sources: {
+      baselineSource: {
+        label: "The Arreat Summit - Elite Unique Shields",
+        url: "https://classic.battle.net/diablo2exp/items/elite/ushields.shtml"
+      },
+      validationSource: validationIndex,
+      notes: "Defense varies, but damage reduction and block utility are the practical reason to keep it."
+    }
+  },
+  {
+    id: "diablos-deception",
+    name: "Diablo's Deception",
+    category: "Book",
+    ruleset: "warlock",
+    hasVariableRolls: true,
+    keyRollFields: ["allSkills", "fireSkillDamage", "minusEnemyFireResist"],
+    scnlPriority: "high",
+    sclPriority: "high",
+    liquidity: "Medium",
+    notes: "Warlock-only item. Fire book rolls matter; skills, fire damage, and -enemy fire res are the check.",
+    source: "Blizzard News / community patch notes",
+    rollDefinitions: [
+      {
+        key: "allSkills",
+        label: "Fire Skills",
+        min: 1,
+        max: 3,
+        higherIsBetter: true,
+        thresholds: { low: 1, mid: 2, high: 3 }
+      },
+      {
+        key: "fireSkillDamage",
+        label: "Fire Skill Damage",
+        min: 10,
+        max: 30,
+        higherIsBetter: true,
+        thresholds: { low: 15, mid: 25, high: 30 }
+      },
+      {
+        key: "minusEnemyFireResist",
+        label: "-Enemy Fire Resist",
+        min: 5,
+        max: 20,
+        higherIsBetter: true,
+        thresholds: { low: 8, mid: 15, high: 20 }
+      }
+    ],
+    sources: {
+      baselineSource: warlockOverviewSource,
+      validationSource: warlockPatchNotesSource,
+      notes: "Warlock-only unique book. Roll ranges are seeded from the community patch-note compilation and should stay mode-gated."
+    }
+  },
+  {
+    id: "baals-betrayal",
+    name: "Baal's Betrayal",
+    category: "Book",
+    ruleset: "warlock",
+    hasVariableRolls: true,
+    keyRollFields: ["allSkills", "coldSkillDamage", "minusEnemyColdResist"],
+    scnlPriority: "high",
+    sclPriority: "high",
+    liquidity: "Medium",
+    notes: "Warlock-only item. Cold book rolls matter; skills, cold damage, and -enemy cold res are the check.",
+    source: "Blizzard News / community patch notes",
+    rollDefinitions: [
+      {
+        key: "allSkills",
+        label: "Cold Skills",
+        min: 1,
+        max: 3,
+        higherIsBetter: true,
+        thresholds: { low: 1, mid: 2, high: 3 }
+      },
+      {
+        key: "coldSkillDamage",
+        label: "Cold Skill Damage",
+        min: 10,
+        max: 30,
+        higherIsBetter: true,
+        thresholds: { low: 15, mid: 25, high: 30 }
+      },
+      {
+        key: "minusEnemyColdResist",
+        label: "-Enemy Cold Resist",
+        min: 5,
+        max: 20,
+        higherIsBetter: true,
+        thresholds: { low: 8, mid: 15, high: 20 }
+      }
+    ],
+    sources: {
+      baselineSource: warlockOverviewSource,
+      validationSource: warlockPatchNotesSource,
+      notes: "Warlock-only unique book. Roll ranges are seeded from the community patch-note compilation and should stay mode-gated."
+    }
+  },
+  {
+    id: "mephistos-manipulation",
+    name: "Mephisto's Manipulation",
+    category: "Book",
+    ruleset: "warlock",
+    hasVariableRolls: true,
+    keyRollFields: ["allSkills", "lightningSkillDamage", "minusEnemyLightningResist"],
+    scnlPriority: "high",
+    sclPriority: "high",
+    liquidity: "Medium",
+    notes: "Warlock-only item. Lightning book rolls matter; skills, lightning damage, and -enemy lightning res are the check.",
+    source: "Blizzard News / community patch notes",
+    rollDefinitions: [
+      {
+        key: "allSkills",
+        label: "Lightning Skills",
+        min: 1,
+        max: 3,
+        higherIsBetter: true,
+        thresholds: { low: 1, mid: 2, high: 3 }
+      },
+      {
+        key: "lightningSkillDamage",
+        label: "Lightning Skill Damage",
+        min: 10,
+        max: 30,
+        higherIsBetter: true,
+        thresholds: { low: 15, mid: 25, high: 30 }
+      },
+      {
+        key: "minusEnemyLightningResist",
+        label: "-Enemy Lightning Resist",
+        min: 5,
+        max: 20,
+        higherIsBetter: true,
+        thresholds: { low: 8, mid: 15, high: 20 }
+      }
+    ],
+    sources: {
+      baselineSource: warlockOverviewSource,
+      validationSource: warlockPatchNotesSource,
+      notes: "Warlock-only unique book. Roll ranges are seeded from the community patch-note compilation and should stay mode-gated."
     }
   },
   {

@@ -109,6 +109,10 @@ function baseDemandPhrase(item: BaseItem, input: BaseCheckInput) {
     return "Sockets are the value here.";
   }
 
+  if (item.socketSensitive && input.sockets === 0 && item.tags.includes("merc") && input.ethereal && item.ethPriority !== "low") {
+    return "Good eth merc base. It still needs the right sockets before it becomes a clean trade piece.";
+  }
+
   if (item.tags.includes("merc") && input.ethereal && item.ethPriority !== "low") {
     return "Eth merc bases are the version people actually chase.";
   }
@@ -298,6 +302,10 @@ function buildExplanation(item: BaseItem, input: BaseCheckInput, verdict: Verdic
 }
 
 function buildRecommendedAction(item: BaseItem, input: BaseCheckInput, verdict: Verdict) {
+  if (item.socketSensitive && input.sockets === 0 && hasMeaningfulUnsocketedDemand(input, item)) {
+    return `Good base. Socket potential matters, but it needs ${formatSockets(item.desiredSockets)} before it is a finished trade piece.`;
+  }
+
   if (item.socketSensitive && input.sockets === 0 && !hasMeaningfulUnsocketedDemand(input, item)) {
     return `Do not treat this as a clean trade base yet. Socket it, then re-check if it hits ${formatSockets(item.desiredSockets)}.`;
   }

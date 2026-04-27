@@ -3,6 +3,91 @@
 [2026-04-27]
 
 Change:
+- Added a compact LOD / Reign of the Warlock ruleset toggle.
+
+Type:
+- Data / UX
+
+Why:
+- Warlock itemization needs to stay separated from Standard LOD triage.
+
+Impact:
+- Players can switch rulesets without mixing Warlock-only items into LOD checks.
+
+Notes:
+- SCNL / SCL remains available inside both rulesets.
+
+[2026-04-27]
+
+Change:
+- Added a minimal mode-gated Warlock unique batch to Unique Triage.
+
+Type:
+- Data / Checker
+
+Why:
+- Warlock named uniques need early support without adding a new grimoire or item system.
+
+Impact:
+- Diablo's Deception, Baal's Betrayal, and Mephisto's Manipulation can be checked only in Reign of the Warlock mode.
+
+Notes:
+- Deterministic named-unique roll checks only; no pricing, broad Warlock coverage, or new checker was added.
+
+[2026-04-27]
+
+Change:
+- Expanded LOD Unique Triage with Chance Guards, Magefist, Wizardspike, and Stormshield.
+
+Type:
+- Data / Checker
+
+Why:
+- These Standard D2R uniques commonly create quick farming hesitation but were missing from the curated list.
+
+Impact:
+- More staple and roll-sensitive unique drops can be checked without turning the app into a full unique database.
+
+Notes:
+- Only meaningful roll fields were exposed.
+
+[2026-04-27]
+
+Change:
+- Clarified eth 0os merc base wording in Base Triage.
+
+Type:
+- UX
+
+Why:
+- Unsocketed eth elite merc bases could sound like finished trade pieces even though socket state still matters.
+
+Impact:
+- Output now frames them as good bases with socket potential, not clean finished socket hits.
+
+Notes:
+- Wording-only correction; scoring and Trade Value tiers were unchanged.
+
+[2026-04-27]
+
+Change:
+- Cleaned up Rare / Crafted Amulet wording for high-FCR amulets with mismatched class skills.
+
+Type:
+- UX
+
+Why:
+- QA found noisy crafted-style amulet output could imply a mismatched skill was a selling point while also saying the skill did not fit.
+
+Impact:
+- Mismatched high-FCR amulets now read as useful FCR shells with niche skill support instead of clean caster hits.
+
+Notes:
+- Wording-only correction; scoring, Trade Value tiers, decision mapping, affix ranges, and checker architecture were unchanged.
+
+[2026-04-27]
+
+Change:
 - Reframed Ring and Amulet checkers as Rare / Crafted Jewelry triage and added practical crafted-range support for blood ring leech and caster amulet FCR.
 
 Type:

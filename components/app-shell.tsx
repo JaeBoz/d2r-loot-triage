@@ -12,8 +12,8 @@ import { RingChecker } from "@/components/ring-checker";
 import { RuneGuide } from "@/components/rune-guide";
 import { UniqueChecker } from "@/components/unique-checker";
 import { Card, Pill } from "@/components/ui";
-import { CATEGORY_TABS, MODE_OPTIONS } from "@/lib/constants";
-import { GameMode, ItemCategory } from "@/lib/types";
+import { CATEGORY_TABS, MODE_OPTIONS, RULESET_OPTIONS } from "@/lib/constants";
+import { GameMode, ItemCategory, Ruleset } from "@/lib/types";
 
 const quickIdTargets = [
   "Rare Amulets: +2 skills + FCR -> always check",
@@ -25,8 +25,10 @@ const quickIdTargets = [
 ];
 
 export function AppShell() {
+  const [ruleset, setRuleset] = useState<Ruleset>("lod");
   const [mode, setMode] = useState<GameMode>("SCNL");
   const [category, setCategory] = useState<ItemCategory>("Bases");
+  const activeRulesetLabel = RULESET_OPTIONS.find((option) => option.value === ruleset)?.label ?? "LOD";
 
   return (
     <main className="mx-auto flex min-h-screen max-w-7xl flex-col gap-3 px-3 py-4 sm:px-5 lg:px-8">
@@ -35,8 +37,8 @@ export function AppShell() {
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap items-center gap-2">
               <Pill active>D2R Loot Triage</Pill>
+              <Pill>{activeRulesetLabel}</Pill>
               <Pill>{mode}</Pill>
-              <Pill>Resurrected</Pill>
             </div>
             <div className="flex flex-wrap items-center gap-2">
               <a
@@ -51,6 +53,23 @@ export function AppShell() {
           </div>
 
           <div className="mt-3 flex flex-wrap gap-2">
+            {RULESET_OPTIONS.map((option) => (
+              <button
+                key={option.value}
+                className={`rounded-xl border px-3 py-1.5 text-sm font-semibold transition ${
+                  ruleset === option.value
+                    ? "border-accent bg-accent/15 text-accent"
+                    : "border-border bg-black/20 text-zinc-300 hover:border-amber-500/60 hover:text-white"
+                }`}
+                onClick={() => setRuleset(option.value)}
+                type="button"
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="mt-2 flex flex-wrap gap-2">
             {MODE_OPTIONS.map((option) => (
               <button
                 key={option.value}
@@ -107,7 +126,7 @@ export function AppShell() {
       {category === "Rings" ? <RingChecker mode={mode} /> : null}
       {category === "Amulets" ? <AmuletChecker mode={mode} /> : null}
       {category === "Boots" ? <BootsChecker mode={mode} /> : null}
-      {category === "Uniques" ? <UniqueChecker mode={mode} /> : null}
+      {category === "Uniques" ? <UniqueChecker mode={mode} ruleset={ruleset} /> : null}
       {category !== "Bases" &&
       category !== "Circlets" &&
       category !== "Runes" &&

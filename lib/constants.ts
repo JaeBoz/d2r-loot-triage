@@ -1,9 +1,14 @@
-import { ItemCategory, Verdict } from "@/lib/types";
+import { ItemCategory, Ruleset, Verdict } from "@/lib/types";
 
 export const MODE_OPTIONS = [
   { value: "SCNL", label: "SCNL" },
   { value: "SCL", label: "SCL" }
 ] as const;
+
+export const RULESET_OPTIONS: Array<{ value: Ruleset; label: string }> = [
+  { value: "lod", label: "LOD" },
+  { value: "warlock", label: "Reign of the Warlock" }
+];
 
 export const CATEGORY_TABS: ItemCategory[] = [
   "Bases",

@@ -285,6 +285,18 @@ export function evaluateUnique(input: UniqueCheckInput): UniqueCheckResult {
     };
   }
 
+  const activeRuleset = input.ruleset ?? "lod";
+  if ((item.ruleset ?? "lod") !== activeRuleset) {
+    return {
+      verdict: "Ignore",
+      priority: "Trash",
+      liquidity: "Low",
+      explanation: "Wrong ruleset. This unique is not available in the selected ruleset.",
+      recommendedAction: "Switch rulesets if you are checking a Warlock or LOD-only item.",
+      qualityScore: 0
+    };
+  }
+
   const details: string[] = [item.notes];
   let score = tierScore[baseTier(item, input.mode)];
 
