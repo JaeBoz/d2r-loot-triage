@@ -25,6 +25,7 @@ export function mapDecisionOutput(input: DecisionInput): DecisionOutput {
   const isSocketDependent = includesAny(text, ["socket-dependent", "socket it", "socket path", "right socket", "correct sockets"]);
   const isSelfUse = includesAny(text, ["self-use", "personal placeholder", "temporary", "specific buyer", "specific use case"]);
   const isMarketCheck = includesAny(text, ["check market", "list it", "commonly sought", "commonly traded", "easy to trade"]);
+  const isNoRollStapleUnique = includesAny(text, ["is a staple unique"]);
 
   if (input.priority === "Trash" || input.verdict === "Ignore") {
     return {
@@ -35,6 +36,14 @@ export function mapDecisionOutput(input: DecisionInput): DecisionOutput {
   }
 
   if (input.priority === "Premium Trade Value") {
+    if (isNoRollStapleUnique) {
+      return {
+        label: "Keep",
+        actionLine: "Keep this. It has clear current value or strong staple demand.",
+        caveat: "No-roll staple uniques should not be tossed quickly."
+      };
+    }
+
     return {
       label: "Check Before Tossing",
       actionLine: "Do not drop this blindly. Compare or review it before tossing.",
@@ -43,6 +52,14 @@ export function mapDecisionOutput(input: DecisionInput): DecisionOutput {
   }
 
   if (input.priority === "High Trade Value") {
+    if (isNoRollStapleUnique) {
+      return {
+        label: "Keep",
+        actionLine: "Keep this. It has clear current value or strong staple demand.",
+        caveat: isSocketDependent ? "Make sure the current socket state is the reason it is valuable." : undefined
+      };
+    }
+
     return {
       label: isMarketCheck ? "Check Before Tossing" : "Keep",
       actionLine: isMarketCheck ? "Do not drop this blindly. Compare or review it before tossing." : "Keep it for trade or comparison.",

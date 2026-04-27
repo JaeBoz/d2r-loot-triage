@@ -28,6 +28,8 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - Test roll-sensitive uniques with low, mid, and top rolls, such as `War Travelers`, `Nagelring`, `Raven Frost`, `Griffon's Eye`, and `Death's Fathom`.
 - Expected: weak rolls sound common or limited, mid rolls are not overstated, and top rolls stand out clearly.
 - For eth-sensitive uniques, confirm ethereal state only helps when it makes sense for that item.
+- Test no-roll staple uniques such as `Stone of Jordan` and `Arachnid Mesh`; expected: decision label reads `Keep`, not `Check Before Tossing`.
+- Test a mid roll-sensitive unique; expected: decision label can still read `Check Before Tossing` when roll quality deserves review but is not an automatic keep.
 
 ## Charms
 
@@ -41,3 +43,4 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - Toggle between `SCNL` and `SCL` on a few scenarios; expected: wording and liquidity feel mode-aware without changing the workflow.
 - Use Reset/Clear on active checkers; expected: inputs and results clear while the selected game mode remains intact.
 - Check the app on a narrow/mobile viewport; expected: forms remain compact and usable.
+- Test an unsocketed socket-potential base and a moderate partial rare item; expected: socket potential remains `Conditional`, while partial rares remain `Check Before Tossing` or `Conditional` based on existing mapping.

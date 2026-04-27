@@ -3,6 +3,23 @@
 [2026-04-26]
 
 Change:
+- Mapped no-roll staple/chase uniques with strong Trade Value to `Keep` in the decision-first result layer instead of `Check Before Tossing`.
+
+Type:
+- UX
+
+Why:
+- Items like Stone of Jordan are obvious keep outcomes; asking players to "check before tossing" created unnecessary hesitation during farming.
+
+Impact:
+- Staple no-roll uniques now give a clearer immediate action while roll-sensitive uniques, socket-potential bases, and partial rare items keep their existing decision behavior.
+
+Notes:
+- Scoring, Trade Value tiers, item data, and evaluator logic were unchanged.
+
+[2026-04-26]
+
+Change:
 - Renamed the decision-layer "Check Market" label to "Check Before Tossing" and updated its action line to better match fast farming triage.
 
 Type:
