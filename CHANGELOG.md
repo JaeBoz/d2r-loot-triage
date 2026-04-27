@@ -3,6 +3,23 @@
 [2026-04-27]
 
 Change:
+- Replaced the main guide entry point with a compact Quick ID Targets strip on the farming screen.
+
+Type:
+- UX / Guide
+
+Why:
+- The full guide section was not useful during active farming and added an extra decision path.
+
+Impact:
+- Players now see a short list of high-signal ID patterns without leaving the checker workflow.
+
+Notes:
+- Static guide-layer change only; checker logic, scoring, Trade Value tiers, and decision mapping were unchanged.
+
+[2026-04-27]
+
+Change:
 - Cleaned up generated result phrase composition for strong rare rings, amulets, boots, and jewels.
 
 Type:

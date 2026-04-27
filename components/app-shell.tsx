@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
 import { AmuletChecker } from "@/components/amulet-checker";
 import { BaseChecker } from "@/components/base-checker";
@@ -15,6 +14,15 @@ import { UniqueChecker } from "@/components/unique-checker";
 import { Card, Pill } from "@/components/ui";
 import { CATEGORY_TABS, MODE_OPTIONS } from "@/lib/constants";
 import { GameMode, ItemCategory } from "@/lib/types";
+
+const quickIdTargets = [
+  "Rare Amulets: +2 skills + FCR -> always check",
+  "Circlets: 2/20 -> jackpot potential",
+  "Jewels: IAS + ED -> check",
+  "Charms: Skiller + life -> high value",
+  "Bases: Eth elite polearms -> pick up",
+  "Gloves: 2/20 -> always check"
+];
 
 export function AppShell() {
   const [mode, setMode] = useState<GameMode>("SCNL");
@@ -39,12 +47,6 @@ export function AppShell() {
               >
                 Report Evaluation Issue
               </a>
-              <Link
-                className="rounded-xl border border-border bg-black/20 px-3 py-2 text-sm font-semibold text-zinc-200 transition hover:border-amber-500/60 hover:text-white"
-                href="/reference"
-              >
-                Open Guides
-              </Link>
             </div>
           </div>
 
@@ -82,6 +84,17 @@ export function AppShell() {
             >
               {tab}
             </button>
+          ))}
+        </div>
+      </Card>
+
+      <Card className="py-3">
+        <div className="flex flex-wrap items-center gap-2">
+          <Pill active>Quick ID Targets</Pill>
+          {quickIdTargets.map((target) => (
+            <span key={target} className="rounded-xl border border-border bg-black/20 px-3 py-1.5 text-xs font-semibold text-zinc-200">
+              {target}
+            </span>
           ))}
         </div>
       </Card>
