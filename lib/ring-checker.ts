@@ -199,6 +199,28 @@ function topStats(stats: NormalizedRingStats) {
     .slice(0, 4);
 }
 
+function displayHighlight(highlight: string) {
+  const labelMap: Record<string, string> = {
+    "FCR with strength": "FCR + strength",
+    "FCR with all resist": "FCR + all res",
+    "FCR with dual useful resists": "FCR + dual res",
+    "dual leech with attack rating": "dual leech + AR",
+    "strength, dexterity, and AR": "strength/dex/AR",
+    "magic find with resist support": "MF + res",
+    "life with resist support": "life + res",
+    "FCR with dexterity and life": "FCR + dex/life"
+  };
+
+  return labelMap[highlight] ?? highlight;
+}
+
+function comboTextFor(highlights: string[]) {
+  const packageLabels = new Set(["premium shell", "multiple high-impact rolls", "strong overall stat package"]);
+  const focusedHighlights = highlights.length > 1 ? highlights.filter((highlight) => !packageLabels.has(highlight)) : highlights;
+  const displayHighlights = Array.from(new Set(focusedHighlights.map(displayHighlight)));
+  return displayHighlights.length > 0 ? displayHighlights.slice(0, 2).join(" and ") : "the overall stat mix";
+}
+
 function rollPackageAdjustment(
   stats: NormalizedRingStats,
   rated: RatedStat[],
@@ -282,8 +304,7 @@ function explanationFor(
   const leadTag = tags[0] ?? "niche";
   const summaryBits = topRated.slice(0, 3).map((entry) => `${entry.value} ${labelByKey[entry.key]}`);
   const summaryText = summaryBits.length > 0 ? summaryBits.join(", ") : "very little usable value";
-  const comboText =
-    highlights.length > 0 ? highlights.slice(0, 2).join(" and ") : "the overall stat mix";
+  const comboText = comboTextFor(highlights);
   const highCount = rated.filter((entry) => entry.score >= 4).length;
   const lowOnly = rated.length > 0 && rated.every((entry) => entry.score <= 1);
 
@@ -300,15 +321,15 @@ function explanationFor(
   }
 
   if (verdict === "Keep") {
-    return `Solid ${leadTag} ring. ${summaryText} plus ${comboText} is the reason to keep it.`;
+    return `Solid ${leadTag} ring. ${summaryText}. ${comboText} is the reason to keep it.`;
   }
 
   if (verdict === "List") {
-    return `Good ${leadTag} ring. ${summaryText} with ${comboText} is a real listing candidate.`;
+    return `Good ${leadTag} ring. ${summaryText}. ${comboText} is the value here.`;
   }
 
   if (highCount >= 2 && !lowOnly) {
-    return `Premium ${leadTag} ring. ${summaryText} with ${comboText} is the hit.`;
+    return `Premium ${leadTag} ring. ${summaryText}. ${comboText} is the hit.`;
   }
 
   return "Looks premium at a glance. Check the full stat mix before calling it a true trophy.";

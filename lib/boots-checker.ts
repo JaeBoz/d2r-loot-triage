@@ -206,6 +206,27 @@ function summaryFor(stats: NormalizedBootsStats) {
   return parts.slice(0, 3).join(", ");
 }
 
+function displayHighlight(highlight: string) {
+  const labelMap: Record<string, string> = {
+    "tri-res utility boots": "tri-res utility",
+    "FRW with strong resist support": "FRW + strong res",
+    "FRW with magic find": "FRW + MF",
+    "FRW, FHR, and resist support": "FRW/FHR/res",
+    "stats with resist utility": "stats + res",
+    "caster mana utility": "caster mana utility",
+    "premium boot shell": "premium boot shell"
+  };
+
+  return labelMap[highlight] ?? highlight;
+}
+
+function comboTextFor(highlights: string[]) {
+  const packageLabels = new Set(["premium boot shell", "multiple strong utility rolls", "strong overall boot package"]);
+  const focusedHighlights = highlights.length > 1 ? highlights.filter((highlight) => !packageLabels.has(highlight)) : highlights;
+  const displayHighlights = Array.from(new Set(focusedHighlights.map(displayHighlight)));
+  return displayHighlights.length > 0 ? displayHighlights.slice(0, 2).join(" and ") : "the overall stat mix";
+}
+
 function explanationFor(
   input: BootsCheckInput,
   verdict: Verdict,
@@ -215,7 +236,7 @@ function explanationFor(
   rated: RatedStat[]
 ) {
   const summary = summaryFor(stats) || "some utility stats";
-  const comboText = highlights.length > 0 ? highlights.slice(0, 2).join(" and ") : "the overall stat mix";
+  const comboText = comboTextFor(highlights);
   const highCount = rated.filter((entry) => entry.score >= 4).length;
   const lowOnly = rated.length > 0 && rated.every((entry) => entry.score <= 1);
 
@@ -232,15 +253,15 @@ function explanationFor(
   }
 
   if (verdict === "Keep") {
-    return `Solid boots. ${summary} plus ${comboText} is the reason to keep them.`;
+    return `Solid boots. ${summary}. ${comboText} is the reason to keep them.`;
   }
 
   if (verdict === "List") {
-    return `Good boots. ${summary} with ${comboText} is a real listing candidate.`;
+    return `Good boots. ${summary}. ${comboText} is the value here.`;
   }
 
   if (highCount >= 2 && !lowOnly) {
-    return `Premium boots. ${summary} with ${comboText} is the hit.`;
+    return `Premium boots. ${summary}. ${comboText} is the hit.`;
   }
 
   return "Looks premium at a glance. Check the full boot mix before calling it a trophy.";

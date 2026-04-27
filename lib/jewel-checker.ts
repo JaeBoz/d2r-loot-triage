@@ -147,13 +147,31 @@ function liquidityFrom(score: number, mode: JewelCheckInput["mode"], tags: RingA
 function topSummary(stats: NormalizedJewelStats) {
   const parts: string[] = [];
   if (stats.increasedAttackSpeed) parts.push(`${stats.increasedAttackSpeed} IAS`);
-  if (stats.enhancedDamage) parts.push(`${stats.enhancedDamage}% ED`);
+  if (stats.enhancedDamage) parts.push(`${stats.enhancedDamage} ED`);
   if (stats.allResist) parts.push(`${stats.allResist} all resist`);
   if (!stats.allResist && stats.lightningResist) parts.push(`${stats.lightningResist} lightning resist`);
   if (stats.requirementsReduction) parts.push(`${stats.requirementsReduction}% -req`);
   if (stats.maxDamage && stats.attackRating) parts.push(`${stats.maxDamage} max damage / ${stats.attackRating} AR`);
   if (!stats.maxDamage && stats.strength) parts.push(`${stats.strength} strength`);
-  return parts.slice(0, 3).join(", ");
+  return parts.slice(0, 3).join(" / ");
+}
+
+function displayHighlight(highlight: string) {
+  const labelMap: Record<string, string> = {
+    "IAS with resist support": "IAS + res",
+    "IAS with enhanced damage": "IAS + ED",
+    "IAS with stat support": "IAS + stat",
+    "enhanced damage with -requirements": "ED + -req",
+    "enhanced damage with damage or AR": "ED + damage/AR",
+    "resist utility jewel": "resist utility"
+  };
+
+  return labelMap[highlight] ?? highlight;
+}
+
+function comboTextFor(highlights: string[]) {
+  const displayHighlights = Array.from(new Set(highlights.map(displayHighlight)));
+  return displayHighlights.length > 0 ? displayHighlights.slice(0, 2).join(" and ") : "the overall stat mix";
 }
 
 function explanationFor(
@@ -164,7 +182,7 @@ function explanationFor(
   stats: NormalizedJewelStats
 ) {
   const summary = topSummary(stats) || "some usable stats";
-  const comboText = highlights.length > 0 ? highlights.slice(0, 2).join(" and ") : "the overall stat mix";
+  const comboText = comboTextFor(highlights);
   const leadTag = tags[0] ?? "niche";
 
   if (verdict === "Ignore") {
@@ -180,17 +198,17 @@ function explanationFor(
   }
 
   if (verdict === "Keep") {
-    return `Solid ${leadTag} jewel. ${summary} plus ${comboText} is the reason to keep it.`;
+    return `Solid ${leadTag} jewel. ${summary}. ${comboText} is the reason to keep it.`;
   }
 
   if (verdict === "List") {
     if (highlights.includes("enhanced damage with -requirements")) {
       return `Good niche jewel. ${summary} matters for socketing awkward bases.`;
     }
-    return `Good ${leadTag} jewel. ${summary} with ${comboText} is a real listing candidate.`;
+    return `Good ${leadTag} jewel. ${summary}. ${comboText} is the value here.`;
   }
 
-  return `Premium ${leadTag} jewel. ${summary} with ${comboText} is the hit.`;
+  return `Premium ${leadTag} jewel. ${summary}. ${comboText} is the hit.`;
 }
 
 function recommendedActionFor(verdict: Verdict, highlights: string[]) {

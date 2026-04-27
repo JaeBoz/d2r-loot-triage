@@ -404,6 +404,25 @@ function topStats(stats: NormalizedAmuletStats) {
     .slice(0, 4);
 }
 
+function displayHighlight(highlight: string) {
+  const labelMap: Record<string, string> = {
+    "+skills with FCR": "+skills + FCR",
+    "+skills with all resist": "+skills + all res",
+    "+skills with life": "+skills + life",
+    "FCR with resist support": "FCR + res",
+    "stats with life and resist": "stats/life/res",
+    "magic find with resist support": "MF + res",
+    "AR with stats and damage": "AR/stats/damage"
+  };
+
+  return labelMap[highlight] ?? highlight;
+}
+
+function comboTextFor(highlights: string[]) {
+  const displayHighlights = Array.from(new Set(highlights.map(displayHighlight)));
+  return displayHighlights.length > 0 ? displayHighlights.slice(0, 2).join(" and ") : "the overall stat mix";
+}
+
 function liquidityFrom(score: number, mode: AmuletCheckInput["mode"], tags: RingArchetype[], input: AmuletCheckInput): Liquidity {
   let liquidityScore = score + amuletModeAdjustments[mode].liquidityBias;
 
@@ -428,7 +447,7 @@ function explanationFor(
   const leadTag = tags[0] ?? "niche";
   const summaryBits = topRated.slice(0, 3).map((entry) => `+${entry.value} ${labelForStat(entry.key, input)}`);
   const summaryText = summaryBits.length > 0 ? summaryBits.join(", ") : "very little usable value";
-  const comboText = highlights.length > 0 ? highlights.slice(0, 2).join(" and ") : "the overall stat mix";
+  const comboText = comboTextFor(highlights);
 
   if (verdict === "Ignore") {
     return `Charsi-level amulet. ${summaryText} is not enough for ${input.mode}.`;
@@ -443,14 +462,14 @@ function explanationFor(
   }
 
   if (verdict === "Keep") {
-    return `Solid ${leadTag} amulet. You're mainly paying for ${summaryText} plus ${comboText}.`;
+    return `Solid ${leadTag} amulet. You're mainly paying for ${summaryText}. ${comboText} is the reason.`;
   }
 
   if (verdict === "List") {
-    return `Good ${leadTag} amulet. ${summaryText} plus ${comboText} is a real listing candidate.`;
+    return `Good ${leadTag} amulet. ${summaryText}. ${comboText} is the value here.`;
   }
 
-  return `Premium ${leadTag} amulet. ${summaryText} with ${comboText} is the hit.`;
+  return `Premium ${leadTag} amulet. ${summaryText}. ${comboText} is the hit.`;
 }
 
 function recommendedActionFor(verdict: Verdict, mode: AmuletCheckInput["mode"]) {

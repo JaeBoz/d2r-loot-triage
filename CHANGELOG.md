@@ -3,6 +3,23 @@
 [2026-04-27]
 
 Change:
+- Cleaned up generated result phrase composition for strong rare rings, amulets, boots, and jewels.
+
+Type:
+- UX
+
+Why:
+- QA found repeated support wording such as "with X with Y" in strong item results after the D2-native tone pass.
+
+Impact:
+- Results now read shorter and more naturally during farming without changing the underlying item decision.
+
+Notes:
+- Copy-only composition fix; scoring, item data, Trade Value tiers, and decision mapping were unchanged.
+
+[2026-04-27]
+
+Change:
 - Rewrote result explanations, recommended actions, decision caveats, and unique item summaries with shorter D2-native loot/trade wording.
 
 Type:
