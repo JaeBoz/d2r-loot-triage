@@ -90,38 +90,38 @@ function hasMeaningfulUnsocketedDemand(input: BaseCheckInput, item: BaseItem) {
 
 function baseDemandPhrase(item: BaseItem, input: BaseCheckInput) {
   if (item.socketSensitive && input.sockets === 0 && !hasMeaningfulUnsocketedDemand(input, item)) {
-    return "This is socket-dependent potential, not an easy trade as-is.";
+    return "Good base, but this is socket-dependent potential, not an easy trade as-is.";
   }
 
   if (item.socketSensitive && input.sockets > 0 && !item.desiredSockets.includes(input.sockets)) {
-    return "Demand is limited because this socket count misses the usual target.";
+    return "Wrong sockets. Demand is limited because it misses the usual target.";
   }
 
   if (item.socketSensitive && item.desiredSockets.includes(input.sockets)) {
     if (item.tags.includes("spirit")) {
-      return "Correct sockets make this a commonly traded utility base, but broad supply can keep demand selective.";
+      return "Sockets are the value here. This is a commonly traded utility base, but easy to find.";
     }
 
     if (item.tags.includes("caster") || item.tags.includes("merc")) {
-      return "Correct sockets make this a recognizable trade candidate, with demand depending on supply and buyer need.";
+      return "Sockets are the value here. This is a recognizable trade candidate, but buyer need matters.";
     }
 
-    return "Correct sockets are the main reason this has trade appeal.";
+    return "Sockets are the value here.";
   }
 
   if (item.tags.includes("merc") && input.ethereal && item.ethPriority !== "low") {
-    return "Ethereal mercenary bases have more reliable demand than ordinary self-use bases.";
+    return "Eth merc bases are the version people actually chase.";
   }
 
   if (item.tags.includes("paladin") && (input.allRes ?? 0) >= 30) {
-    return "The paladin resist automod is the demand driver here.";
+    return "The paladin resist automod is what matters here.";
   }
 
   if (item.scnlPriority === "low" || item.tags.includes("staffmods")) {
-    return "Demand is niche, so this is mostly a specific-buyer or self-use check.";
+    return "Niche base. Mostly a specific-buyer or self-use check.";
   }
 
-  return "Tradeability depends on whether the visible state matches a real runeword plan.";
+  return "Only keep it if the visible state matches a real runeword plan.";
 }
 
 function useCaseLabel(item: BaseItem) {
@@ -143,41 +143,41 @@ function useCaseLabel(item: BaseItem) {
 function adjustForEtherealState(score: number, input: BaseCheckInput, item: BaseItem, details: string[]) {
   if (input.ethereal) {
     if (!item.etherealAllowed) {
-      details.push(`Ethereal ${item.name} loses value because buyers usually want a self-use version.`);
+      details.push(`Eth ${item.name} is usually worse because buyers want a self-use version.`);
       return score - 4;
     }
 
     if (item.ethPriority === "required") {
-      details.push(`Ethereal status is required for this ${primaryUseCase(item)} profile to matter.`);
+      details.push(`Eth is required for this ${primaryUseCase(item)} setup to matter.`);
       return score + 4;
     }
 
     if (item.ethPriority === "high") {
-      details.push(`Ethereal status is a major upside for this ${item.category.toLowerCase()} base.`);
+      details.push(`Eth is a major upside for this ${item.category.toLowerCase()} base.`);
       return score + 3;
     }
 
     if (item.ethPriority === "medium") {
-      details.push(`Ethereal status adds meaningful upside for some buyers.`);
+      details.push("Eth adds a real bump for some buyers.");
       return score + 1;
     }
 
-    details.push("Ethereal status does not meaningfully improve this base.");
+    details.push("Eth does not really improve this base.");
     return score - 1;
   }
 
   if (item.ethPriority === "required") {
-    details.push(`Non-eth ${item.name} misses the core demand pattern for this base.`);
+    details.push(`Non-eth ${item.name} misses the main version people want.`);
     return score - 5;
   }
 
   if (item.ethPriority === "high") {
-    details.push(`Non-eth version has reduced demand on ${input.mode}.`);
+    details.push(`Non-eth is a weaker hit on ${input.mode}.`);
     return score - 3;
   }
 
   if (item.ethPriority === "medium") {
-    details.push("Non-eth is still usable, but it is not the preferred version.");
+    details.push("Non-eth is usable, but not preferred.");
     return score - 1;
   }
 
@@ -196,17 +196,17 @@ function adjustForSockets(score: number, input: BaseCheckInput, item: BaseItem, 
 
   if (input.sockets === 0) {
     details.push(
-      `Unsocketed ${item.name} has socket potential for ${formatSockets(item.desiredSockets)}, but its current trade value depends on actually hitting the right socket state.`
+      `Unsocketed ${item.name} can hit ${formatSockets(item.desiredSockets)}, but it needs the right socket state before it is a clean trade base.`
     );
 
     if (hasMeaningfulUnsocketedDemand(input, item)) {
       let nextScore = score;
 
       if (item.tags.includes("merc") && input.ethereal) {
-        details.push("Unsocketed eth mercenary bases can still attract buyers because socket control has real value.");
+        details.push("Unsocketed eth merc bases can still matter because buyers may want socket control.");
         nextScore += 1;
       } else {
-        details.push("This base has enough context that the unsocketed state can still be worth checking, but it is not the same as a finished socket hit.");
+        details.push("Worth a look, but not the same as a finished socket hit.");
       }
 
       return nextScore;
@@ -215,19 +215,19 @@ function adjustForSockets(score: number, input: BaseCheckInput, item: BaseItem, 
     let nextScore = score - 1;
 
     if (input.mode === "SCNL" && (item.category === "Weapon" || item.category === "Shield")) {
-      details.push("On SCNL, common unsocketed weapon and shield bases are saturated and usually need the correct sockets before they have clean trade value.");
+      details.push("On SCNL, common unsocketed weapons and shields are everywhere. They usually need correct sockets.");
     }
 
     return nextScore;
   }
 
   if (item.desiredSockets.includes(input.sockets)) {
-    details.push(`${input.sockets} sockets matches the most desirable setup for ${primaryUseCase(item)}.`);
+    details.push(`${input.sockets} sockets hits the normal ${primaryUseCase(item)} setup.`);
     return score + 2;
   }
 
   details.push(
-    `${input.sockets} sockets is off-pattern for this base. The usual target is ${formatSockets(item.desiredSockets)}.`
+    `${input.sockets} sockets is off-pattern. The usual target is ${formatSockets(item.desiredSockets)}.`
   );
   return score - 3;
 }
@@ -238,7 +238,7 @@ function adjustForAffixes(score: number, input: BaseCheckInput, item: BaseItem, 
 
   if (input.superior) {
     nextScore += 1;
-    details.push("Superior quality adds a small extra bump.");
+    details.push("Superior adds a small bump.");
   }
 
   if (item.category === "Armor" && typeof input.defenseOrEd === "number") {
@@ -247,38 +247,38 @@ function adjustForAffixes(score: number, input: BaseCheckInput, item: BaseItem, 
       details.push("High defense helps this armor stand out.");
     } else if (input.defenseOrEd < 430) {
       nextScore -= 1;
-      details.push("Low defense reduces upside unless the base is especially liquid.");
+      details.push("Low defense makes it less exciting.");
     }
   }
 
   if (isCircletFamily && typeof input.defenseOrEd === "number") {
     if (input.defenseOrEd >= 45) {
       nextScore += 2;
-      details.push("Strong circlet-family defense makes this base more attractive for superior socketed setups.");
+      details.push("Strong circlet defense helps the superior socketed setup.");
     } else if (input.defenseOrEd >= 30) {
       nextScore += 1;
-      details.push("Respectable circlet-family defense helps the base stand out.");
+      details.push("Decent circlet defense helps it stand out.");
     }
   }
 
   if (isCircletFamily && input.superior && typeof input.durabilityBonus === "number") {
     if (input.durabilityBonus >= 10) {
       nextScore += 1;
-      details.push("Superior durability is a real quality bump on circlet-family bases.");
+      details.push("Superior durability is a real quality bump here.");
     } else if (input.durabilityBonus > 0) {
-      details.push("Superior durability is present, but the roll is not especially notable.");
+      details.push("Superior durability is present, but nothing special.");
     }
   }
 
   if (item.category === "Shield" && typeof input.allRes === "number") {
     if (input.allRes >= 40) {
       nextScore += 3;
-      details.push("High all-res automod is a premium paladin shield trait.");
+      details.push("High all-res is the paladin shield hit.");
     } else if (input.allRes >= 30) {
       nextScore += 1;
       details.push("Good all-res keeps the shield worth holding.");
     } else if (input.allRes > 0) {
-      details.push("The all-res roll is usable but not exceptional.");
+      details.push("Usable all-res, but not a standout.");
     }
   }
 
@@ -299,19 +299,19 @@ function buildExplanation(item: BaseItem, input: BaseCheckInput, verdict: Verdic
 
 function buildRecommendedAction(item: BaseItem, input: BaseCheckInput, verdict: Verdict) {
   if (item.socketSensitive && input.sockets === 0 && !hasMeaningfulUnsocketedDemand(input, item)) {
-    return `Do not treat this as a clean trade base yet. Socket it or check the socket path, then re-evaluate if it hits ${formatSockets(item.desiredSockets)}.`;
+    return `Do not treat this as a clean trade base yet. Socket it, then re-check if it hits ${formatSockets(item.desiredSockets)}.`;
   }
 
   if (item.socketSensitive && input.sockets > 0 && !item.desiredSockets.includes(input.sockets)) {
-    return `Usually move on. This socket count misses the normal ${formatSockets(item.desiredSockets)} target.`;
+    return `Usually move on. This misses the normal ${formatSockets(item.desiredSockets)} target.`;
   }
 
   if (item.socketSensitive && item.desiredSockets.includes(input.sockets)) {
-    return "This has the right socket state. Keep it, then compare demand before listing.";
+    return "Right sockets. Keep it, then compare demand before listing.";
   }
 
   if (verdict === "Ignore") {
-    return "Ignore unless you need the base personally.";
+    return "Charsi unless you need the base personally.";
   }
 
   if (verdict === "Low Priority") {
@@ -319,10 +319,10 @@ function buildRecommendedAction(item: BaseItem, input: BaseCheckInput, verdict: 
   }
 
   if (verdict === "Keep") {
-    return "Keep it, but treat it as selective demand rather than an automatic listing.";
+    return "Keep it, but do not assume it is an instant trade.";
   }
 
-  return "Treat this as a premium trade base and prepare to list or mule it.";
+  return "Premium base. List it or mule it.";
 }
 
 export function evaluateBase(input: BaseCheckInput): BaseCheckResult {
@@ -334,7 +334,7 @@ export function evaluateBase(input: BaseCheckInput): BaseCheckResult {
       priority: "Trash",
       liquidity: "Low",
       explanation: "Unknown base item. The current local dataset does not contain a rule for it.",
-      recommendedAction: "Ignore it for now or extend the local data file."
+      recommendedAction: "Ignore it for now or add a local rule later."
     };
   }
 
@@ -348,12 +348,12 @@ export function evaluateBase(input: BaseCheckInput): BaseCheckResult {
 
   if (input.mode === "SCL" && item.tags.includes("ladder-staple")) {
     score += 1;
-    details.push("Ladder demand keeps this base moving more quickly.");
+    details.push("Ladder keeps this base moving faster.");
   }
 
   if (input.mode === "SCNL" && tier !== "premium" && item.category !== "Polearm") {
     score -= 1;
-    details.push("SCNL liquidity is usually softer for common bases.");
+    details.push("SCNL is tougher on common bases.");
   }
 
   const liquidity = liquidityFromTier(tier, input.mode, item);

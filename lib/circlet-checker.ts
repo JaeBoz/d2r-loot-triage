@@ -80,7 +80,7 @@ function scoreMagicCirclet(input: CircletCheckInput, details: string[], tags: Se
     score += input.skillTreeValue === 3 ? 10 : input.skillTreeValue === 2 ? 5 : 1;
     score += circletTreeSkillDemand[skillTreeType];
     tags.add("caster");
-    details.push(`${getSkillLabel(input)} is one of the classic magic circlet value patterns.`);
+    details.push(`${getSkillLabel(input)} is the classic magic circlet angle.`);
   } else if (input.skillMode === "class" && input.classSkillType && input.classSkillValue) {
     const classSkillType = input.classSkillType;
     score += input.classSkillValue === 2 ? 7 : 3;
@@ -92,7 +92,7 @@ function scoreMagicCirclet(input: CircletCheckInput, details: string[], tags: Se
   if ((input.fasterCastRate ?? 0) >= 20) {
     score += 6;
     tags.add("caster");
-    details.push("20 FCR is a high-signal magic circlet roll.");
+    details.push("20 FCR is the caster line people notice.");
   } else if ((input.fasterCastRate ?? 0) >= 10) {
     score += 2;
   }
@@ -100,16 +100,16 @@ function scoreMagicCirclet(input: CircletCheckInput, details: string[], tags: Se
   if ((input.fasterRunWalk ?? 0) >= 30) {
     score += 4;
     tags.add("PvP");
-    details.push("30 FRW adds real utility appeal.");
+    details.push("30 FRW gives it PvP utility.");
   }
 
   if ((input.sockets ?? 0) >= 2) {
     score += (input.sockets ?? 0) >= 3 ? 8 : 6;
     tags.add("niche");
-    details.push(`${input.sockets} sockets are a major value driver for magic circlet utility and PvP setups.`);
+    details.push(`${input.sockets} sockets are the value here for magic circlet utility and PvP setups.`);
   } else if ((input.sockets ?? 0) === 1) {
     score += 2;
-    details.push("A single socket adds some utility, but multi-socket magic circlets are the real target.");
+    details.push("One socket helps, but multi-socket magic circlets are the real target.");
   }
 
   if ((input.allResist ?? 0) >= 20) {
@@ -127,22 +127,22 @@ function scoreMagicCirclet(input: CircletCheckInput, details: string[], tags: Se
 
   if (input.skillMode === "tree" && (input.skillTreeValue ?? 0) >= 3 && (input.fasterCastRate ?? 0) >= 20) {
     score += 7;
-    details.push("The +3 tree and 20 FCR combination is a true jackpot-style magic circlet outcome.");
+    details.push("+3 tree with 20 FCR is the magic circlet jackpot.");
   }
 
   if ((input.sockets ?? 0) >= 2 && (input.fasterRunWalk ?? 0) >= 30) {
     score += (input.sockets ?? 0) >= 3 ? 6 : 5;
-    details.push("Socket utility paired with FRW is a real specialty magic circlet hit.");
+    details.push("Sockets plus FRW is a real specialty hit.");
   }
 
   if ((input.sockets ?? 0) >= 2 && (input.skillMode === "class" || input.skillMode === "tree")) {
     score -= 3;
-    details.push("Skills plus sockets on the same magic circlet is usually not a realistic hit, so trade confidence is reduced.");
+    details.push("Skills plus sockets on the same magic circlet is usually suspect, so treat it carefully.");
   }
 
   if ((input.fasterCastRate ?? 0) >= 20 && (input.fasterRunWalk ?? 0) >= 30) {
     score -= 2;
-    details.push("20 FCR and 30 FRW together on a magic circlet is unusually unlikely, so this result is treated conservatively.");
+    details.push("20 FCR with 30 FRW is unusually unlikely, so this is treated conservatively.");
   }
 
   return score;
@@ -166,13 +166,13 @@ function scoreRareCirclet(input: CircletCheckInput, details: string[], tags: Set
       score += circletClassSkillDemand[classSkillType];
     }
     tags.add("caster");
-    details.push(`${getSkillLabel(input)} is the main rare circlet value driver.`);
+    details.push(`${getSkillLabel(input)} is the main rare circlet line.`);
   }
 
   if (has20Fcr) {
     score += 4;
     tags.add("caster");
-    details.push("20 FCR is the key caster breakpoint on rare circlets.");
+    details.push("20 FCR is the caster breakpoint people want.");
   } else if ((input.fasterCastRate ?? 0) >= 10) {
     score += 1;
   }
@@ -211,32 +211,32 @@ function scoreRareCirclet(input: CircletCheckInput, details: string[], tags: Set
 
   if ((input.classSkillValue ?? 0) >= 2 && has20Fcr) {
     score += 10;
-    details.push("+2 skills with 20 FCR is the core rare circlet jackpot pattern.");
+    details.push("+2 skills with 20 FCR is the core rare circlet hit.");
   }
 
   if ((input.classSkillValue ?? 0) >= 2 && has20Fcr && hasStrongSupport) {
     score += 6;
-    details.push("Strong secondary support pushes it into clearly tradable rare circlet territory.");
+    details.push("Strong support makes it a real circlet.");
   }
 
   if ((input.fasterRunWalk ?? 0) >= 30 && ((input.allResist ?? 0) >= 15 || hasUsefulSingleRes(input))) {
     score += 4;
-    details.push("FRW with solid resist support gives it real utility appeal.");
+    details.push("FRW with resists gives it real utility.");
   }
 
   if (!has20Fcr && (input.classSkillValue ?? 0) >= 2 && !hasStrongSupport && !hasSocketUtility) {
     score -= 3;
-    details.push("+2 skills alone is only a partial rare circlet hit without FCR, socket utility, or strong secondary support.");
+    details.push("+2 skills alone is only a partial hit without FCR, sockets, or strong support.");
   }
 
   if (has20Fcr && !hasClassSkills && !hasStrongSupport && (input.fasterRunWalk ?? 0) < 30) {
     score -= 1;
-    details.push("Standalone 20 FCR helps, but it usually needs stronger support to become clearly tradable.");
+    details.push("20 FCR helps, but needs support to be a clean winner.");
   }
 
   if ((input.sockets ?? 0) > 0) {
     score += 2;
-    details.push("A socketed rare circlet gains real finished-item utility, especially when paired with skills, FCR, or strong support.");
+    details.push("A socket matters most when paired with skills, FCR, or strong support.");
   }
 
   return score;
@@ -273,10 +273,10 @@ export function evaluateCirclet(rawInput: CircletCheckInput): CircletCheckResult
 
   if (input.mode === "SCNL") {
     score -= 1;
-    details.push("SCNL is more selective, so circlets usually need tighter rolls to feel tradable.");
+    details.push("SCNL is stricter. Circlets need tighter rolls.");
   } else {
     score += 1;
-    details.push("SCL is a bit more forgiving for usable caster and utility circlets.");
+    details.push("SCL is more forgiving for usable caster and utility circlets.");
   }
 
   score += input.quality === "Magic" ? scoreMagicCirclet(input, details, tags) : scoreRareCirclet(input, details, tags);
@@ -292,28 +292,28 @@ export function evaluateCirclet(rawInput: CircletCheckInput): CircletCheckResult
   const liquidity = liquidityFor(input, verdict, tags);
   const verdictSummary =
     verdict === "Premium"
-      ? "This is a premium circlet pattern that should stand out immediately during farming."
+      ? "Premium circlet hit. This should stand out immediately."
       : verdict === "List"
-        ? "This is a clearly tradable circlet pattern rather than a marginal utility piece."
+        ? "Good circlet. This is a real listing candidate."
         : verdict === "Keep"
-          ? "There is real value here, but the roll stops short of a true jackpot."
+          ? "Solid circlet, but not a jackpot."
           : verdict === "Check"
-            ? "There is at least one useful line here, but it reads more like a partial hit than a clean trade winner."
+            ? "Partial hit. At least one useful line, but not a clean winner."
             : verdict === "Low Priority"
-              ? "Some utility is present, but the combination is weak for real circlet trade demand."
-              : "This does not match a meaningful high-signal circlet pattern.";
+              ? "Some utility, but the combo is weak."
+              : "No real circlet pattern here.";
 
-  let recommendedAction = "Ignore unless you specifically collect niche circlets.";
+  let recommendedAction = "Charsi unless you specifically collect niche circlets.";
   if (verdict === "Low Priority") {
-    recommendedAction = "Only keep if you see a specific niche use case or want a self-use placeholder.";
+    recommendedAction = "Only keep for a specific niche use case or self-use placeholder.";
   } else if (verdict === "Check") {
-    recommendedAction = "Check it more carefully. There may be a useful circlet pattern here, but it is not clearly tradable yet.";
+    recommendedAction = "Check it once before tossing. It is not clearly tradable yet.";
   } else if (verdict === "Keep") {
-    recommendedAction = "Keep it if you use this archetype. Trade value exists, but it may be selective.";
+    recommendedAction = "Keep it if the archetype matters. Demand may be selective.";
   } else if (verdict === "List") {
-    recommendedAction = "Check market activity or list it. This circlet has a real tradable pattern.";
+    recommendedAction = "Check market activity or list it. This circlet has a real pattern.";
   } else if (verdict === "Premium") {
-    recommendedAction = "Treat this as a premium circlet hit and compare it against strong market examples.";
+    recommendedAction = "Premium circlet. Compare it against strong examples before listing.";
   }
 
   const explanation = `${input.family} ${input.quality.toLowerCase()} circlet: ${details.join(" ")} ${verdictSummary}`;

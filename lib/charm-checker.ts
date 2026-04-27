@@ -269,7 +269,7 @@ export function evaluateCharm(input: CharmCheckInput): CharmCheckResult {
       verdict: "Ignore",
       priority: "Trash",
       liquidity: "Low",
-      explanation: "No charm stats were entered yet, so there is nothing meaningful to evaluate.",
+      explanation: "No charm stats entered yet.",
       recommendedAction: "Enter the visible charm mods to triage it.",
       qualityScore: 0,
       archetypeTags: ["niche"]
@@ -345,39 +345,39 @@ export function evaluateCharm(input: CharmCheckInput): CharmCheckResult {
   let explanation = "";
   if (matchedPatterns.length > 0) {
     if (isTopPoisonSmallCharm(input, matchedPatternIds)) {
-      explanation = `${summary} is a top poison small charm roll. High-end poison small charms have strong standalone trade relevance and should be treated as premium hits.`;
+      explanation = `${summary} is a top poison small charm roll. This is the poison SC jackpot, not filler.`;
     } else if (matchedPatternIds.includes("sc-poison")) {
-      explanation = `${summary} is a moderate poison small charm. Poison rolls in this range are niche or conditional rather than standout trade hits.`;
+      explanation = `${summary} is a moderate poison small charm. Niche, not a jackpot.`;
     } else if (input.size === "Grand Charm" && isPlainSkiller(matchedPatternIds)) {
-      explanation = `${summary} fits a valuable ${input.size.toLowerCase()} pattern. Plain skiller grand charms are often tradable, though value depends on the skill tree and current demand.`;
+      explanation = `${summary} is a plain skiller. Often tradable, but the skill tree decides how good it really is.`;
     } else if (input.size === "Grand Charm" && input.skill?.trim()) {
-      explanation = `${summary} fits a valuable ${input.size.toLowerCase()} pattern. Skill grand charms have strong demand, especially when backed by ${patternText}.`;
+      explanation = `${summary} is a skiller hit. The secondary mod is what pushes it higher.`;
     } else if (input.size === "Small Charm") {
-      explanation = `${summary} fits a useful ${input.size.toLowerCase()} pattern. Small charms with ${patternText} are broadly useful.`;
+      explanation = `Good small charm. ${patternText} is the pattern that matters.`;
     } else {
-      explanation = `${summary} gives this ${input.size.toLowerCase()} some value. ${patternText} keeps it at least worth checking.`;
+      explanation = `Decent ${input.size.toLowerCase()}. ${patternText} makes it worth a second look.`;
     }
   } else {
-    explanation = `${summary} is present, but the stats do not form a strong charm pattern for ${input.mode}.`;
+    explanation = `${summary} is present, but it does not make a real charm pattern for ${input.mode}.`;
   }
 
   let recommendedAction = "";
   if (verdict === "Ignore") {
-    recommendedAction = "Ignore it unless you need a temporary filler charm.";
+    recommendedAction = "Charsi unless you need a temporary filler charm.";
   } else if (verdict === "Low Priority") {
-    recommendedAction = "Only keep it if you want a stopgap charm or have extra stash room.";
+    recommendedAction = "Only keep it as a stopgap charm.";
   } else if (verdict === "Check") {
-    recommendedAction = "Check it a bit more carefully before tossing it. The pattern is at least somewhat usable.";
+    recommendedAction = "Check it once before tossing. The pattern is at least usable.";
   } else if (isTopPoisonSmallCharm(input, matchedPatternIds)) {
-    recommendedAction = "Treat this as a premium poison small charm and prepare to list or mule it.";
+    recommendedAction = "Premium poison small charm. List it or mule it.";
   } else if (isPlainSkiller(matchedPatternIds)) {
     recommendedAction = "Check market activity or list it if the skill tree is useful. Plain skillers are commonly tradable.";
   } else if (verdict === "Keep") {
-    recommendedAction = "Keep it. This matches a real charm pattern and is worth stashing.";
+    recommendedAction = "Keep it. This matches a real charm pattern.";
   } else if (verdict === "List") {
-    recommendedAction = "List it or compare it against similar charms with the same pattern.";
+    recommendedAction = "List it or compare it against similar charms.";
   } else {
-    recommendedAction = "Treat this as premium trade value and prepare to list or mule it.";
+    recommendedAction = "Premium charm. List it or mule it.";
   }
 
   return {

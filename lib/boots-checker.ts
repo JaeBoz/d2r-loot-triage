@@ -120,7 +120,7 @@ function awkwardPenalty(stats: NormalizedBootsStats, highlights: string[]) {
 
   if (Object.keys(stats).length >= 4 && !hasAnchor) {
     penalty += 2;
-    highlights.push("scattered stats without a strong boot pattern");
+    highlights.push("scattered stats with no strong boot pattern");
   }
 
   return penalty;
@@ -151,12 +151,12 @@ function rollPackageAdjustment(stats: NormalizedBootsStats, rated: RatedStat[], 
     (hasRealResAnchor || hasRealMfAnchor || ((stats.fasterHitRecovery ?? 0) >= 10 && (stats.lightningResist ?? 0) >= 25));
 
   if (hasPremiumShell) {
-    highlights.push("coherent premium boot shell");
+    highlights.push("premium boot shell");
     return 2;
   }
 
   if (highCount >= 3) {
-    highlights.push("multiple high-impact utility rolls");
+    highlights.push("multiple strong utility rolls");
     return 2;
   }
 
@@ -166,12 +166,12 @@ function rollPackageAdjustment(stats: NormalizedBootsStats, rated: RatedStat[], 
   }
 
   if (highCount === 0 && mediumCount <= 1 && lowCount >= 2) {
-    highlights.push("mostly filler-level utility");
+    highlights.push("mostly filler stats");
     return -2;
   }
 
   if (!hasRealFrwAnchor && !hasRealResAnchor && !hasRealMfAnchor && mediumCount > 0 && lowCount > 0) {
-    highlights.push("mixed utility without a strong boot pattern");
+    highlights.push("mixed stats with no strong boot pattern");
     return -1;
   }
 
@@ -220,44 +220,44 @@ function explanationFor(
   const lowOnly = rated.length > 0 && rated.every((entry) => entry.score <= 1);
 
   if (verdict === "Ignore") {
-    return `These boots have ${summary}, but they do not form a strong tradable pattern for ${input.mode}.`;
+    return `Charsi-level boots. ${summary} does not make a real ${input.mode} boot pattern.`;
   }
 
   if (verdict === "Low Priority") {
-    return `These boots show ${summary}, but the combination is still too thin for strong ${input.mode} demand.`;
+    return `Some useful lines, but not enough together. ${summary} is mostly self-use or niche.`;
   }
 
   if (verdict === "Check") {
-    return `${summary} gives these boots some utility appeal, but they still read more like a partial hit than a clearly tradable pair. ${comboText} is the main reason to give them a second look.`;
+    return `Decent partial hit. ${summary} is usable, but not a clean winner. Check because of ${comboText}.`;
   }
 
   if (verdict === "Keep") {
-    return `${summary} makes these boots useful. ${comboText} gives them real self-use or selective trade appeal, even if they stop short of a true jackpot pair.`;
+    return `Solid boots. ${summary} plus ${comboText} is the reason to keep them.`;
   }
 
   if (verdict === "List") {
-    return `${summary} makes these boots clearly tradable. ${comboText} is a real marketable boot pattern.`;
+    return `Good boots. ${summary} with ${comboText} is a real listing candidate.`;
   }
 
   if (highCount >= 2 && !lowOnly) {
-    return `${summary} makes these boots premium. ${comboText} pushes them into premium trade territory.`;
+    return `Premium boots. ${summary} with ${comboText} is the hit.`;
   }
 
-  return `${summary} makes these boots look premium at a glance, but they are still worth checking carefully because the full utility mix matters on rare boots.`;
+  return "Looks premium at a glance. Check the full boot mix before calling it a trophy.";
 }
 
 function recommendedActionFor(verdict: Verdict, highlights: string[]) {
-  if (verdict === "Ignore") return "Ignore them unless you need temporary self-use boots.";
-  if (verdict === "Low Priority") return "Only keep them if you want a progression filler or specific self-use utility.";
-  if (verdict === "Check") return "Check the full boot mix more carefully before tossing them.";
-  if (verdict === "Keep") return "Keep them. These boots are useful enough to stash or compare.";
+  if (verdict === "Ignore") return "Charsi unless you need temporary self-use boots.";
+  if (verdict === "Low Priority") return "Only keep them as a filler or specific self-use pair.";
+  if (verdict === "Check") return "Check the full boot mix before tossing them.";
+  if (verdict === "Keep") return "Keep them. Useful enough to stash or compare.";
   if (verdict === "List") {
     if (highlights.includes("FRW with magic find")) {
-      return "Check market activity or list them. FRW + MF boots are broadly useful and easy to understand.";
+      return "Check market activity or list them. FRW + MF is easy to understand.";
     }
-    return "List them or compare them against similar rare utility boots.";
+    return "List them or compare them against similar rare boots.";
   }
-  return "Treat these as premium trade value and compare them against premium rare boot listings.";
+  return "Premium rare boots. Compare before listing.";
 }
 
 export function evaluateBoots(input: BootsCheckInput): BootsCheckResult {
@@ -268,7 +268,7 @@ export function evaluateBoots(input: BootsCheckInput): BootsCheckResult {
       verdict: "Ignore",
       priority: "Trash",
       liquidity: "Low",
-      explanation: "No boot stats were entered yet, so there is nothing meaningful to evaluate.",
+      explanation: "No boot stats entered yet.",
       recommendedAction: "Enter the visible boot mods to triage them.",
       qualityScore: 0,
       archetypeTags: ["niche"]

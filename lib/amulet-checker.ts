@@ -254,7 +254,7 @@ function classSkillContextAdjustment(stats: NormalizedAmuletStats, tags: Set<Rin
 
   if (!isCasterFriendlyClassSkill(stats.classSkillType) && (stats.fasterCastRate ?? 0) >= 10) {
     score -= 1;
-    highlights.push("class skill is less attractive with a caster-style stat mix");
+    highlights.push("class skill does not fit the caster-style stats");
   }
 
   if (stats.classSkillType === "Barbarian Skills" && !hasMeleeSupport && (stats.life ?? 0) < 20) {
@@ -299,7 +299,7 @@ function skillTreeContextAdjustment(stats: NormalizedAmuletStats, tags: Set<Ring
 
   if (!isCasterFriendlySkillTree(stats.skillTreeType) && (stats.fasterCastRate ?? 0) >= 10) {
     score -= 1;
-    highlights.push("skill tree is less attractive with a caster-style stat mix");
+    highlights.push("skill tree does not fit the caster-style stats");
   }
 
   return score;
@@ -356,7 +356,7 @@ function awkwardComboPenalty(stats: NormalizedAmuletStats, tags: RingArchetype[]
 
   if (scattered) {
     penalty += 2;
-    highlights.push("scattered utility without a clear build anchor");
+    highlights.push("scattered stats with no clear build anchor");
   }
 
   if (
@@ -369,7 +369,7 @@ function awkwardComboPenalty(stats: NormalizedAmuletStats, tags: RingArchetype[]
 
   if ((stats.levelRequirement ?? 0) >= 67) {
     penalty += 1;
-    highlights.push("elevated level requirement");
+    highlights.push("high level requirement");
   }
 
   if ((stats.levelRequirement ?? 0) >= 89) {
@@ -431,35 +431,35 @@ function explanationFor(
   const comboText = highlights.length > 0 ? highlights.slice(0, 2).join(" and ") : "the overall stat mix";
 
   if (verdict === "Ignore") {
-    return `This amulet has ${summaryText}, but the combination is too weak for meaningful ${input.mode} demand.`;
+    return `Charsi-level amulet. ${summaryText} is not enough for ${input.mode}.`;
   }
 
   if (verdict === "Low Priority") {
-    return `Useful stats are present, but this ${leadTag} amulet is still too thin for strong ${input.mode} demand.`;
+    return `Some useful stats, but not enough together. This ${leadTag} amulet is mostly self-use or niche.`;
   }
 
   if (verdict === "Check") {
-    return `This amulet has ${leadTag} appeal due to ${summaryText}. It is worth checking more carefully because of ${comboText}.`;
+    return `Decent partial hit. ${summaryText} gives it ${leadTag} appeal. Check because of ${comboText}.`;
   }
 
   if (verdict === "Keep") {
-    return `This looks like a practical ${leadTag} amulet. ${summaryText} and ${comboText} give it real self-use or trade value.`;
+    return `Solid ${leadTag} amulet. You're mainly paying for ${summaryText} plus ${comboText}.`;
   }
 
   if (verdict === "List") {
-    return `This is a real ${leadTag} amulet worth listing. ${summaryText} plus ${comboText} create a solid market profile.`;
+    return `Good ${leadTag} amulet. ${summaryText} plus ${comboText} is a real listing candidate.`;
   }
 
-  return `This is a premium ${leadTag} amulet. ${summaryText} with ${comboText} pushes it into premium trade territory.`;
+  return `Premium ${leadTag} amulet. ${summaryText} with ${comboText} is the hit.`;
 }
 
 function recommendedActionFor(verdict: Verdict, mode: AmuletCheckInput["mode"]) {
-  if (verdict === "Ignore") return "Ignore it unless you need a temporary self-use amulet.";
-  if (verdict === "Low Priority") return "Only keep it if you want a progression filler.";
-  if (verdict === "Check") return "Give it a second pass before selling or tossing it. The stat mix is at least checkable.";
-  if (verdict === "Keep") return `Keep it and compare it against your other ${mode} utility amulets.`;
-  if (verdict === "List") return "List it or compare it against other rare amulets with similar caster or utility rolls.";
-  return "Treat this as premium trade value and prepare to list it.";
+  if (verdict === "Ignore") return "Charsi unless you need a temporary self-use amulet.";
+  if (verdict === "Low Priority") return "Only keep it as a progression filler.";
+  if (verdict === "Check") return "Give it a second pass before tossing it.";
+  if (verdict === "Keep") return `Keep it and compare it against your other ${mode} amulets.`;
+  if (verdict === "List") return "List it or compare it against similar rare amulets.";
+  return "Premium rare amulet. Compare before listing.";
 }
 
 export function evaluateAmulet(input: AmuletCheckInput): AmuletCheckResult {
@@ -471,7 +471,7 @@ export function evaluateAmulet(input: AmuletCheckInput): AmuletCheckResult {
       verdict: "Ignore",
       priority: "Trash",
       liquidity: "Low",
-      explanation: "No amulet stats were entered yet, so there is nothing meaningful to evaluate.",
+      explanation: "No amulet stats entered yet.",
       recommendedAction: "Enter the visible mods to triage the amulet.",
       qualityScore: 0,
       archetypeTags: ["niche"]

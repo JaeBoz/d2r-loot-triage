@@ -15,7 +15,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "high",
     sclPriority: "high",
     liquidity: "High",
-    notes: "Staple MF boots. Magic Find drives value heavily, while added damage is a lighter secondary tiebreaker.",
+    notes: "Staple MF boots. The MF roll is what matters; damage is just a tiebreaker.",
     source: "Arreat Summit / diablo2.io",
     rollDefinitions: [
       {
@@ -57,7 +57,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "high",
     sclPriority: "high",
     liquidity: "High",
-    notes: "Staple Cannot Be Frozen ring. Dexterity and attack rating both matter, but rolls affect value moderately rather than radically.",
+    notes: "Staple Cannot Be Frozen ring. Dex and AR matter, but the item itself carries most of the value.",
     source: "Arreat Summit / diablo2.io",
     rollDefinitions: [
       {
@@ -95,7 +95,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "low",
     sclPriority: "medium",
     liquidity: "Medium",
-    notes: "Mostly about the Magic Find roll. Rolls matter heavily because low Nagels are common and much less desirable.",
+    notes: "Mostly an MF roll check. Low Nagels are common and nothing special.",
     source: "Arreat Summit / diablo2.io",
     rollDefinitions: [
       {
@@ -125,7 +125,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "high",
     sclPriority: "high",
     liquidity: "High",
-    notes: "Caster staple. All resist is the meaningful variable and stronger rolls matter noticeably for trade quality.",
+    notes: "Caster staple. All resist is the roll people care about.",
     source: "Arreat Summit / diablo2.io",
     rollDefinitions: [
       {
@@ -160,7 +160,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "medium",
     sclPriority: "high",
     liquidity: "Medium",
-    notes: "Still worth checking for javazon demand, especially in SCL. Enhanced damage matters most, life leech is a lighter secondary roll, and ethereal versions carry extra but more selective trade appeal.",
+    notes: "Javazon staple. ED matters most, leech is secondary, and eth copies are the spicy version.",
     source: "Arreat Summit / diablo2.io",
     rollDefinitions: [
       {
@@ -201,7 +201,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "high",
     sclPriority: "high",
     liquidity: "High",
-    notes: "Widely used mercenary helm. Strength and life leech both matter, though rolls usually fine-tune value rather than define it outright.",
+    notes: "Common merc helm. Strength and leech matter, but the item is useful even without perfect rolls.",
     source: "Arreat Summit / diablo2.io",
     rollDefinitions: [
       {
@@ -242,7 +242,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "premium",
     sclPriority: "premium",
     liquidity: "High",
-    notes: "Top-end lightning unique. Both lightning rolls matter heavily, and strong combined rolls drive premium value.",
+    notes: "Top-end lightning unique. Both lightning rolls matter a lot; strong combined rolls are the chase.",
     source: "Arreat Summit / diablo2.io",
     rollDefinitions: [
       {
@@ -280,7 +280,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "premium",
     sclPriority: "premium",
     liquidity: "High",
-    notes: "Premium cold sorceress weapon. Cold skill damage is the meaningful value driver and rolls matter heavily.",
+    notes: "Premium cold sorc weapon. Cold skill damage is the roll.",
     source: "Arreat Summit / diablo2.io",
     rollDefinitions: [
       {
@@ -310,7 +310,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "high",
     sclPriority: "high",
     liquidity: "Medium",
-    notes: "Cold-damage staple with selective but real demand. Cold skill damage is the main trade driver, while dexterity is a useful secondary tiebreaker.",
+    notes: "Cold-damage staple. Cold skill damage is the main roll; dex is a tiebreaker.",
     source: "Arreat Summit / diablo2.io",
     rollDefinitions: [
       {
@@ -352,7 +352,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "premium",
     sclPriority: "premium",
     liquidity: "High",
-    notes: "Premium poison necromancer wand with high-end but build-specific demand. -Enemy poison resist drives value heavily, with Poison and Bone Skills as a meaningful secondary roll.",
+    notes: "Premium poison necro wand. -Enemy poison resist is the money roll; +Poison and Bone helps.",
     source: "Arreat Summit / diablo2.io",
     rollDefinitions: [
       {
@@ -394,7 +394,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "medium",
     sclPriority: "high",
     liquidity: "Medium",
-    notes: "Caster orb with selective, roll-sensitive demand. Sorceress skills matter first, and only strong elemental skill damage rolls usually separate it from more common caster options.",
+    notes: "Roll-sensitive sorc orb. Skills matter first; elemental rolls need to be strong.",
     source: "Arreat Summit / diablo2.io",
     rollDefinitions: [
       {
@@ -446,7 +446,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "high",
     sclPriority: "high",
     liquidity: "High",
-    notes: "Staple mercenary polearm with steady demand. Enhanced damage matters most, and ethereal versions are a major trade-value upgrade for mercenary use.",
+    notes: "Staple merc polearm. ED matters, and eth is the version people want.",
     source: "Arreat Summit / diablo2.io",
     rollDefinitions: [
       {
@@ -487,7 +487,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "high",
     sclPriority: "high",
     liquidity: "Medium",
-    notes: "High-end defensive helm with selective PvP/endgame demand. Two sockets are a major separator, with damage reduction and all resist deciding how strong the piece really is.",
+    notes: "High-end defensive helm. Two sockets are huge; DR and res decide how good it is.",
     source: "Arreat Summit / diablo2.io",
     rollDefinitions: [
       {
@@ -537,7 +537,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "high",
     sclPriority: "premium",
     liquidity: "High",
-    notes: "Staple caster belt with very consistent liquidity. Market saturation can keep ordinary copies below premium trade value, but caster demand makes it worth checking or listing.",
+    notes: "Staple caster belt. Common, but always worth keeping because casters use it everywhere.",
     source: "Arreat Summit / diablo2.io",
     sources: {
       baselineSource: {
@@ -557,7 +557,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "high",
     sclPriority: "high",
     liquidity: "Medium",
-    notes: "Classic paladin shield. This MVP treats it as a staple check because the important trade call is usually the item itself, not its defense roll.",
+    notes: "Classic paladin shield. The drop itself is the value; defense is not the quick call.",
     source: "Arreat Summit / diablo2.io",
     sources: {
       baselineSource: {
@@ -580,7 +580,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "medium",
     sclPriority: "medium",
     liquidity: "Medium",
-    notes: "Solid melee staple. Usually worth keeping or checking market activity, even without roll input in this MVP.",
+    notes: "Solid melee staple. Usually worth keeping even without a roll check here.",
     source: "Arreat Summit / diablo2.io",
     sources: {
       baselineSource: {
@@ -600,7 +600,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "high",
     sclPriority: "high",
     liquidity: "High",
-    notes: "Commonly called Shako. Staple all-around helm with broad caster, MF, and general PvM demand; defense is not the main quick-triage value driver.",
+    notes: "Shako. Staple all-around helm for casters, MF, and PvM; defense is not the point.",
     source: "diablo2.io / Arreat Summit",
     sources: {
       baselineSource: {
@@ -620,7 +620,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "high",
     sclPriority: "high",
     liquidity: "High",
-    notes: "Staple sorceress orb with easy-to-recognize caster and MF demand. Its value is mostly the item identity, not a variable roll check.",
+    notes: "Staple sorc orb. The item identity is the value, not a roll check.",
     source: "Arreat Summit / Diablo Wiki",
     sources: {
       baselineSource: {
@@ -640,7 +640,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "medium",
     sclPriority: "high",
     liquidity: "High",
-    notes: "Staple magic-find grand charm. Magic Find is the fastest value check; low rolls are common, while high MF rolls are much easier to justify keeping or listing.",
+    notes: "Staple MF grand charm. Low rolls are common; high MF is what makes it worth listing.",
     source: "Gamer Guides / Diablo Wiki",
     rollDefinitions: [
       {
@@ -671,7 +671,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "low",
     sclPriority: "medium",
     liquidity: "Medium",
-    notes: "Useful melee and Uber-focused gloves. Life Tap is fixed, while life leech and strength separate weak utility copies from stronger tradable ones.",
+    notes: "Melee/Uber gloves. Life Tap is fixed; leech and strength decide whether the copy is decent.",
     source: "Diablo Wiki / diablo2.io",
     rollDefinitions: [
       {
@@ -710,7 +710,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "low",
     sclPriority: "medium",
     liquidity: "Medium",
-    notes: "Niche melee gloves where enhanced damage and strength carry most of the trade signal. Weak rolls should read as selective or self-use.",
+    notes: "Niche melee gloves. ED and strength carry the roll; weak copies are mostly self-use.",
     source: "Diablo Wiki / diablo2.io",
     rollDefinitions: [
       {
@@ -748,7 +748,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "medium",
     sclPriority: "medium",
     liquidity: "Medium",
-    notes: "Rare absorb ring with niche but real demand. Lightning absorb drives value first, with Magic Find as a secondary quality roll.",
+    notes: "Niche absorb ring. Lightning absorb is the main roll; MF is secondary.",
     source: "diablo2.io / Diablo Wiki",
     rollDefinitions: [
       {
@@ -790,7 +790,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "medium",
     sclPriority: "medium",
     liquidity: "Medium",
-    notes: "Usable belt, but trade value depends on stronger defensive rolls. Life leech matters lightly here as a quick single-field check.",
+    notes: "Usable belt. Needs stronger defensive rolls; leech is only a quick check here.",
     source: "Arreat Summit / diablo2.io",
     rollDefinitions: [
       {
@@ -820,7 +820,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "premium",
     sclPriority: "premium",
     liquidity: "High",
-    notes: "Premium all-around amulet. All resist is the main value driver, and higher rolls matter heavily.",
+    notes: "Premium all-around amulet. All resist is the roll.",
     source: "Arreat Summit / diablo2.io",
     rollDefinitions: [
       {
@@ -853,7 +853,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "premium",
     sclPriority: "premium",
     liquidity: "High",
-    notes: "Staple chase ring with steady trade demand. The main decision is whether it dropped at all, not how it rolled.",
+    notes: "Staple chase ring. No roll chase here; the drop itself is the value.",
     source: "Arreat Summit / diablo2.io",
     sources: {
       baselineSource: {
@@ -876,7 +876,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "medium",
     sclPriority: "medium",
     liquidity: "Medium",
-    notes: "Still tradable, but usually less liquid than Stone of Jordan. Life leech is the meaningful quick roll check and matters moderately.",
+    notes: "Still tradable, but less liquid than SoJ. Life leech is the quick roll check.",
     source: "Arreat Summit / diablo2.io",
     rollDefinitions: [
       {

@@ -1,5 +1,22 @@
 # D2R Loot Triage App - Internal Changelog
 
+[2026-04-27]
+
+Change:
+- Rewrote result explanations, recommended actions, decision caveats, and unique item summaries with shorter D2-native loot/trade wording.
+
+Type:
+- UX
+
+Why:
+- QA feedback showed some result language felt too generic and analytical for fast D2 farming decisions.
+
+Impact:
+- Results now read more like practical price-check/loot-triage notes, with clearer phrases around good rolls, low rolls, staples, socket hits, niche items, and Charsi-level junk.
+
+Notes:
+- Wording-only pass; scoring, Trade Value tiers, decision mapping, item data coverage, and checker architecture were unchanged.
+
 [2026-04-26]
 
 Change:

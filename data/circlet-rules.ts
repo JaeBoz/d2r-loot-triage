@@ -15,19 +15,19 @@ export const circletFamilies: Array<{
   {
     family: "Coronet",
     maxMagicSockets: 2,
-    demandNote: "Coronets can still hit real caster or utility patterns, but usually need stronger affixes to stand out.",
+    demandNote: "Coronets can hit real caster or utility patterns, but need stronger mods to stand out.",
     familyBias: 0
   },
   {
     family: "Tiara",
     maxMagicSockets: 3,
-    demandNote: "Tiara is a stronger jackpot base for magic utility rolls and polished rare circlets.",
+    demandNote: "Tiara is a stronger base for magic socket hits and polished rare circlets.",
     familyBias: 1
   },
   {
     family: "Diadem",
     maxMagicSockets: 3,
-    demandNote: "Diadem is the premium circlet-family base and gives strong trade context to real jackpot rolls.",
+    demandNote: "Diadem is the premium circlet base. Great rolls matter more here.",
     familyBias: 2
   }
 ];
@@ -53,6 +53,6 @@ export const circletTreeSkillDemand: Record<CircletSkillTree, number> = {
 };
 
 export const circletQualityNotes: Record<CircletQuality, string> = {
-  Magic: "Magic circlets usually win on one narrow jackpot package like +skills with 20 FCR or strong socket utility.",
-  Rare: "Rare circlets need a tighter combination of skills, FCR, movement, stats, or resist support to be clearly tradable."
+  Magic: "Magic circlets usually need one narrow jackpot package: +skills with 20 FCR or strong sockets.",
+  Rare: "Rare circlets need skills, FCR, movement, stats, or resists to come together."
 };

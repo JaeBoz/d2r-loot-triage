@@ -163,7 +163,7 @@ function awkwardComboPenalty(stats: NormalizedRingStats, tags: RingArchetype[], 
 
   if (hasMostlyScatteredStats) {
     penalty += 2;
-    highlights.push("scattered stats without a strong anchor");
+    highlights.push("scattered stats with no real anchor");
   }
 
   if (tags.includes("caster") && tags.includes("melee") && !hasCasterAnchor) {
@@ -172,7 +172,7 @@ function awkwardComboPenalty(stats: NormalizedRingStats, tags: RingArchetype[], 
 
   if ((stats.levelRequirement ?? 0) >= 51) {
     penalty += 1;
-    highlights.push("elevated level requirement");
+    highlights.push("high level requirement");
   }
 
   if ((stats.levelRequirement ?? 0) >= 71) {
@@ -220,7 +220,7 @@ function rollPackageAdjustment(
     (((stats.strength ?? 0) >= 8 && (stats.dexterity ?? 0) >= 8) || (stats.maxDamage ?? 0) >= 5);
 
   if (hasPremiumCasterShell || hasPremiumMeleeShell) {
-    highlights.push("coherent premium shell");
+    highlights.push("premium shell");
     return 2;
   }
 
@@ -240,7 +240,7 @@ function rollPackageAdjustment(
   }
 
   if (highCount === 0 && mediumCount > 0 && lowCount > 0 && !hasCasterAnchor && !hasMeleeAnchor) {
-    highlights.push("mixed utility without a strong anchor");
+    highlights.push("mixed stats with no real anchor");
     return -1;
   }
 
@@ -288,54 +288,54 @@ function explanationFor(
   const lowOnly = rated.length > 0 && rated.every((entry) => entry.score <= 1);
 
   if (verdict === "Ignore") {
-    return `This ring has ${summaryText}, but the combination is too weak for meaningful ${input.mode} demand.`;
+    return `Charsi-level ring. ${summaryText} is not enough for ${input.mode}.`;
   }
 
   if (verdict === "Low Priority") {
-    return `This looks like a ${leadTag} ring with ${summaryText}, but the synergy is too thin for strong ${input.mode} demand.`;
+    return `Some useful stats, but not enough together. ${summaryText} is mostly self-use or niche.`;
   }
 
   if (verdict === "Check") {
-    return `${summaryText} gives this ring some ${leadTag} appeal, but it still reads more like a partial hit than a clean winner. ${comboText} is the main reason to check it more closely.`;
+    return `Decent partial hit. ${summaryText} gives it some ${leadTag} appeal, but it is not a clean winner. Check because of ${comboText}.`;
   }
 
   if (verdict === "Keep") {
-    return `${summaryText} makes this a practical ${leadTag} ring. The combination of ${comboText} gives it real use value, even if it stops short of premium trade territory.`;
+    return `Solid ${leadTag} ring. ${summaryText} plus ${comboText} is the reason to keep it.`;
   }
 
   if (verdict === "List") {
-    return `${summaryText} makes this a real ${leadTag} ring worth listing. ${comboText} gives it a strong, marketable profile.`;
+    return `Good ${leadTag} ring. ${summaryText} with ${comboText} is a real listing candidate.`;
   }
 
   if (highCount >= 2 && !lowOnly) {
-    return `${summaryText} makes this a premium ${leadTag} ring. ${comboText} pushes it into premium trade territory.`;
+    return `Premium ${leadTag} ring. ${summaryText} with ${comboText} is the hit.`;
   }
 
-  return `${summaryText} makes this a premium ${leadTag} ring, but it is still worth checking carefully because the value depends on how the full stat mix comes together.`;
+  return "Looks premium at a glance. Check the full stat mix before calling it a true trophy.";
 }
 
 function recommendedActionFor(verdict: Verdict, mode: RingCheckInput["mode"]) {
   if (verdict === "Ignore") {
-    return "Ignore it unless you need a temporary self-use ring.";
+    return "Charsi unless you need a temporary self-use ring.";
   }
 
   if (verdict === "Low Priority") {
-    return "Only keep it if you want a stopgap ring for progression.";
+    return "Only keep it as a stopgap.";
   }
 
   if (verdict === "Check") {
-    return "Check the full mod mix carefully before tossing it. The ring has enough going on to merit a second pass.";
+    return "Check the full mod mix before tossing it.";
   }
 
   if (verdict === "Keep") {
-    return `Keep it. This is good enough to stash and compare against other ${mode} utility rings.`;
+    return `Keep it. Good enough to stash and compare against other ${mode} rings.`;
   }
 
   if (verdict === "List") {
-    return "List it or price-check it against comparable rare rings.";
+    return "List it or compare it against similar rare rings.";
   }
 
-  return "Treat this as premium trade value and prepare to list it.";
+  return "Premium rare ring. Compare before listing.";
 }
 
 export function evaluateRing(input: RingCheckInput): RingCheckResult {
@@ -347,7 +347,7 @@ export function evaluateRing(input: RingCheckInput): RingCheckResult {
       verdict: "Ignore",
       priority: "Trash",
       liquidity: "Low",
-      explanation: "No ring stats were entered yet, so there is nothing meaningful to evaluate.",
+      explanation: "No ring stats entered yet.",
       recommendedAction: "Enter the visible mods to triage the ring.",
       qualityScore: 0,
       archetypeTags: ["niche"]

@@ -31,7 +31,7 @@ export function mapDecisionOutput(input: DecisionInput): DecisionOutput {
     return {
       label: "Drop",
       actionLine: "Drop it unless you need it for immediate self-use.",
-      caveat: isSelfUse ? "Self-use is not the same as trade value." : undefined
+      caveat: isSelfUse ? "Useful for you does not always mean tradable." : undefined
     };
   }
 
@@ -39,15 +39,15 @@ export function mapDecisionOutput(input: DecisionInput): DecisionOutput {
     if (isNoRollStapleUnique) {
       return {
         label: "Keep",
-        actionLine: "Keep this. It has clear current value or strong staple demand.",
-        caveat: "No-roll staple uniques should not be tossed quickly."
+        actionLine: "Keep this. It has clear value or staple demand.",
+        caveat: "No-roll staples are keeps. The drop itself is the value."
       };
     }
 
     return {
       label: "Check Before Tossing",
       actionLine: "Do not drop this blindly. Compare or review it before tossing.",
-      caveat: "Premium outcomes should not be tossed quickly."
+      caveat: "Premium hits deserve a real look before listing or muling."
     };
   }
 
@@ -55,15 +55,15 @@ export function mapDecisionOutput(input: DecisionInput): DecisionOutput {
     if (isNoRollStapleUnique) {
       return {
         label: "Keep",
-        actionLine: "Keep this. It has clear current value or strong staple demand.",
-        caveat: isSocketDependent ? "Make sure the current socket state is the reason it is valuable." : undefined
+        actionLine: "Keep this. It has clear value or staple demand.",
+        caveat: isSocketDependent ? "Make sure the sockets are the reason it matters." : undefined
       };
     }
 
     return {
       label: isMarketCheck ? "Check Before Tossing" : "Keep",
       actionLine: isMarketCheck ? "Do not drop this blindly. Compare or review it before tossing." : "Keep it for trade or comparison.",
-      caveat: isSocketDependent ? "Make sure the current socket state is the reason it is valuable." : undefined
+      caveat: isSocketDependent ? "Make sure the sockets are the reason it matters." : undefined
     };
   }
 
@@ -76,7 +76,7 @@ export function mapDecisionOutput(input: DecisionInput): DecisionOutput {
           : isSocketDependent
             ? "Keep only if you plan to socket, reroll, or re-check the final state."
             : "Keep only if the use case matters to you or the roll deserves a closer look.",
-      caveat: isSelfUse ? "Likely selective demand rather than an easy trade." : undefined
+      caveat: isSelfUse ? "Likely niche or self-use, not an easy trade." : undefined
     };
   }
 

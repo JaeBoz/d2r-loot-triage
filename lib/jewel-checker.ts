@@ -122,7 +122,7 @@ function awkwardPenalty(stats: NormalizedJewelStats, highlights: string[]) {
 
   if (Object.keys(stats).length >= 4 && !hasAnchor) {
     penalty += 2;
-    highlights.push("scattered stats without a strong jewel pattern");
+    highlights.push("scattered stats with no strong jewel pattern");
   }
 
   return penalty;
@@ -168,46 +168,46 @@ function explanationFor(
   const leadTag = tags[0] ?? "niche";
 
   if (verdict === "Ignore") {
-    return `This jewel has ${summary}, but it lacks a strong tradable pattern for ${input.mode}.`;
+    return `Charsi-level jewel. ${summary} does not make a real ${input.mode} jewel pattern.`;
   }
 
   if (verdict === "Low Priority") {
-    return `This looks like a ${leadTag} jewel with ${summary}, but the synergy is too thin for meaningful trade value.`;
+    return `Some useful stats, but not enough together. ${summary} is mostly self-use or niche.`;
   }
 
   if (verdict === "Check") {
-    return `${summary} gives this jewel some ${leadTag} appeal. It is worth checking because of ${comboText}.`;
+    return `Decent jewel. ${summary} gives it some ${leadTag} appeal. Check because of ${comboText}.`;
   }
 
   if (verdict === "Keep") {
-    return `${summary} makes this a usable ${leadTag} jewel. ${comboText} gives it real value, even if liquidity may vary.`;
+    return `Solid ${leadTag} jewel. ${summary} plus ${comboText} is the reason to keep it.`;
   }
 
   if (verdict === "List") {
     if (highlights.includes("enhanced damage with -requirements")) {
-      return `${summary} makes this a tradable ${leadTag} jewel. ${comboText} has niche but real value for socketing awkward bases.`;
+      return `Good niche jewel. ${summary} matters for socketing awkward bases.`;
     }
-    return `${summary} makes this a tradable ${leadTag} jewel. ${comboText} is a real marketable pattern.`;
+    return `Good ${leadTag} jewel. ${summary} with ${comboText} is a real listing candidate.`;
   }
 
-  return `${summary} makes this a premium ${leadTag} jewel. ${comboText} pushes it into premium trade territory.`;
+  return `Premium ${leadTag} jewel. ${summary} with ${comboText} is the hit.`;
 }
 
 function recommendedActionFor(verdict: Verdict, highlights: string[]) {
-  if (verdict === "Ignore") return "Ignore it unless you need a temporary self-use jewel.";
-  if (verdict === "Low Priority") return "Only keep it if you want a stash filler or niche utility option.";
-  if (verdict === "Check") return "Check the mod mix carefully before tossing it. The jewel has at least one useful angle.";
-  if (verdict === "Keep") return "Keep it. This is useful enough to stash for a future socket.";
+  if (verdict === "Ignore") return "Charsi unless you need a temporary self-use jewel.";
+  if (verdict === "Low Priority") return "Only keep it as a stash filler or niche socket option.";
+  if (verdict === "Check") return "Check the mod mix before tossing it.";
+  if (verdict === "Keep") return "Keep it. Useful enough to stash for a future socket.";
   if (verdict === "List") {
     if (highlights.includes("IAS with resist support")) {
-      return "Check market activity or list it. IAS + resist jewels are broadly useful and commonly tradable.";
+      return "Check market activity or list it. IAS + resist is commonly traded.";
     }
     if (highlights.includes("enhanced damage with -requirements")) {
-      return "Check market activity or list it. ED + -requirements jewels have niche but real trade value.";
+      return "Check market activity or list it. ED + -requirements is niche but real.";
     }
-    return "List it or compare it against similar trade jewels.";
+    return "List it or compare it against similar jewels.";
   }
-  return "Treat this as premium trade value and prepare to list it.";
+  return "Premium jewel. Compare before listing.";
 }
 
 export function evaluateJewel(input: JewelCheckInput): JewelCheckResult {
@@ -218,7 +218,7 @@ export function evaluateJewel(input: JewelCheckInput): JewelCheckResult {
       verdict: "Ignore",
       priority: "Trash",
       liquidity: "Low",
-      explanation: "No jewel stats were entered yet, so there is nothing meaningful to evaluate.",
+      explanation: "No jewel stats entered yet.",
       recommendedAction: "Enter the visible jewel mods to triage it.",
       qualityScore: 0,
       archetypeTags: ["niche"]

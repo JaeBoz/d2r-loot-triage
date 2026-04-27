@@ -109,17 +109,17 @@ function scoreDefinitionRoll(input: UniqueCheckInput, definition: UniqueRollDefi
   const band = getRollBand(input, definition);
 
   if (band === "high") {
-    details.push(`${label} rolled near the top end.`);
+    details.push(`Good ${label} roll.`);
     return 5;
   }
 
   if (band === "mid") {
-    details.push(`${label} rolled in a solid tradable range.`);
+    details.push(`Solid ${label} roll.`);
     return 2;
   }
 
   if (band === "low") {
-    details.push(`${label} is on the low side for this unique.`);
+    details.push(`Low ${label} roll.`);
     return -2;
   }
 
@@ -159,22 +159,22 @@ function scoreRollPackage(item: UniqueItemDefinition, assessment: RollAssessment
   }
 
   if (assessment.high >= 2) {
-    details.push("Multiple key rolls landed near the top end, which materially boosts trade appeal.");
+    details.push("Multiple good rolls make this copy stand out.");
     return 2;
   }
 
   if (assessment.low >= assessment.provided && assessment.provided > 0) {
-    details.push("The tracked rolls are mostly low, so this version is much less exciting than the item name alone suggests.");
+    details.push("Mostly low rolls. The name is better than this copy.");
     return -2;
   }
 
   if (assessment.low > 0 && assessment.high === 0 && assessment.mid === 0) {
-    details.push("None of the tracked rolls landed in a strong tradable range.");
+    details.push("No tracked roll landed well.");
     return -1;
   }
 
   if (assessment.high === 0 && assessment.mid > 0 && assessment.low > 0) {
-    details.push("This is a mixed roll package rather than a clearly strong one.");
+    details.push("Mixed rolls. Decent, not a standout.");
     return -1;
   }
 
@@ -188,51 +188,51 @@ function scoreEthereal(input: UniqueCheckInput, item: UniqueItemDefinition, deta
 
   if (item.id === "titans-revenge") {
     if (input.ethereal) {
-      details.push("Ethereal adds real javazon appeal here, but it is a selective premium rather than a generic huge upgrade.");
+      details.push("Eth adds real javazon appeal, but it is still a specific-buyer upgrade.");
       return 2;
     }
 
-    details.push("Non-eth Titan's is still tradable, but it gives up the extra appeal eth rolls can have.");
+    details.push("Non-eth Titan's is still usable, but eth is the better hit.");
     return -1;
   }
 
   if (item.id === "the-reapers-toll") {
     if (input.ethereal) {
-      details.push("Ethereal is a major value jump on Reaper's Toll because mercenary demand strongly favors it.");
+      details.push("Eth is a major jump here. Merc Reaper's wants eth.");
       return 4;
     }
 
-    details.push("Non-eth Reaper's Toll is still useful, but it misses the strongest mercenary demand.");
+    details.push("Non-eth Reaper's is useful, but misses the main merc version.");
     return -2;
   }
 
   if (input.ethereal) {
     if (item.ethPriority === "required") {
-      details.push("Ethereal is effectively required for the strongest trade appeal on this unique.");
+      details.push("Eth is basically required for the best version.");
       return 4;
     }
 
     if (item.ethPriority === "high") {
-      details.push("Ethereal meaningfully boosts trade appeal on this unique.");
+      details.push("Eth is a meaningful upgrade here.");
       return 3;
     }
 
     if (item.ethPriority === "medium") {
-      details.push("Ethereal adds some extra trade appeal here.");
+      details.push("Eth adds a small bump here.");
       return 1;
     }
 
-    details.push("Ethereal is valid here, but only a minor value factor.");
+    details.push("Eth is valid, but not the reason to care.");
     return 0;
   }
 
   if (item.ethPriority === "required") {
-    details.push("Non-eth versions are much less desirable for the highest-end demand.");
+    details.push("Non-eth misses the version buyers usually want.");
     return -3;
   }
 
   if (item.ethPriority === "high") {
-    details.push("Non-eth versions are still usable, but they miss the premium eth appeal.");
+    details.push("Non-eth is usable, but gives up the eth premium.");
     return -2;
   }
 
@@ -257,15 +257,15 @@ function liquidityFor(item: UniqueItemDefinition, mode: UniqueCheckInput["mode"]
 
 function demandContext(item: UniqueItemDefinition, verdict: Verdict) {
   if (item.liquidity === "High" && verdict !== "Premium") {
-    return "It is commonly sought after, so demand can be steady even when the roll is not premium.";
+    return "Staple demand is steady even when the roll is not perfect.";
   }
 
   if (item.liquidity === "Medium") {
-    return "Demand is more selective, so roll quality or the right buyer matters more than the item name alone.";
+    return "More niche. Rolls or the right buyer matter here.";
   }
 
   if (item.liquidity === "Low") {
-    return "Demand is limited, so this is mostly a self-use or niche-market check.";
+    return "Mostly self-use or a niche-market check.";
   }
 
   return "";
@@ -290,12 +290,12 @@ export function evaluateUnique(input: UniqueCheckInput): UniqueCheckResult {
 
   if (input.mode === "SCNL" && item.liquidity !== "High") {
     score -= 1;
-    details.push("SCNL is more selective because long-term supply is deeper.");
+    details.push("SCNL has deep supply, so weak rolls get punished.");
   }
 
   if (input.mode === "SCL" && item.liquidity !== "Low") {
     score += 1;
-    details.push("SCL is a bit more permissive because progression demand is broader.");
+    details.push("SCL is more forgiving because progression items move better.");
   }
 
   const rollAssessment = scoreRolls(input, item, details);
@@ -322,50 +322,50 @@ export function evaluateUnique(input: UniqueCheckInput): UniqueCheckResult {
   } else if (item.rollDefinitions) {
     const rollSummary =
       rollAssessment.high >= 2
-        ? "This version has a genuinely strong roll package."
+        ? "Good roll package."
         : rollAssessment.high >= 1 && rollAssessment.low === 0
-          ? "At least one key roll landed high enough to matter."
+          ? "At least one key roll is strong."
           : rollAssessment.low >= rollAssessment.provided && rollAssessment.provided > 0
-            ? "The visible rolls are mostly weak for this unique."
+            ? "Low roll copy."
             : rollAssessment.mid > 0 || rollAssessment.low > 0
-              ? "This looks more middling than premium."
-              : "Roll quality is the main separator on this unique.";
-    explanation = `${item.name} has real trade value, but value depends heavily on roll quality. ${rollSummary} ${details.join(" ")} ${demandNote}`.trim();
+              ? "Decent, but not a standout."
+              : "Rolls matter here.";
+    explanation = `${item.name}: ${rollSummary} You're mainly paying for the key rolls here. ${details.join(" ")} ${demandNote}`.trim();
   } else {
-    explanation = `${item.name} is generally worth caring about, though the exact appeal depends on the visible rolls. ${details.join(" ")} ${demandNote}`.trim();
+    explanation = `${item.name}: worth a look. The visible rolls decide whether it is more than self-use. ${details.join(" ")} ${demandNote}`.trim();
   }
 
   let recommendedAction = "";
   if (verdict === "Ignore") {
-    recommendedAction = "Usually ignore unless you need this exact unique for self-use.";
+    recommendedAction = "Usually Charsi unless you need this exact unique for self-use.";
   } else if (verdict === "Low Priority") {
-    recommendedAction = "Keep only if you want a personal placeholder or the market is unusually active.";
+    recommendedAction = "Keep only as a placeholder or specific self-use piece.";
   } else if (verdict === "Check") {
     recommendedAction =
       item.liquidity === "High"
         ? "Check the roll, but do not toss it quickly. This is a commonly sought-after unique."
-        : "Check the roll more carefully before deciding whether to stash or trade it.";
+        : "Check the roll before tossing it. Low copies may just be self-use.";
   } else if (verdict === "Keep") {
     recommendedAction =
       item.liquidity === "High"
-        ? "Keep it and check market activity. Demand is steady even if this is not a premium-roll outcome."
-        : "Keep it if you have stash room. This is useful, but demand may be selective.";
+        ? "Keep it and check market activity. Staple demand is steady even when the roll is not perfect."
+        : "Keep if you have room. Useful, but more niche.";
   } else if (verdict === "List") {
     recommendedAction =
       !item.hasVariableRolls && item.liquidity === "High"
-        ? "Keep it. It is easy to understand and commonly traded; no roll check is needed."
+        ? "Keep it. The drop itself is the value and it is commonly traded."
         : item.liquidity === "High"
-          ? "Check market activity or list it. It is easy to understand and commonly traded, but roll quality still matters."
-          : "Check market activity or list it only if the roll is competitive; demand is more niche.";
+          ? "Check market activity or list it. It is commonly traded, but rolls still matter."
+          : "List only if the roll is competitive. This one is more niche.";
   } else {
-    recommendedAction = "Treat this as premium and compare it against top-end listings.";
+    recommendedAction = "Premium hit. Compare it against strong examples before listing.";
   }
 
   if (item.etherealRelevant && input.ethereal && verdict !== "Ignore" && verdict !== "Low Priority") {
     recommendedAction =
       verdict === "Premium"
-        ? "Treat this as a premium eth unique and compare it against top-end listings."
-        : "Keep or list it. Ethereal meaningfully improves this unique's trade appeal.";
+        ? "Premium eth hit. Compare it against strong examples before listing."
+        : "Keep or list it. Eth is a real reason this copy matters.";
   }
 
   return {
