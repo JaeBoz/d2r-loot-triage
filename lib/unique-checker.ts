@@ -37,11 +37,86 @@ const uniqueVerdictRank: Record<Verdict, number> = {
   Premium: 5
 };
 
-function applyDemandFloor(item: UniqueItemDefinition, verdict: Verdict) {
+const primeEvilGrimoires = new Set(["ars-al-diabolos", "ars-tor-baalos", "ars-dul-mephistos"]);
+
+const warlockRollWeights: Record<string, Partial<Record<UniqueRollDefinition["key"], number>>> = {
+  dreadfang: {
+    enhancedDamage: 1,
+    manaLeech: 0.8
+  },
+  "bloodpact-shard": {
+    bindDemon: 1,
+    bloodBoil: 1,
+    bloodOath: 1,
+    maxLifePercent: 0.8,
+    magicFind: 0.6
+  },
+  wraithstep: {
+    defense: 0.25,
+    dexterity: 0.6,
+    energy: 0.4
+  },
+  sling: {
+    minusEnemyMagicResist: 0.8,
+    energy: 0.4,
+    magicFind: 0.5
+  },
+  opalvein: {
+    fireResist: 0.4,
+    manaAfterKill: 0.5,
+    lifeAfterKill: 0.5
+  },
+  "entropy-locket": {
+    fasterCastRate: 1,
+    magicSkillDamage: 1,
+    maxManaPercent: 0.7,
+    lightningResist: 0.4,
+    magicDamageReduced: 0.3
+  },
+  "gheeds-wager": {
+    fasterRunWalk: 0.8,
+    fasterCastRate: 1,
+    fasterHitRecovery: 0.7,
+    minusEnemyMagicResist: 0.8,
+    enhancedDefense: 0.3,
+    fireResist: 0.3,
+    extraGold: 0.2
+  },
+  "hellwardens-will": {
+    minusEnemyMagicResist: 0.8,
+    minusEnemyFireResist: 0.8,
+    enhancedDefense: 0.3,
+    manaAfterKill: 0.5
+  },
+  "measured-wrath": {
+    flameWave: 0.6,
+    ringOfFire: 0.6,
+    summonTainted: 0.6,
+    enhancedDefense: 0.3,
+    vitality: 0.4,
+    fireResist: 0.3,
+    lifeAfterKill: 0.2
+  }
+};
+
+function rollWeightFor(item: UniqueItemDefinition, definition: UniqueRollDefinition) {
+  return warlockRollWeights[item.id]?.[definition.key] ?? 1;
+}
+
+function applyDemandFloor(item: UniqueItemDefinition, verdict: Verdict, details: string[]) {
   const isHighDemandStaple = !item.hasVariableRolls && item.liquidity === "High" && item.scnlPriority !== "low";
 
   if (isHighDemandStaple && uniqueVerdictRank[verdict] < uniqueVerdictRank.List) {
     return "List" as Verdict;
+  }
+
+  if ((item.ruleset ?? "lod") === "warlock" && item.hasVariableRolls && uniqueVerdictRank[verdict] < uniqueVerdictRank["Low Priority"]) {
+    details.push(
+      primeEvilGrimoires.has(item.id)
+        ? "Prime Evil books are still worth a second look, even on low rolls."
+        : "Warlock demand is still settling, so weak copies are treated as low-value checks instead of automatic trash."
+    );
+    return "Low Priority" as Verdict;
   }
 
   return verdict;
@@ -104,23 +179,29 @@ function getRollBand(input: UniqueCheckInput, definition: UniqueRollDefinition):
   return null;
 }
 
-function scoreDefinitionRoll(input: UniqueCheckInput, definition: UniqueRollDefinition, details: string[]) {
+function scoreDefinitionRoll(
+  input: UniqueCheckInput,
+  item: UniqueItemDefinition,
+  definition: UniqueRollDefinition,
+  details: string[]
+) {
   const label = definition.label;
   const band = getRollBand(input, definition);
+  const weight = rollWeightFor(item, definition);
 
   if (band === "high") {
     details.push(`Good ${label} roll.`);
-    return 5;
+    return 5 * weight;
   }
 
   if (band === "mid") {
     details.push(`Solid ${label} roll.`);
-    return 2;
+    return 2 * weight;
   }
 
   if (band === "low") {
     details.push(`Low ${label} roll.`);
-    return -2;
+    return -2 * Math.min(weight, 1);
   }
 
   return 0;
@@ -147,7 +228,7 @@ function scoreRolls(input: UniqueCheckInput, item: UniqueItemDefinition, details
       assessment[band] += 1;
     }
 
-    assessment.score += scoreDefinitionRoll(input, definition, details);
+    assessment.score += scoreDefinitionRoll(input, item, definition, details);
   }
 
   return assessment;
@@ -315,7 +396,7 @@ export function evaluateUnique(input: UniqueCheckInput): UniqueCheckResult {
   score += scoreRollPackage(item, rollAssessment, details);
   score += scoreEthereal(input, item, details);
 
-  const verdict = applyDemandFloor(item, verdictFromScore(score));
+  const verdict = applyDemandFloor(item, verdictFromScore(score), details);
   const priority =
     verdict === "Ignore"
       ? "Trash"

@@ -18,6 +18,11 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - Test `Dreadfang`; expected: `Enhanced Damage` and `Mana Stolen Per Hit` roll inputs are available.
 - Test `Bloodpact Shard`; expected: `Bind Demon`, `Blood Boil`, `Blood Oath`, `Increased Maximum Life`, and `Magic Find` roll inputs are available.
 - Test `Entropy Locket` or `Gheed's Wager`; expected: their listed Warlock roll inputs are available and no unlisted rolls appear.
+- Test `Ars Al'Diabolos` with min, mid, and max rolls; expected: min rolls are low-value but not automatic trash, while max rolls still stand out as premium.
+- Test `Measured Wrath` with min, mid, and max rolls; expected: weaker copies stay conservative, but strong copies still improve clearly.
+- Test a strong non-Grimoire Warlock unique such as max `Entropy Locket` or max `Gheed's Wager`; expected: strong supported roll packages no longer evaluate as trash.
+- Test a weak non-Grimoire Warlock unique such as min `Wraithstep` or min `Opalvein`; expected: weak rolls stay low/conditional, not a fake winner.
+- Test isolated `-Enemy Magic Resistance` on `Sling`, `Gheed's Wager`, or `Hellwarden's Will`; expected: it does not reach high value by itself.
 
 ## Rare Boots
 

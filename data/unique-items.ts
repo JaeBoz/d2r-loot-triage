@@ -1335,14 +1335,16 @@ export const uniqueItems: UniqueItemDefinition[] = [
         label: "Enhanced Damage",
         min: 133,
         max: 166,
-        higherIsBetter: true
+        higherIsBetter: true,
+        thresholds: { low: 145, mid: 158, high: 166 }
       },
       {
         key: "manaLeech",
         label: "Mana Stolen Per Hit",
         min: 3,
         max: 6,
-        higherIsBetter: true
+        higherIsBetter: true,
+        thresholds: { low: 4, mid: 5, high: 6 }
       }
     ],
     sources: {
@@ -1368,35 +1370,40 @@ export const uniqueItems: UniqueItemDefinition[] = [
         label: "Bind Demon",
         min: 1,
         max: 3,
-        higherIsBetter: true
+        higherIsBetter: true,
+        thresholds: { low: 1, mid: 2, high: 3 }
       },
       {
         key: "bloodBoil",
         label: "Blood Boil",
         min: 2,
         max: 3,
-        higherIsBetter: true
+        higherIsBetter: true,
+        thresholds: { low: 2, mid: 3, high: 3 }
       },
       {
         key: "bloodOath",
         label: "Blood Oath",
         min: 2,
         max: 3,
-        higherIsBetter: true
+        higherIsBetter: true,
+        thresholds: { low: 2, mid: 3, high: 3 }
       },
       {
         key: "maxLifePercent",
         label: "Increased Maximum Life",
         min: 10,
         max: 15,
-        higherIsBetter: true
+        higherIsBetter: true,
+        thresholds: { low: 11, mid: 14, high: 15 }
       },
       {
         key: "magicFind",
         label: "Magic Find",
         min: 20,
         max: 35,
-        higherIsBetter: true
+        higherIsBetter: true,
+        thresholds: { low: 24, mid: 30, high: 35 }
       }
     ],
     sources: {
@@ -1422,21 +1429,24 @@ export const uniqueItems: UniqueItemDefinition[] = [
         label: "Defense",
         min: 40,
         max: 60,
-        higherIsBetter: true
+        higherIsBetter: true,
+        thresholds: { low: 45, mid: 55, high: 60 }
       },
       {
         key: "dexterity",
         label: "Dexterity",
         min: 10,
         max: 15,
-        higherIsBetter: true
+        higherIsBetter: true,
+        thresholds: { low: 11, mid: 14, high: 15 }
       },
       {
         key: "energy",
         label: "Energy",
         min: 10,
         max: 15,
-        higherIsBetter: true
+        higherIsBetter: true,
+        thresholds: { low: 11, mid: 14, high: 15 }
       }
     ],
     sources: {
@@ -1462,21 +1472,24 @@ export const uniqueItems: UniqueItemDefinition[] = [
         label: "-Enemy Magic Resistance",
         min: 3,
         max: 5,
-        higherIsBetter: true
+        higherIsBetter: true,
+        thresholds: { low: 3, mid: 4, high: 5 }
       },
       {
         key: "energy",
         label: "Energy",
         min: 10,
         max: 15,
-        higherIsBetter: true
+        higherIsBetter: true,
+        thresholds: { low: 11, mid: 14, high: 15 }
       },
       {
         key: "magicFind",
         label: "Magic Find",
         min: 10,
         max: 20,
-        higherIsBetter: true
+        higherIsBetter: true,
+        thresholds: { low: 12, mid: 17, high: 20 }
       }
     ],
     sources: {
@@ -1502,21 +1515,24 @@ export const uniqueItems: UniqueItemDefinition[] = [
         label: "Fire Resist",
         min: 6,
         max: 8,
-        higherIsBetter: true
+        higherIsBetter: true,
+        thresholds: { low: 6, mid: 7, high: 8 }
       },
       {
         key: "manaAfterKill",
         label: "Mana After Each Kill",
         min: 1,
         max: 3,
-        higherIsBetter: true
+        higherIsBetter: true,
+        thresholds: { low: 1, mid: 2, high: 3 }
       },
       {
         key: "lifeAfterKill",
         label: "Life After Each Kill",
         min: 1,
         max: 3,
-        higherIsBetter: true
+        higherIsBetter: true,
+        thresholds: { low: 1, mid: 2, high: 3 }
       }
     ],
     sources: {
@@ -1548,35 +1564,40 @@ export const uniqueItems: UniqueItemDefinition[] = [
         label: "Faster Cast Rate",
         min: 5,
         max: 10,
-        higherIsBetter: true
+        higherIsBetter: true,
+        thresholds: { low: 6, mid: 9, high: 10 }
       },
       {
         key: "magicSkillDamage",
         label: "Magic Skill Damage",
         min: 5,
         max: 10,
-        higherIsBetter: true
+        higherIsBetter: true,
+        thresholds: { low: 6, mid: 9, high: 10 }
       },
       {
         key: "maxManaPercent",
         label: "Increased Maximum Mana",
         min: 10,
         max: 15,
-        higherIsBetter: true
+        higherIsBetter: true,
+        thresholds: { low: 11, mid: 14, high: 15 }
       },
       {
         key: "lightningResist",
         label: "Lightning Resist",
         min: 25,
         max: 40,
-        higherIsBetter: true
+        higherIsBetter: true,
+        thresholds: { low: 30, mid: 36, high: 40 }
       },
       {
         key: "magicDamageReduced",
         label: "Magic Damage Reduced",
         min: 8,
         max: 12,
-        higherIsBetter: true
+        higherIsBetter: true,
+        thresholds: { low: 9, mid: 11, high: 12 }
       }
     ],
     sources: {
@@ -1610,49 +1631,56 @@ export const uniqueItems: UniqueItemDefinition[] = [
         label: "Faster Run/Walk",
         min: 10,
         max: 20,
-        higherIsBetter: true
+        higherIsBetter: true,
+        thresholds: { low: 12, mid: 17, high: 20 }
       },
       {
         key: "fasterCastRate",
         label: "Faster Cast Rate",
         min: 10,
         max: 20,
-        higherIsBetter: true
+        higherIsBetter: true,
+        thresholds: { low: 12, mid: 17, high: 20 }
       },
       {
         key: "fasterHitRecovery",
         label: "Faster Hit Recovery",
         min: 10,
         max: 20,
-        higherIsBetter: true
+        higherIsBetter: true,
+        thresholds: { low: 12, mid: 17, high: 20 }
       },
       {
         key: "minusEnemyMagicResist",
         label: "-Enemy Magic Resistance",
         min: 3,
         max: 7,
-        higherIsBetter: true
+        higherIsBetter: true,
+        thresholds: { low: 4, mid: 6, high: 7 }
       },
       {
         key: "enhancedDefense",
         label: "Enhanced Defense",
         min: 90,
         max: 150,
-        higherIsBetter: true
+        higherIsBetter: true,
+        thresholds: { low: 105, mid: 135, high: 150 }
       },
       {
         key: "fireResist",
         label: "Fire Resist",
         min: 5,
         max: 15,
-        higherIsBetter: true
+        higherIsBetter: true,
+        thresholds: { low: 7, mid: 12, high: 15 }
       },
       {
         key: "extraGold",
         label: "Extra Gold",
         min: 44,
         max: 75,
-        higherIsBetter: true
+        higherIsBetter: true,
+        thresholds: { low: 50, mid: 65, high: 75 }
       }
     ],
     sources: {
@@ -1678,28 +1706,32 @@ export const uniqueItems: UniqueItemDefinition[] = [
         label: "-Enemy Magic Resistance",
         min: 5,
         max: 8,
-        higherIsBetter: true
+        higherIsBetter: true,
+        thresholds: { low: 6, mid: 7, high: 8 }
       },
       {
         key: "minusEnemyFireResist",
         label: "-Enemy Fire Resistance",
         min: 5,
         max: 8,
-        higherIsBetter: true
+        higherIsBetter: true,
+        thresholds: { low: 6, mid: 7, high: 8 }
       },
       {
         key: "enhancedDefense",
         label: "Enhanced Defense",
         min: 150,
         max: 215,
-        higherIsBetter: true
+        higherIsBetter: true,
+        thresholds: { low: 170, mid: 200, high: 215 }
       },
       {
         key: "manaAfterKill",
         label: "Mana After Each Kill",
         min: 4,
         max: 6,
-        higherIsBetter: true
+        higherIsBetter: true,
+        thresholds: { low: 4, mid: 5, high: 6 }
       }
     ],
     sources: {

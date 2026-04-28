@@ -3,6 +3,23 @@
 [2026-04-27]
 
 Change:
+- Added Warlock-only unique evaluation support for corrected non-Grimoire roll fields.
+
+Type:
+- Evaluation
+
+Why:
+- Accurate Warlock roll fields were visible, but min/max rolls still evaluated like unsupported trash.
+
+Impact:
+- Warlock uniques now scale by their verified item-specific rolls, weak copies receive a conservative low-value floor, and strong supported packages can reach check-worthy or high-end outcomes.
+
+Notes:
+- No item names, roll ranges, LOD unique behavior, Trade Value tier names, or decision mapping were changed.
+
+[2026-04-27]
+
+Change:
 - Added verified variable roll fields for the non-Grimoire Warlock uniques already in Unique Triage.
 
 Type:
