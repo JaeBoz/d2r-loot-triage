@@ -9,7 +9,8 @@ const categoryHints: Record<Exclude<ItemCategory, "Bases">, string> = {
   Jewels: "Deterministic filters can cover IAS, ED, resist, and level requirement breakpoints well.",
   Rings: "A structured affix threshold engine will scale nicely here later.",
   Amulets: "This category can reuse the same modular rule system once affix combinations are seeded.",
-  Boots: "Rare boot triage fits well with controlled affix entry because FRW, FHR, and resist patterns matter much more than filler mods."
+  Boots: "Rare boot triage fits well with controlled affix entry because FRW, FHR, and resist patterns matter much more than filler mods.",
+  Gloves: "Glove triage is pattern-driven because skill, IAS, Crushing Blow, and support combinations matter more than raw stat count."
 };
 
 export function PlaceholderCategoryPanel({ category }: { category: Exclude<ItemCategory, "Bases"> }) {

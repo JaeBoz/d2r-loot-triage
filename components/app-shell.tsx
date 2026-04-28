@@ -6,6 +6,7 @@ import { BaseChecker } from "@/components/base-checker";
 import { BootsChecker } from "@/components/boots-checker";
 import { CharmChecker } from "@/components/charm-checker";
 import { CircletChecker } from "@/components/circlet-checker";
+import { GloveChecker } from "@/components/glove-checker";
 import { JewelChecker } from "@/components/jewel-checker";
 import { PlaceholderCategoryPanel } from "@/components/placeholder-category-panel";
 import { RingChecker } from "@/components/ring-checker";
@@ -126,6 +127,7 @@ export function AppShell() {
       {category === "Rings" ? <RingChecker mode={mode} /> : null}
       {category === "Amulets" ? <AmuletChecker mode={mode} /> : null}
       {category === "Boots" ? <BootsChecker mode={mode} /> : null}
+      {category === "Gloves" ? <GloveChecker mode={mode} /> : null}
       {category === "Uniques" ? <UniqueChecker mode={mode} ruleset={ruleset} /> : null}
       {category !== "Bases" &&
       category !== "Circlets" &&
@@ -135,6 +137,7 @@ export function AppShell() {
       category !== "Rings" &&
       category !== "Amulets" &&
       category !== "Boots" &&
+      category !== "Gloves" &&
       category !== "Uniques" ? (
         <PlaceholderCategoryPanel category={category} />
       ) : null}

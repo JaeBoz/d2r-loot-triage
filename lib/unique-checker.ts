@@ -39,7 +39,11 @@ const uniqueVerdictRank: Record<Verdict, number> = {
 
 const primeEvilGrimoires = new Set(["ars-al-diabolos", "ars-tor-baalos", "ars-dul-mephistos"]);
 
-const warlockRollWeights: Record<string, Partial<Record<UniqueRollDefinition["key"], number>>> = {
+const uniqueRollWeights: Record<string, Partial<Record<UniqueRollDefinition["key"], number>>> = {
+  "ormus-robes": {
+    elementalSkillDamage: 1,
+    fasterCastRate: 0.2
+  },
   dreadfang: {
     enhancedDamage: 1,
     manaLeech: 0.8
@@ -100,7 +104,7 @@ const warlockRollWeights: Record<string, Partial<Record<UniqueRollDefinition["ke
 };
 
 function rollWeightFor(item: UniqueItemDefinition, definition: UniqueRollDefinition) {
-  return warlockRollWeights[item.id]?.[definition.key] ?? 1;
+  return uniqueRollWeights[item.id]?.[definition.key] ?? 1;
 }
 
 function applyDemandFloor(item: UniqueItemDefinition, verdict: Verdict, details: string[]) {
@@ -320,6 +324,31 @@ function scoreEthereal(input: UniqueCheckInput, item: UniqueItemDefinition, deta
   return 0;
 }
 
+function scoreUniqueSelects(input: UniqueCheckInput, item: UniqueItemDefinition, details: string[]) {
+  if (item.id === "ormus-robes") {
+    if (input.ormusSkillQuality === "desirable") {
+      details.push("Desirable skill roll. That's what makes Ormus worth checking.");
+      return 4;
+    }
+
+    if (input.ormusSkillQuality === "useful") {
+      details.push("Useful skill roll. Decent, but the exact skill still matters.");
+      return 1;
+    }
+
+    if (input.ormusSkillQuality === "wrong") {
+      details.push("Wrong skill roll. Ormus falls off hard without the right skill.");
+      return -8;
+    }
+  }
+
+  if (item.id === "rainbow-facet" && input.rainbowFacetElement) {
+    details.push(`${input.rainbowFacetElement} facet. The 5/5 roll is the real check.`);
+  }
+
+  return 0;
+}
+
 function liquidityFor(item: UniqueItemDefinition, mode: UniqueCheckInput["mode"], verdict: Verdict) {
   if (verdict === "Ignore" || verdict === "Low Priority") {
     return "Low" as Liquidity;
@@ -395,6 +424,7 @@ export function evaluateUnique(input: UniqueCheckInput): UniqueCheckResult {
   score += rollAssessment.score;
   score += scoreRollPackage(item, rollAssessment, details);
   score += scoreEthereal(input, item, details);
+  score += scoreUniqueSelects(input, item, details);
 
   const verdict = applyDemandFloor(item, verdictFromScore(score), details);
   const priority =

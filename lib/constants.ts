@@ -19,7 +19,8 @@ export const CATEGORY_TABS: ItemCategory[] = [
   "Jewels",
   "Rings",
   "Amulets",
-  "Boots"
+  "Boots",
+  "Gloves"
 ];
 
 export const VERDICT_STYLES: Record<Verdict, string> = {

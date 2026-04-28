@@ -3,6 +3,57 @@
 [2026-04-27]
 
 Change:
+- Refined Magic glove tiering and wording.
+
+Type:
+- Evaluation
+
+Why:
+- QA showed +2 Jav / 20 IAS was too close to +3 Jav / 20 IAS, while Bow and Martial Arts / 20 IAS were overvalued without support.
+
+Impact:
+- +3 Jav / 20 IAS remains the premium magic glove hit, +2 Jav / 20 IAS now reads as high-value but lower, and non-Jav skill gloves need support before reaching high value.
+
+Notes:
+- Rare/Crafted glove logic, Trade Value tiers, and decision mapping were unchanged.
+
+[2026-04-27]
+
+Change:
+- Added Magic / Rare / Crafted Glove Triage.
+
+Type:
+- Checker
+
+Why:
+- Gloves are a common farming and crafting hesitation point, especially Jav/IAS and Blood craft patterns.
+
+Impact:
+- Players can quickly check glove quality, skill/IAS patterns, Crushing Blow, leech, MF, stats, and resist support without a crafting system or pricing tool.
+
+Notes:
+- Deterministic pattern-based triage only; no crafting recipes, pricing, broad affix database, or unrelated checker changes.
+
+[2026-04-27]
+
+Change:
+- Expanded roll-dependent LOD Unique Triage coverage with Ormus' Robes and Rainbow Facet support, plus richer Andariel's Visage eth handling.
+
+Type:
+- Data
+
+Why:
+- These common hesitation drops need fast roll-based triage without becoming a price checker.
+
+Impact:
+- Players can now compare Ormus skill quality, Rainbow Facet 3-5 rolls, Andariel's eth merc value, and existing Crown of Ages socket/DR/res behavior in the Unique Checker.
+
+Notes:
+- Reuses existing unique evaluation patterns; no Trade Value tier, decision mapping, Warlock logic, pricing, or checker architecture changes.
+
+[2026-04-27]
+
+Change:
 - Added Warlock-only unique evaluation support for corrected non-Grimoire roll fields.
 
 Type:

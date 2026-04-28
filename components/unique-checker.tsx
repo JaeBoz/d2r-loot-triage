@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Card, Pill } from "@/components/ui";
 import { ResultPanel } from "@/components/result-panel";
 import { evaluateUnique, uniqueItems } from "@/lib/unique-checker";
-import { GameMode, Ruleset, UniqueRollField } from "@/lib/types";
+import { GameMode, Ruleset, UniqueRollField, UniqueSelectField } from "@/lib/types";
 
 const fieldLabels: Record<UniqueRollField, string> = {
   magicFind: "Magic Find",
@@ -22,6 +22,7 @@ const fieldLabels: Record<UniqueRollField, string> = {
   minusEnemyPoisonResist: "-Enemy Poison Res",
   lightningSkillDamage: "Lightning Damage",
   fireSkillDamage: "Fire Skill Damage",
+  elementalSkillDamage: "Elemental Skill Damage",
   enhancedDamage: "Enhanced Damage",
   enhancedDefense: "Enhanced Defense",
   strength: "Strength",
@@ -62,6 +63,7 @@ function getFieldLabel(field: UniqueRollField, selectedItem?: (typeof uniqueItem
 }
 
 type UniqueFormState = Record<UniqueRollField, string>;
+type UniqueSelectFormState = Record<UniqueSelectField, string>;
 
 const emptyForm: UniqueFormState = {
   magicFind: "",
@@ -79,6 +81,7 @@ const emptyForm: UniqueFormState = {
   minusEnemyPoisonResist: "",
   lightningSkillDamage: "",
   fireSkillDamage: "",
+  elementalSkillDamage: "",
   enhancedDamage: "",
   enhancedDefense: "",
   strength: "",
@@ -114,6 +117,11 @@ const emptyForm: UniqueFormState = {
   vitality: ""
 };
 
+const emptySelectForm: UniqueSelectFormState = {
+  ormusSkillQuality: "",
+  rainbowFacetElement: ""
+};
+
 function toOptionalNumber(value: string) {
   return value.trim() === "" ? undefined : Number(value);
 }
@@ -126,11 +134,13 @@ export function UniqueChecker({ mode, ruleset }: { mode: GameMode; ruleset: Rule
   const defaultItemId = availableUniqueItems[0]?.id ?? "";
   const [itemId, setItemId] = useState(defaultItemId);
   const [form, setForm] = useState<UniqueFormState>(emptyForm);
+  const [selectForm, setSelectForm] = useState<UniqueSelectFormState>(emptySelectForm);
   const [ethereal, setEthereal] = useState(false);
 
   useEffect(() => {
     setItemId(defaultItemId);
     setForm(emptyForm);
+    setSelectForm(emptySelectForm);
     setEthereal(false);
   }, [defaultItemId, ruleset]);
 
@@ -139,7 +149,10 @@ export function UniqueChecker({ mode, ruleset }: { mode: GameMode; ruleset: Rule
     [availableUniqueItems, itemId]
   );
   const hasInput =
-    itemId !== defaultItemId || ethereal || Object.values(form).some((value) => value.trim() !== "");
+    itemId !== defaultItemId ||
+    ethereal ||
+    Object.values(form).some((value) => value.trim() !== "") ||
+    Object.values(selectForm).some((value) => value.trim() !== "");
 
   const result = useMemo(
     () =>
@@ -163,6 +176,7 @@ export function UniqueChecker({ mode, ruleset }: { mode: GameMode; ruleset: Rule
         minusEnemyPoisonResist: toOptionalNumber(form.minusEnemyPoisonResist),
         lightningSkillDamage: toOptionalNumber(form.lightningSkillDamage),
         fireSkillDamage: toOptionalNumber(form.fireSkillDamage),
+        elementalSkillDamage: toOptionalNumber(form.elementalSkillDamage),
         enhancedDamage: toOptionalNumber(form.enhancedDamage),
         enhancedDefense: toOptionalNumber(form.enhancedDefense),
         strength: toOptionalNumber(form.strength),
@@ -195,14 +209,17 @@ export function UniqueChecker({ mode, ruleset }: { mode: GameMode; ruleset: Rule
         coldSkillDamage: toOptionalNumber(form.coldSkillDamage),
         allSkills: toOptionalNumber(form.allSkills),
         lightningAbsorb: toOptionalNumber(form.lightningAbsorb),
-        vitality: toOptionalNumber(form.vitality)
+        vitality: toOptionalNumber(form.vitality),
+        ormusSkillQuality: selectForm.ormusSkillQuality || undefined,
+        rainbowFacetElement: selectForm.rainbowFacetElement || undefined
       }),
-    [ethereal, form, itemId, mode, ruleset]
+    [ethereal, form, itemId, mode, ruleset, selectForm]
   );
 
   const handleReset = () => {
     setItemId(defaultItemId);
     setForm(emptyForm);
+    setSelectForm(emptySelectForm);
     setEthereal(false);
   };
 
@@ -233,7 +250,10 @@ export function UniqueChecker({ mode, ruleset }: { mode: GameMode; ruleset: Rule
             <select
               className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
               value={itemId}
-              onChange={(event) => setItemId(event.target.value)}
+              onChange={(event) => {
+                setItemId(event.target.value);
+                setSelectForm(emptySelectForm);
+              }}
             >
               {availableUniqueItems.map((item) => (
                 <option key={item.id} value={item.id}>
@@ -254,6 +274,28 @@ export function UniqueChecker({ mode, ruleset }: { mode: GameMode; ruleset: Rule
               Ethereal
             </label>
           ) : null}
+
+          {selectedItem?.selectDefinitions?.map((definition) => (
+            <label key={definition.key} className="grid gap-2 text-sm text-zinc-300">
+              {definition.label}
+              <select
+                className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
+                value={selectForm[definition.key]}
+                onChange={(event) =>
+                  setSelectForm((current) => ({
+                    ...current,
+                    [definition.key]: event.target.value
+                  }))
+                }
+              >
+                {definition.options.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ))}
 
           {selectedItem?.hasVariableRolls ? (
             selectedItem.keyRollFields.map((field) => (

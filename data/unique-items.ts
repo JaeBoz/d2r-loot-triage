@@ -203,10 +203,12 @@ export const uniqueItems: UniqueItemDefinition[] = [
     category: "Helm",
     hasVariableRolls: true,
     keyRollFields: ["strength", "lifeLeech"],
+    etherealRelevant: true,
+    ethPriority: "high",
     scnlPriority: "high",
     sclPriority: "high",
     liquidity: "High",
-    notes: "Common merc helm. Strength and leech matter, but the item is useful even without perfect rolls.",
+    notes: "Common merc helm. Strength and leech matter; eth is the better merc hit. Fixed -30 fire res is the downside.",
     source: "Arreat Summit / diablo2.io",
     rollDefinitions: [
       {
@@ -235,7 +237,109 @@ export const uniqueItems: UniqueItemDefinition[] = [
         label: "diablo2.io - Andariel's Visage",
         url: "https://diablo2.io/post3965559.html"
       },
-      notes: "Fire Resist -30% and poison stats are fixed; the fast value check is mainly strength plus life leech."
+      notes: "Fire Resist -30% and poison stats are fixed; the fast value check is mainly strength, life leech, and whether the copy is ethereal."
+    }
+  },
+  {
+    id: "ormus-robes",
+    name: "Ormus' Robes",
+    category: "Armor",
+    hasVariableRolls: true,
+    keyRollFields: ["elementalSkillDamage", "fasterCastRate"],
+    scnlPriority: "medium",
+    sclPriority: "medium",
+    liquidity: "Medium",
+    notes: "Roll-sensitive caster armor. Skill roll matters here; the damage roll only shines with a useful skill.",
+    source: "Arreat Summit / diablo2.io",
+    selectDefinitions: [
+      {
+        key: "ormusSkillQuality",
+        label: "Skill roll",
+        options: [
+          { value: "", label: "Unknown / not checked" },
+          { value: "wrong", label: "Wrong or low-demand skill" },
+          { value: "useful", label: "Useful skill" },
+          { value: "desirable", label: "Desirable skill" }
+        ]
+      }
+    ],
+    rollDefinitions: [
+      {
+        key: "elementalSkillDamage",
+        label: "Elemental Skill Damage",
+        min: 10,
+        max: 15,
+        higherIsBetter: true,
+        thresholds: { low: 11, mid: 14, high: 15 }
+      },
+      {
+        key: "fasterCastRate",
+        label: "Faster Cast Rate",
+        min: 20,
+        max: 20,
+        higherIsBetter: true,
+        thresholds: { low: 20, mid: 20, high: 20 },
+        note: "Fixed on Ormus; included so the item summary shows the caster shell."
+      }
+    ],
+    sources: {
+      baselineSource: {
+        label: "The Arreat Summit - Elite Unique Armor",
+        url: "https://classic.battle.net/diablo2exp/items/elite/uarmor.shtml"
+      },
+      validationSource: validationIndex,
+      notes: "Only the caster-relevant triage fields are modeled: elemental damage, fixed FCR, and whether the random skill is useful."
+    }
+  },
+  {
+    id: "rainbow-facet",
+    name: "Rainbow Facet",
+    category: "Jewel",
+    hasVariableRolls: true,
+    keyRollFields: ["elementalSkillDamage", "minusEnemyColdResist"],
+    scnlPriority: "medium",
+    sclPriority: "medium",
+    liquidity: "Medium",
+    notes: "Facet check. Perfect 5/5 rolls are the real hit; low rolls are common.",
+    source: "Arreat Summit / diablo2.io",
+    selectDefinitions: [
+      {
+        key: "rainbowFacetElement",
+        label: "Facet element",
+        options: [
+          { value: "", label: "Element not specified" },
+          { value: "fire", label: "Fire" },
+          { value: "cold", label: "Cold" },
+          { value: "lightning", label: "Lightning" },
+          { value: "poison", label: "Poison" }
+        ]
+      }
+    ],
+    rollDefinitions: [
+      {
+        key: "elementalSkillDamage",
+        label: "Elemental Skill Damage",
+        min: 3,
+        max: 5,
+        higherIsBetter: true,
+        thresholds: { low: 3, mid: 4, high: 5 }
+      },
+      {
+        key: "minusEnemyColdResist",
+        label: "-Enemy Elemental Resist",
+        min: 3,
+        max: 5,
+        higherIsBetter: true,
+        thresholds: { low: 3, mid: 4, high: 5 }
+      }
+    ],
+    sources: {
+      baselineSource: {
+        label: "The Arreat Summit - Unique Jewels",
+        url: "https://classic.battle.net/diablo2exp/items/normal/ujewels.shtml"
+      },
+      validationSource: validationIndex,
+      notes: "Death/level-up trigger is intentionally omitted; the fast triage is elemental type plus 3-5 damage and -res rolls."
     }
   },
   {

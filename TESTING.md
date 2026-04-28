@@ -31,6 +31,20 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - Test strong boots such as `30 FRW + 30+ lightning resist + 30+ fire/cold resist`; expected: clearly useful/tradable, not treated as junk.
 - Test weak mixed boots with scattered low rolls; expected: does not inflate into strong trade value.
 
+## Magic / Rare / Crafted Gloves
+
+- Test magic `+3 Javelin and Spear / 20 IAS`; expected: Premium glove hit.
+- Test magic `+2 Javelin and Spear / 20 IAS`; expected: High, clearly worth checking but below +3/20.
+- Test magic `+3 Javelin and Spear` with no IAS; expected: conditional/low, not a clean trade hit.
+- Test magic `Bow and Crossbow / 20 IAS`; expected: Moderate unless supported by strong stats.
+- Test magic `Martial Arts / 20 IAS`; expected: Moderate unless supported by strong stats.
+- Test magic `Bow and Crossbow / 20 IAS + strong support`; expected: High.
+- Test rare or crafted `20 IAS` only; expected: low value, not overhyped.
+- Test crafted `Crushing Blow` only; expected: low at most.
+- Test crafted `Crushing Blow + 20 IAS + support`; expected: check-worthy/high.
+- Test weak no-IAS gloves with filler stats; expected: Charsi/drop.
+- Test `20 IAS + MF/support`; expected: worth checking only when support is strong enough.
+
 ## Circlets
 
 - Test a rare circlet with only `+2 class skills`; expected: reads as a partial hit, not a clear jackpot.
@@ -64,6 +78,10 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - Test roll-sensitive uniques with low, mid, and top rolls, such as `War Travelers`, `Nagelring`, `Raven Frost`, `Griffon's Eye`, and `Death's Fathom`.
 - Expected: weak rolls sound common or limited, mid rolls are not overstated, and top rolls stand out clearly.
 - Test newer curated uniques such as `Kira's Guardian`, `Vampire Gaze`, `Verdungo's Hearty Cord`, and `Thunderstroke`; expected: only meaningful roll fields appear and low/top rolls separate clearly.
+- Test `Ormus' Robes` with a wrong/low-demand skill versus a desirable skill and high elemental damage; expected: wrong skill stays low, while a good skill plus strong damage is worth checking.
+- Test `Crown of Ages` with `1 socket` and low defensive rolls versus `2 sockets` with high DR/res; expected: sockets drive the value and the 2os high-roll copy stands out.
+- Test `Andariel's Visage` non-eth with weak rolls versus eth with high strength/leech; expected: eth merc copies get the better signal.
+- Test `Rainbow Facet` with low rolls versus perfect `5/5`; expected: low facets are not overhyped, perfect rolls stand out clearly.
 - Test `Highlord's Wrath`; expected: no roll input is needed and it reads as a staple keep/check item rather than a roll chase.
 - For eth-sensitive uniques, confirm ethereal state only helps when it makes sense for that item.
 - Test no-roll staple uniques such as `Stone of Jordan` and `Arachnid Mesh`; expected: decision label reads `Keep`, not `Check Before Tossing`.

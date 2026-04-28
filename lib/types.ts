@@ -19,7 +19,8 @@ export type ItemCategory =
   | "Jewels"
   | "Rings"
   | "Amulets"
-  | "Boots";
+  | "Boots"
+  | "Gloves";
 
 export type Verdict = "Ignore" | "Low Priority" | "Check" | "Check sockets" | "Keep" | "List" | "Premium";
 export type RingArchetype = "caster" | "melee" | "PvM" | "PvP" | "MF" | "niche";
@@ -328,6 +329,34 @@ export interface BootsCheckResult {
 
 export type BootsAffixKey = keyof Omit<BootsCheckInput, "mode">;
 
+export type GloveQuality = "Magic" | "Rare" | "Crafted";
+export type GloveSkillType = "None" | "Javelin and Spear" | "Bow and Crossbow" | "Martial Arts";
+
+export interface GloveCheckInput {
+  mode: GameMode;
+  quality: GloveQuality;
+  skillType: GloveSkillType;
+  skillLevel: 0 | 1 | 2 | 3;
+  increasedAttackSpeed: 0 | 10 | 20;
+  crushingBlow?: number;
+  lifeLeech?: number;
+  life?: number;
+  magicFind?: number;
+  strength?: number;
+  dexterity?: number;
+  resistSupport?: number;
+}
+
+export interface GloveCheckResult {
+  verdict: Verdict;
+  priority: EvaluationPriority;
+  liquidity: Liquidity;
+  explanation: string;
+  recommendedAction: string;
+  qualityScore: number;
+  archetypeTags: RingArchetype[];
+}
+
 export type VarianceAffixKey = RingAffixKey | AmuletAffixKey | JewelAffixKey | BootsAffixKey;
 
 export interface VarianceAffixDefinition {
@@ -355,6 +384,7 @@ export type UniqueRollField =
   | "minusEnemyPoisonResist"
   | "lightningSkillDamage"
   | "fireSkillDamage"
+  | "elementalSkillDamage"
   | "enhancedDamage"
   | "enhancedDefense"
   | "strength"
@@ -388,6 +418,19 @@ export type UniqueRollField =
   | "allSkills"
   | "lightningAbsorb"
   | "vitality";
+
+export type UniqueSelectField = "ormusSkillQuality" | "rainbowFacetElement";
+
+export interface UniqueSelectOption {
+  value: string;
+  label: string;
+}
+
+export interface UniqueSelectDefinition {
+  key: UniqueSelectField;
+  label: string;
+  options: UniqueSelectOption[];
+}
 
 export interface UniqueRollThresholdBand {
   low?: number;
@@ -432,6 +475,7 @@ export interface UniqueItemDefinition {
   source?: string;
   usuallyIgnore?: boolean;
   rollDefinitions?: UniqueRollDefinition[];
+  selectDefinitions?: UniqueSelectDefinition[];
   sources: UniqueSourceMetadata;
 }
 
@@ -455,6 +499,7 @@ export interface UniqueCheckInput {
   minusEnemyPoisonResist?: number;
   lightningSkillDamage?: number;
   fireSkillDamage?: number;
+  elementalSkillDamage?: number;
   enhancedDamage?: number;
   enhancedDefense?: number;
   strength?: number;
@@ -488,6 +533,8 @@ export interface UniqueCheckInput {
   allSkills?: number;
   lightningAbsorb?: number;
   vitality?: number;
+  ormusSkillQuality?: string;
+  rainbowFacetElement?: string;
 }
 
 export interface UniqueCheckResult {
