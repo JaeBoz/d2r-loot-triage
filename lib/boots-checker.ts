@@ -126,6 +126,33 @@ function awkwardPenalty(stats: NormalizedBootsStats, highlights: string[]) {
   return penalty;
 }
 
+function resistHitCount(stats: NormalizedBootsStats, minimum = 25) {
+  return [stats.fireResist ?? 0, stats.lightningResist ?? 0, stats.coldResist ?? 0, stats.poisonResist ?? 0].filter((value) => value >= minimum).length;
+}
+
+function supportScore(stats: NormalizedBootsStats) {
+  let score = 0;
+
+  if ((stats.fasterHitRecovery ?? 0) >= 10) score += 2;
+  if ((stats.magicFind ?? 0) >= 20) score += 2;
+  if ((stats.strength ?? 0) >= 10 || (stats.dexterity ?? 0) >= 10) score += 1;
+  if ((stats.life ?? 0) >= 15) score += 1;
+  if ((stats.mana ?? 0) >= 20 || (stats.manaRegen ?? 0) >= 10) score += 1;
+
+  return score;
+}
+
+function nonMagicFindSupportScore(stats: NormalizedBootsStats) {
+  let score = 0;
+
+  if ((stats.fasterHitRecovery ?? 0) >= 10) score += 2;
+  if ((stats.strength ?? 0) >= 10 || (stats.dexterity ?? 0) >= 10) score += 1;
+  if ((stats.life ?? 0) >= 15) score += 1;
+  if ((stats.mana ?? 0) >= 20 || (stats.manaRegen ?? 0) >= 10) score += 1;
+
+  return score;
+}
+
 function ratedStats(stats: NormalizedBootsStats): RatedStat[] {
   return Object.entries(stats)
     .map(([key, value]) => ({
@@ -140,15 +167,14 @@ function rollPackageAdjustment(stats: NormalizedBootsStats, rated: RatedStat[], 
   const highCount = rated.filter((entry) => entry.score >= 4).length;
   const mediumCount = rated.filter((entry) => entry.score >= 2).length;
   const lowCount = rated.filter((entry) => entry.score === 1).length;
-  const resistHits = [stats.fireResist ?? 0, stats.lightningResist ?? 0, stats.coldResist ?? 0, stats.poisonResist ?? 0].filter(
-    (value) => value >= 25
-  ).length;
+  const resistHits = resistHitCount(stats);
   const hasRealFrwAnchor = (stats.fasterRunWalk ?? 0) >= 30;
   const hasRealMfAnchor = (stats.magicFind ?? 0) >= 20;
   const hasRealResAnchor = resistHits >= 2;
+  const support = supportScore(stats);
   const hasPremiumShell =
     hasRealFrwAnchor &&
-    (hasRealResAnchor || hasRealMfAnchor || ((stats.fasterHitRecovery ?? 0) >= 10 && (stats.lightningResist ?? 0) >= 25));
+    (resistHits >= 3 || (hasRealResAnchor && support >= 2) || (hasRealMfAnchor && support >= 2));
 
   if (hasPremiumShell) {
     highlights.push("premium boot shell");
@@ -178,6 +204,46 @@ function rollPackageAdjustment(stats: NormalizedBootsStats, rated: RatedStat[], 
   return 0;
 }
 
+function patternCap(score: number, stats: NormalizedBootsStats, highlights: string[]) {
+  const hasFrwAnchor = (stats.fasterRunWalk ?? 0) >= 30;
+  const hasAnyFrw = (stats.fasterRunWalk ?? 0) > 0;
+  const resists = resistHitCount(stats);
+  const support = supportScore(stats);
+  const nonMfSupport = nonMagicFindSupportScore(stats);
+
+  if (!hasAnyFrw && score > 7) {
+    highlights.push("useful stats, but no movement");
+    return 7;
+  }
+
+  if (!hasFrwAnchor && score > 9) {
+    highlights.push("movement roll is not strong enough");
+    return 9;
+  }
+
+  if (hasFrwAnchor && resists < 2 && support < 2 && score > 6) {
+    highlights.push("FRW is the anchor, but support is light");
+    return 6;
+  }
+
+  if (hasFrwAnchor && (stats.magicFind ?? 0) >= 20 && resists === 0 && nonMfSupport === 0 && score > 7) {
+    highlights.push("FRW with MF, but no support");
+    return 7;
+  }
+
+  if (hasFrwAnchor && resists === 2 && support === 0 && score > 9) {
+    highlights.push("FRW with dual res, but little extra support");
+    return 9;
+  }
+
+  if (hasFrwAnchor && resists === 2 && support >= 2 && score > 15) {
+    highlights.push("strong FRW support, but not triple-res");
+    return 15;
+  }
+
+  return score;
+}
+
 function liquidityFrom(score: number, mode: BootsCheckInput["mode"], tags: RingArchetype[], highlights: string[]): Liquidity {
   if (highlights.includes("tri-res utility boots")) return mode === "SCNL" ? "Medium" : "High";
   if (highlights.includes("FRW with strong resist support")) return "High";
@@ -199,7 +265,9 @@ function summaryFor(stats: NormalizedBootsStats) {
   if (stats.fasterRunWalk) parts.push(`${stats.fasterRunWalk} FRW`);
   if (stats.fasterHitRecovery) parts.push(`${stats.fasterHitRecovery} FHR`);
   if (stats.magicFind) parts.push(`${stats.magicFind} MF`);
+  if (stats.fireResist) parts.push(`${stats.fireResist} fire resist`);
   if (stats.lightningResist) parts.push(`${stats.lightningResist} lightning resist`);
+  if (stats.coldResist) parts.push(`${stats.coldResist} cold resist`);
   if (stats.mana) parts.push(`${stats.mana} mana`);
   if (stats.manaRegen) parts.push(`${stats.manaRegen}% mana regen`);
   if (stats.strength) parts.push(`${stats.strength} strength`);
@@ -214,7 +282,13 @@ function displayHighlight(highlight: string) {
     "FRW, FHR, and resist support": "FRW/FHR/res",
     "stats with resist utility": "stats + res",
     "caster mana utility": "caster mana utility",
-    "premium boot shell": "premium boot shell"
+    "premium boot shell": "premium boot shell",
+    "useful stats, but no movement": "no FRW",
+    "movement roll is not strong enough": "weak FRW",
+    "FRW is the anchor, but support is light": "light support",
+    "FRW with dual res, but little extra support": "FRW + dual res",
+    "FRW with MF, but no support": "FRW + MF",
+    "strong FRW support, but not triple-res": "FRW + support"
   };
 
   return labelMap[highlight] ?? highlight;
@@ -239,25 +313,42 @@ function explanationFor(
   const comboText = comboTextFor(highlights);
   const highCount = rated.filter((entry) => entry.score >= 4).length;
   const lowOnly = rated.length > 0 && rated.every((entry) => entry.score <= 1);
+  const hasFrw = (stats.fasterRunWalk ?? 0) >= 30;
+  const resists = resistHitCount(stats);
+  const support = supportScore(stats);
+
+  if (!hasFrw && verdict !== "Ignore") {
+    return `Useful stats, but no movement. ${summary} is conditional without FRW.`;
+  }
 
   if (verdict === "Ignore") {
-    return `Charsi-level boots. ${summary} does not make a real ${input.mode} boot pattern.`;
+    return hasFrw
+      ? `FRW is here, but the support is too light. ${summary} is not a real ${input.mode} boot pattern.`
+      : `No FRW. Usually Charsi. ${summary} does not make a real boot pattern.`;
   }
 
   if (verdict === "Low Priority") {
-    return `Some useful lines, but not enough together. ${summary} is mostly self-use or niche.`;
+    return hasFrw
+      ? `FRW is the anchor here, but the support is weak. ${summary} is mostly self-use.`
+      : `Useful stats, but no movement. ${summary} is mostly self-use or niche.`;
   }
 
   if (verdict === "Check") {
+    if (hasFrw && resists >= 2) {
+      return `Decent boot shell. FRW + dual res is worth a look, but it needs stronger support to be a real hit.`;
+    }
     return `Decent partial hit. ${summary} is usable, but not a clean winner. Check because of ${comboText}.`;
   }
 
   if (verdict === "Keep") {
+    if (hasFrw && support >= 2) {
+      return `Solid boots. FRW plus support is what makes them worth keeping.`;
+    }
     return `Solid boots. ${summary}. ${comboText} is the reason to keep them.`;
   }
 
   if (verdict === "List") {
-    return `Good boots. ${summary}. ${comboText} is the value here.`;
+    return `Good boots. FRW is the anchor, and ${comboText} is the value here.`;
   }
 
   if (highCount >= 2 && !lowOnly) {
@@ -268,17 +359,21 @@ function explanationFor(
 }
 
 function recommendedActionFor(verdict: Verdict, highlights: string[]) {
+  if (highlights.includes("useful stats, but no movement")) return "Only keep if you personally need the stats. No FRW makes them hard to move.";
+  if (highlights.includes("FRW is the anchor, but support is light")) return "Do not over-stash these. FRW alone is usually filler.";
+  if (highlights.includes("FRW with MF, but no support")) return "MF helps, but this needs res or other support before it is a strong pair.";
+  if (highlights.includes("FRW with dual res, but little extra support")) return "Check before tossing, but do not treat plain dual-res boots like a trophy.";
   if (verdict === "Ignore") return "Charsi unless you need temporary self-use boots.";
   if (verdict === "Low Priority") return "Only keep them as a filler or specific self-use pair.";
   if (verdict === "Check") return "Check the full boot mix before tossing them.";
   if (verdict === "Keep") return "Keep them. Useful enough to stash or compare.";
   if (verdict === "List") {
     if (highlights.includes("FRW with magic find")) {
-      return "Check market activity or list them. FRW + MF is easy to understand.";
+      return "Compare before tossing or listing. FRW + MF is easy to understand.";
     }
     return "List them or compare them against similar rare boots.";
   }
-  return "Premium rare boots. Compare before listing.";
+  return "Premium rare/crafted boots. Compare before listing.";
 }
 
 export function evaluateBoots(input: BootsCheckInput): BootsCheckResult {
@@ -308,6 +403,7 @@ export function evaluateBoots(input: BootsCheckInput): BootsCheckResult {
   score -= awkwardPenalty(stats, highlights);
   const rated = ratedStats(stats);
   score += rollPackageAdjustment(stats, rated, highlights);
+  score = patternCap(score, stats, highlights);
 
   if (input.mode === "SCNL" && score <= 9) {
     score -= 1;

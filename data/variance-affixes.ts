@@ -51,7 +51,7 @@ export const affixGuidanceByItemType: Record<VarianceItemType, string> = {
   ring: "Some omitted modifiers are usually low impact and do not affect trade value unless part of a niche ring pattern.",
   amulet: "Unlisted affixes are generally treated as low-impact unless they support a real caster, MF, or niche melee pattern.",
   jewel: "Unlisted affixes are usually low-impact and should not change trade value much unless they support a real jewel combo.",
-  boots: "Some omitted modifiers are usually low impact and do not affect trade value unless they complete a niche utility boot."
+  boots: "Rare and crafted boots can be checked here. FRW is the anchor; mana and filler mods stay secondary unless they support a real boot pattern."
 };
 
 export function getAffixesForItemType(itemType: VarianceItemType) {

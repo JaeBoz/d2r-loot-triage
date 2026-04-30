@@ -1,5 +1,22 @@
 # D2R Loot Triage App - Internal Changelog
 
+[2026-04-30]
+
+Change:
+- Reframed Boots triage as Rare / Crafted Boots and retuned evaluation around FRW plus support patterns.
+
+Type:
+- Evaluation / UX
+
+Why:
+- Boots are primarily valued by movement plus resists, FHR, MF, stats, or mana support, and crafted boots are checked in the same practical workflow as rares.
+
+Impact:
+- FRW-only and no-FRW boots now read more conservatively, while strong FRW/res/support packages stand out more clearly during farming checks.
+
+Notes:
+- No crafting system, pricing, Trade Value tier changes, decision mapping changes, or unrelated checker changes were added.
+
 [2026-04-27]
 
 Change:

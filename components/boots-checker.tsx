@@ -96,8 +96,8 @@ export function BootsChecker({ mode }: { mode: GameMode }) {
       <Card>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-400">Rare Boots Triage</p>
-            <h2 className="mt-2 text-2xl font-bold text-white">Fast boot checks with tradable utility patterns</h2>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-400">Rare / Crafted Boots Triage</p>
+            <h2 className="mt-2 text-2xl font-bold text-white">Fast boot checks built around FRW and support</h2>
           </div>
           <div className="flex items-center gap-2">
             <Pill active>{mode}</Pill>
@@ -125,9 +125,10 @@ export function BootsChecker({ mode }: { mode: GameMode }) {
         </div>
 
         <div className="mt-5 flex flex-wrap gap-2">
-          <Pill>FRW and tri-res patterns</Pill>
-          <Pill>Mode-aware liquidity</Pill>
-          <Pill>Deterministic scoring</Pill>
+          <Pill>FRW is the anchor</Pill>
+          <Pill>Dual/triple res matters</Pill>
+          <Pill>No FRW is usually Charsi</Pill>
+          <Pill>Mana stays secondary</Pill>
         </div>
       </Card>
 

@@ -41,7 +41,7 @@ export const bootsSynergies: BootsSynergyRule[] = [
   {
     id: "frw-dual-res",
     label: "FRW with strong resist support",
-    score: 4,
+    score: 2,
     archetypes: ["PvM"],
     check: (stats) =>
       (stats.fasterRunWalk ?? 0) >= 30 &&
@@ -50,7 +50,7 @@ export const bootsSynergies: BootsSynergyRule[] = [
   {
     id: "frw-mf",
     label: "FRW with magic find",
-    score: 3,
+    score: 2,
     archetypes: ["MF", "PvM"],
     check: (stats) => (stats.fasterRunWalk ?? 0) >= 30 && (stats.magicFind ?? 0) >= 20
   },

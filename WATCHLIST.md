@@ -9,10 +9,7 @@ Use this file to preserve iteration quality between Codex batches.
 ## Active Issues
 
 ### Gloves
-- [ ] [Evaluation] +2 Jav / 20 IAS may be overvalued vs +3 Jav / 20 IAS (tier separation not clear at a glance)
 - [ ] [Evaluation] IAS + weak support may be inflated.
-- [ ] [Evaluation] Bow / 20 IAS and Martial Arts / 20 IAS are overvalued without support (should likely be Moderate unless supported)
-- [ ] [UX] Magic skill glove wording ignores skill type (reads as "IAS only" instead of reflecting Bow / Martial Arts)
 
 ### Uniques
 - [ ] [Evaluation] Crown of Ages 1os low roll may be too harsh.
@@ -40,3 +37,6 @@ Move completed issues here after implementation and QA confirmation.
 
 Example:
 - [x] [Data] Corrected Warlock unique names and roll fields from verified source.
+- [x] [Evaluation] +2 Jav / 20 IAS may be overvalued vs +3 Jav / 20 IAS. Tuning pass verified +2/20 now sits below +3/20.
+- [x] [Evaluation] Bow / 20 IAS and Martial Arts / 20 IAS are overvalued without support. Tuning pass verified unsupported non-Jav skill gloves now land lower.
+- [x] [UX] Magic skill glove wording ignores skill type. Tuning pass verified Bow and Martial Arts wording now reflects the selected skill type.

@@ -24,11 +24,19 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - Test a weak non-Grimoire Warlock unique such as min `Wraithstep` or min `Opalvein`; expected: weak rolls stay low/conditional, not a fake winner.
 - Test isolated `-Enemy Magic Resistance` on `Sling`, `Gheed's Wager`, or `Hellwarden's Will`; expected: it does not reach high value by itself.
 
-## Rare Boots
+## Rare / Crafted Boots
 
-- Open Rare Boots triage and confirm `All Resist` is not available as a core or optional affix.
+- Open Rare / Crafted Boots triage and confirm `All Resist` is not available as a core or optional affix.
 - Enter single resists such as `Fire Resist`, `Lightning Resist`, and `Cold Resist`; confirm they can be represented and affect the result.
-- Test strong boots such as `30 FRW + 30+ lightning resist + 30+ fire/cold resist`; expected: clearly useful/tradable, not treated as junk.
+- Test `30 FRW` only; expected: low/filler value because FRW needs support.
+- Test no-FRW weak stats; expected: Drop/Trash or clearly self-use only.
+- Test high dual res without FRW; expected: conditional/moderate at most because there is no movement roll.
+- Test `30 FRW + dual res`; expected: moderate/check-worthy, not automatically premium without support.
+- Test `30 FRW + triple res + support`; expected: clearly strong and can reach premium.
+- Test `30 FRW + FHR + dual res`; expected: strong/high because the support lines fit together.
+- Test `30 FRW + MF` only; expected: low/moderate unless support is present.
+- Test `30 FRW + MF + res`; expected: worth checking when rolls are strong.
+- Test mana or mana regeneration only; expected: does not carry value by itself.
 - Test weak mixed boots with scattered low rolls; expected: does not inflate into strong trade value.
 
 ## Magic / Rare / Crafted Gloves
