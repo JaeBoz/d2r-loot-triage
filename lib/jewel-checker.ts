@@ -92,8 +92,7 @@ function toJewelPatternInput(stats: NormalizedJewelStats): JewelPatternInput {
     lightningResist: stats.lightningResist,
     coldResist: stats.coldResist,
     poisonResist: stats.poisonResist,
-    requirementsReduction: stats.requirementsReduction,
-    lifeLeech: stats.lifeLeech
+    requirementsReduction: stats.requirementsReduction
   };
 }
 

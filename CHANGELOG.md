@@ -3,6 +3,23 @@
 [2026-04-30]
 
 Change:
+- Corrected verified circlet and jewel mechanics in the triage inputs.
+
+Type:
+- Data
+
+Why:
+- The mechanics audit found rare circlets should support 2 sockets, while jewels incorrectly exposed life leech, strength requirement, and sub-15 requirements reduction states.
+
+Impact:
+- Rare circlet socket checks and jewel affix entry now better match Standard D2R LOD mechanics during farming triage.
+
+Notes:
+- No scoring model, Trade Value tier, decision mapping, pricing, or unrelated checker changes were added.
+
+[2026-04-30]
+
+Change:
 - Reframed Boots triage as Rare / Crafted Boots and retuned evaluation around FRW plus support patterns.
 
 Type:

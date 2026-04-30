@@ -82,7 +82,7 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
   const [skillTreeValue, setSkillTreeValue] = useState<CircletSkillTier>(3);
   const [form, setForm] = useState<CircletFormState>(emptyForm);
 
-  const availableSocketOptions = quality === "Magic" ? getMagicSocketOptions(family) : ["1"];
+  const availableSocketOptions = quality === "Magic" ? getMagicSocketOptions(family) : ["0", "1", "2"];
   const hasInput =
     quality !== "Rare" ||
     family !== "Diadem" ||

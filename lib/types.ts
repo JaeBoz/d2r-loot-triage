@@ -258,8 +258,6 @@ export interface JewelCheckInput {
   coldResist?: number;
   poisonResist?: number;
   requirementsReduction?: number;
-  strengthRequirement?: number;
-  lifeLeech?: number;
   energy?: number;
   extraGold?: number;
 }
@@ -280,7 +278,6 @@ export type JewelPatternInput = Pick<
   | "coldResist"
   | "poisonResist"
   | "requirementsReduction"
-  | "lifeLeech"
 >;
 
 export interface JewelCheckResult {
@@ -295,7 +292,6 @@ export interface JewelCheckResult {
 
 export type JewelAffixKey =
   | keyof Omit<JewelCheckInput, "mode">
-  | "strengthRequirement"
   | "energy"
   | "extraGold";
 

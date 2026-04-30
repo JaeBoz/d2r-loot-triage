@@ -23,10 +23,8 @@ const jewelFormKeys: JewelAffixKey[] = [
   "coldResist",
   "poisonResist",
   "requirementsReduction",
-  "strengthRequirement",
   "energy",
-  "extraGold",
-  "lifeLeech"
+  "extraGold"
 ];
 
 type JewelFormState = Record<JewelAffixKey, string>;
@@ -66,11 +64,9 @@ export function JewelChecker({ mode }: { mode: GameMode }) {
         lightningResist: toOptionalNumber(form.lightningResist),
         coldResist: toOptionalNumber(form.coldResist),
         poisonResist: toOptionalNumber(form.poisonResist),
-        requirementsReduction: toOptionalNumber(form.requirementsReduction),
-        strengthRequirement: toOptionalNumber(form.strengthRequirement),
+        requirementsReduction: toOptionalNumber(form.requirementsReduction) ? 15 : undefined,
         energy: toOptionalNumber(form.energy),
-        extraGold: toOptionalNumber(form.extraGold),
-        lifeLeech: toOptionalNumber(form.lifeLeech)
+        extraGold: toOptionalNumber(form.extraGold)
       }),
     [form, mode]
   );

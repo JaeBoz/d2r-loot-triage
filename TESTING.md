@@ -55,6 +55,7 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 
 ## Circlets
 
+- Test a rare circlet socket selector; expected: `0`, `1`, and `2` sockets are selectable.
 - Test a rare circlet with only `+2 class skills`; expected: reads as a partial hit, not a clear jackpot.
 - Test a rare circlet with `+2 class skills + 20 FCR`; expected: strong caster result with trade-aware explanation.
 - Add a socket to a rare circlet with useful support; expected: socket utility is mentioned and improves the result.
@@ -70,6 +71,12 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - Test ethereal mercenary bases such as eth polearms; expected: eth status improves relevant merc/runeword value.
 - Test eth `0os Thresher`; expected: wording says it is a good base with socket potential, but not a finished clean trade piece yet.
 - Test weak or wrong-socket bases; expected: output explains why trade value is limited.
+
+## Jewels
+
+- Open Jewel Triage and confirm `Life Leech` is not available as a core or optional affix.
+- Open Jewel Triage and confirm `Strength Req` is not available as a core or optional affix.
+- Add `-15 Requirements`; expected: it behaves as the fixed verified `-15` jewel affix, not as an arbitrary lower numeric range.
 
 ## Rare / Crafted Jewelry
 

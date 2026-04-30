@@ -62,8 +62,7 @@ export const jewelStatWeights = {
     { min: 15, score: 1 }
   ],
   requirementsReduction: [
-    { min: 15, score: 3 },
-    { min: 8, score: 1 }
+    { min: 15, score: 3 }
   ]
 } as const;
 
@@ -100,7 +99,7 @@ export const jewelSynergies: JewelSynergyRule[] = [
     label: "enhanced damage with -requirements",
     score: 5,
     archetypes: ["melee", "niche"],
-    check: (stats) => (stats.enhancedDamage ?? 0) >= 20 && (stats.requirementsReduction ?? 0) >= 8
+    check: (stats) => (stats.enhancedDamage ?? 0) >= 20 && (stats.requirementsReduction ?? 0) >= 15
   },
   {
     id: "ed-max-ar",
