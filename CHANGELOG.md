@@ -3,6 +3,23 @@
 [2026-04-30]
 
 Change:
+- Adjusted Crown of Ages and Entropy Locket unique evaluation outliers.
+
+Type:
+- Evaluation
+
+Why:
+- Full-app QA found weak 1os Crown of Ages rolls were too harsh as Trash, while max Entropy Locket was too high for its niche/self-use position.
+
+Impact:
+- Weak Crown of Ages copies now get a low-value second-look floor, while max Entropy Locket caps at High Trade Value instead of Premium.
+
+Notes:
+- No data, roll range, Trade Value tier, decision mapping, pricing, or unrelated unique changes were added.
+
+[2026-04-30]
+
+Change:
 - Corrected verified circlet and jewel mechanics in the triage inputs.
 
 Type:

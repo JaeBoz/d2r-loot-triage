@@ -12,11 +12,24 @@ Use this file to preserve iteration quality between Codex batches.
 - [ ] [Evaluation] IAS + weak support may be inflated.
 
 ### Uniques
-- [ ] [Evaluation] Crown of Ages 1os low roll may be too harsh.
+- [ ] [Evaluation] Crown of Ages 1os low roll may be too harsh as Drop / Trash.
 
 ### Warlock
 - [ ] [Evaluation] Ars Dul'Mephistos mid rolls may feel slightly harsh.
+- [ ] [Evaluation] Entropy Locket max rolls may be overvalued as Premium despite niche/self-use positioning.
 - [ ] [UX] Measured Wrath mid rolls: Keep/High plus niche wording may feel mixed.
+
+### Charms
+- [ ] [Data] Charm inputs need size-aware range validation.
+
+### Jewels
+- [ ] [UX] -15 Requirements field is visually numeric but mechanically fixed.
+
+### Circlets
+- [ ] [UX] Circlet explanations are too long for fast farming reads.
+
+### Base Checker
+- [ ] [UX] Base search selector needs manual mobile/viewport validation for usability.
 
 ### Jewelry
 - [ ] [Evaluation] High life leech + medium support rings may be slightly inflated.
@@ -40,3 +53,5 @@ Example:
 - [x] [Evaluation] +2 Jav / 20 IAS may be overvalued vs +3 Jav / 20 IAS. Tuning pass verified +2/20 now sits below +3/20.
 - [x] [Evaluation] Bow / 20 IAS and Martial Arts / 20 IAS are overvalued without support. Tuning pass verified unsupported non-Jav skill gloves now land lower.
 - [x] [UX] Magic skill glove wording ignores skill type. Tuning pass verified Bow and Martial Arts wording now reflects the selected skill type.
+- [x] [Data] Rare circlets only allow 1 socket -> fixed (0-2 sockets enabled for rares).
+- [x] [Data] Jewel affixes invalid fields -> fixed (removed life leech & strength req; -requirements normalized to -15).

@@ -20,7 +20,8 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - Test `Entropy Locket` or `Gheed's Wager`; expected: their listed Warlock roll inputs are available and no unlisted rolls appear.
 - Test `Ars Al'Diabolos` with min, mid, and max rolls; expected: min rolls are low-value but not automatic trash, while max rolls still stand out as premium.
 - Test `Measured Wrath` with min, mid, and max rolls; expected: weaker copies stay conservative, but strong copies still improve clearly.
-- Test a strong non-Grimoire Warlock unique such as max `Entropy Locket` or max `Gheed's Wager`; expected: strong supported roll packages no longer evaluate as trash.
+- Test max `Entropy Locket`; expected: caps at High Trade Value, not Premium, because it is more niche/self-use.
+- Test a strong non-Grimoire Warlock unique such as max `Gheed's Wager`; expected: strong supported roll packages no longer evaluate as trash.
 - Test a weak non-Grimoire Warlock unique such as min `Wraithstep` or min `Opalvein`; expected: weak rolls stay low/conditional, not a fake winner.
 - Test isolated `-Enemy Magic Resistance` on `Sling`, `Gheed's Wager`, or `Hellwarden's Will`; expected: it does not reach high value by itself.
 
@@ -94,7 +95,8 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - Expected: weak rolls sound common or limited, mid rolls are not overstated, and top rolls stand out clearly.
 - Test newer curated uniques such as `Kira's Guardian`, `Vampire Gaze`, `Verdungo's Hearty Cord`, and `Thunderstroke`; expected: only meaningful roll fields appear and low/top rolls separate clearly.
 - Test `Ormus' Robes` with a wrong/low-demand skill versus a desirable skill and high elemental damage; expected: wrong skill stays low, while a good skill plus strong damage is worth checking.
-- Test `Crown of Ages` with `1 socket` and low defensive rolls versus `2 sockets` with high DR/res; expected: sockets drive the value and the 2os high-roll copy stands out.
+- Test `Crown of Ages` with `1 socket` and low defensive rolls; expected: not Trash, but still a weak/conditional CoA.
+- Test `Crown of Ages` with `2 sockets` and high DR/res; expected: sockets drive the value and the 2os high-roll copy still stands out as Premium.
 - Test `Andariel's Visage` non-eth with weak rolls versus eth with high strength/leech; expected: eth merc copies get the better signal.
 - Test `Rainbow Facet` with low rolls versus perfect `5/5`; expected: low facets are not overhyped, perfect rolls stand out clearly.
 - Test `Highlord's Wrath`; expected: no roll input is needed and it reads as a staple keep/check item rather than a roll chase.

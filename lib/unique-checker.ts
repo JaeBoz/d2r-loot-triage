@@ -349,6 +349,20 @@ function scoreUniqueSelects(input: UniqueCheckInput, item: UniqueItemDefinition,
   return 0;
 }
 
+function applyItemSpecificScoreAdjustments(item: UniqueItemDefinition, score: number, details: string[]) {
+  if (item.id === "crown-of-ages" && score <= 1) {
+    details.push("Even a weak CoA is still worth a quick second look. Sockets are the value here.");
+    return 2;
+  }
+
+  if (item.id === "entropy-locket" && score > 15) {
+    details.push("Entropy Locket is niche, so even a great roll caps as a high-value check.");
+    return 15;
+  }
+
+  return score;
+}
+
 function liquidityFor(item: UniqueItemDefinition, mode: UniqueCheckInput["mode"], verdict: Verdict) {
   if (verdict === "Ignore" || verdict === "Low Priority") {
     return "Low" as Liquidity;
@@ -425,6 +439,7 @@ export function evaluateUnique(input: UniqueCheckInput): UniqueCheckResult {
   score += scoreRollPackage(item, rollAssessment, details);
   score += scoreEthereal(input, item, details);
   score += scoreUniqueSelects(input, item, details);
+  score = applyItemSpecificScoreAdjustments(item, score, details);
 
   const verdict = applyDemandFloor(item, verdictFromScore(score), details);
   const priority =
