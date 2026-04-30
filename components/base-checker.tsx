@@ -254,7 +254,7 @@ export function BaseChecker({ mode }: { mode: GameMode }) {
           ) : null}
         </div>
 
-        {selectedItem ? (
+        {selectedItem && !pickerOpen ? (
           <div className="mt-6 rounded-2xl border border-border bg-black/20 p-4">
             <div className="flex flex-wrap items-center gap-2">
               <Pill>{selectedItem.category}</Pill>
@@ -273,7 +273,11 @@ export function BaseChecker({ mode }: { mode: GameMode }) {
         ) : null}
       </Card>
 
-      <ResultPanel result={result} />
+      <ResultPanel
+        result={result}
+        hasInput={!pickerOpen}
+        emptyMessage="Choose a base from the search results to refresh the trade-value check."
+      />
     </div>
   );
 }

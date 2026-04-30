@@ -28,11 +28,16 @@ Use this file to preserve iteration quality between Codex batches.
 
 ### Base Checker
 - [ ] [UX] Base search selector needs manual mobile/viewport validation for usability.
+- [ ] [UX] Base search results can overlap with stale selected-base panel on narrow/mobile viewport.
 
 ### Jewelry
 - [ ] [Evaluation] High life leech + medium support rings may be slightly inflated.
 - [ ] [Evaluation] 15 FCR crafted amulets vs fully supported caster amulets may need clearer separation.
 - [ ] [Evaluation] +2 / 10 FCR with weak support may land slightly high.
+
+### Amulets
+- [ ] [UX] Weak +2 / 10 FCR amulet uses overly confident listing-oriented action copy.
+- [ ] [UX] Mismatched +20 FCR amulet opener sounds too positive before explaining mismatch.
 
 ---
 

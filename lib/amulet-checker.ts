@@ -423,6 +423,23 @@ function comboTextFor(highlights: string[]) {
   return displayHighlights.length > 0 ? displayHighlights.slice(0, 2).join(" and ") : "the overall stat mix";
 }
 
+function hasWeakRareStyleCasterShell(stats: NormalizedAmuletStats) {
+  const hasTwoCasterSkills =
+    ((stats.classSkills ?? 0) >= 2 && isCasterFriendlyClassSkill(stats.classSkillType)) ||
+    ((stats.skillTreeSkills ?? 0) >= 2 && isCasterFriendlySkillTree(stats.skillTreeType));
+  const hasOnlyRareStyleFcr = (stats.fasterCastRate ?? 0) >= 10 && (stats.fasterCastRate ?? 0) < 15;
+  const hasMeaningfulSupport =
+    (stats.allResist ?? 0) >= 10 ||
+    (stats.life ?? 0) >= 25 ||
+    (stats.mana ?? 0) >= 40 ||
+    (stats.strength ?? 0) >= 10 ||
+    (stats.dexterity ?? 0) >= 10 ||
+    (stats.lightningResist ?? 0) >= 25 ||
+    (stats.magicFind ?? 0) >= 20;
+
+  return hasTwoCasterSkills && hasOnlyRareStyleFcr && !hasMeaningfulSupport;
+}
+
 function summaryTextFor(
   topRated: Array<{ key: StatKey; value: number }>,
   input: AmuletCheckInput,
@@ -483,7 +500,7 @@ function explanationFor(
 
   if (verdict === "Keep") {
     if (hasCasterSkillMismatch) {
-      return `Solid ${leadTag} amulet. ${craftedFcrNote}${mismatchNote}You're mainly paying for ${summaryText}.`;
+      return `High FCR, but mismatch. ${craftedFcrNote}${mismatchNote}You're mainly paying for ${summaryText}.`;
     }
 
     return `Solid ${leadTag} amulet. ${craftedFcrNote}You're mainly paying for ${summaryText}. ${comboText} is the reason.`;
@@ -491,14 +508,14 @@ function explanationFor(
 
   if (verdict === "List") {
     if (hasCasterSkillMismatch) {
-      return `Good ${leadTag} amulet. ${craftedFcrNote}${mismatchNote}${summaryText} is the value here.`;
+      return `High FCR, but mismatch. ${craftedFcrNote}${mismatchNote}${summaryText} is the value here.`;
     }
 
     return `Good ${leadTag} amulet. ${craftedFcrNote}${summaryText}. ${comboText} is the value here.`;
   }
 
   if (hasCasterSkillMismatch) {
-    return `Premium ${leadTag} amulet. ${craftedFcrNote}${mismatchNote}${summaryText} is the value here.`;
+    return `High FCR, but mismatch. ${craftedFcrNote}${mismatchNote}${summaryText} is the value here.`;
   }
 
   return `Premium ${leadTag} amulet. ${craftedFcrNote}${summaryText}. ${comboText} is the hit.`;
@@ -543,6 +560,11 @@ export function evaluateAmulet(input: AmuletCheckInput): AmuletCheckResult {
   score += skillTreeContextAdjustment(stats, tagSet, highlights);
   const archetypeTags = Array.from(tagSet);
   score -= awkwardComboPenalty(stats, archetypeTags, highlights);
+
+  if (hasWeakRareStyleCasterShell(stats)) {
+    score -= 7;
+    highlights.push("+2 / 10 FCR needs support");
+  }
 
   if (input.mode === "SCNL" && score <= 11) {
     score -= 1;

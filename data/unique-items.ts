@@ -385,11 +385,11 @@ export const uniqueItems: UniqueItemDefinition[] = [
     name: "Death's Fathom",
     category: "Weapon",
     hasVariableRolls: true,
-    keyRollFields: ["coldSkillDamage"],
+    keyRollFields: ["coldSkillDamage", "fireResist", "lightningResist"],
     scnlPriority: "premium",
     sclPriority: "premium",
     liquidity: "High",
-    notes: "Premium cold sorc weapon. Cold skill damage is the roll.",
+    notes: "Dimensional Shard. Premium cold sorc weapon. Cold damage is the roll; fire/light res are secondary.",
     source: "Arreat Summit / diablo2.io",
     rollDefinitions: [
       {
@@ -399,6 +399,24 @@ export const uniqueItems: UniqueItemDefinition[] = [
         max: 30,
         higherIsBetter: true,
         thresholds: { low: 20, mid: 25, high: 30 }
+      },
+      {
+        key: "fireResist",
+        label: "Fire Resist",
+        min: 25,
+        max: 40,
+        higherIsBetter: true,
+        thresholds: { low: 30, mid: 36, high: 40 },
+        note: "Secondary roll; Death's Fathom does not roll all res or -enemy cold res."
+      },
+      {
+        key: "lightningResist",
+        label: "Lightning Resist",
+        min: 25,
+        max: 40,
+        higherIsBetter: true,
+        thresholds: { low: 30, mid: 36, high: 40 },
+        note: "Secondary roll; cold skill damage remains the main value driver."
       }
     ],
     sources: {
@@ -407,7 +425,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
         url: "https://classic.battle.net/diablo2exp/items/elite/usorceress.shtml"
       },
       validationSource: validationIndex,
-      notes: "Fire and lightning resist also vary, but cold skill damage is the most important quick trade-quality field."
+      notes: "Verified variable rolls modeled here are cold skill damage, fire resist, and lightning resist. Prompt-suggested -enemy cold resist/all resist were intentionally omitted because the LOD item does not roll them."
     }
   },
   {
@@ -415,11 +433,11 @@ export const uniqueItems: UniqueItemDefinition[] = [
     name: "Nightwing's Veil",
     category: "Helm",
     hasVariableRolls: true,
-    keyRollFields: ["coldSkillDamage", "dexterity"],
+    keyRollFields: ["coldSkillDamage", "dexterity", "coldAbsorb"],
     scnlPriority: "high",
     sclPriority: "high",
     liquidity: "Medium",
-    notes: "Cold-damage staple. Cold skill damage is the main roll; dex is a tiebreaker.",
+    notes: "Spired Helm. Cold-damage staple. Cold skill damage is the main roll; dex and absorb are tiebreakers.",
     source: "Arreat Summit / diablo2.io",
     rollDefinitions: [
       {
@@ -438,6 +456,15 @@ export const uniqueItems: UniqueItemDefinition[] = [
         higherIsBetter: true,
         thresholds: { low: 13, mid: 17, high: 20 },
         note: "Secondary quality roll behind cold skill damage."
+      },
+      {
+        key: "coldAbsorb",
+        label: "Cold Absorb",
+        min: 5,
+        max: 9,
+        higherIsBetter: true,
+        thresholds: { low: 6, mid: 8, high: 9 },
+        note: "Small secondary roll; the cold damage roll matters more."
       }
     ],
     sources: {
@@ -449,7 +476,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
         label: "diablo2.io - Nightwing's Veil",
         url: "https://diablo2.io/uniques/nightwing-s-veil-t885.html"
       },
-      notes: "Cold skill damage is the key fast triage roll; dexterity matters as a secondary quality check."
+      notes: "Cold skill damage, dexterity, and cold absorb are modeled as the meaningful quick roll checks."
     }
   },
   {
@@ -499,11 +526,11 @@ export const uniqueItems: UniqueItemDefinition[] = [
     name: "Eschuta's Temper",
     category: "Weapon",
     hasVariableRolls: true,
-    keyRollFields: ["allSkills", "lightningSkillDamage", "fireSkillDamage"],
+    keyRollFields: ["allSkills", "lightningSkillDamage", "fireSkillDamage", "energy"],
     scnlPriority: "medium",
     sclPriority: "high",
     liquidity: "Medium",
-    notes: "Roll-sensitive sorc orb. Skills matter first; elemental rolls need to be strong.",
+    notes: "Eldritch Orb. Roll-sensitive sorc orb. Skills matter first; elemental rolls need to be strong.",
     source: "Arreat Summit / diablo2.io",
     rollDefinitions: [
       {
@@ -530,6 +557,15 @@ export const uniqueItems: UniqueItemDefinition[] = [
         higherIsBetter: true,
         thresholds: { low: 13, mid: 17, high: 20 },
         note: "Useful for fire variants, but still secondary to the skill roll and preferred elemental line."
+      },
+      {
+        key: "energy",
+        label: "Energy",
+        min: 20,
+        max: 30,
+        higherIsBetter: true,
+        thresholds: { low: 22, mid: 27, high: 30 },
+        note: "Minor roll compared with skills and elemental damage."
       }
     ],
     sources: {
@@ -541,7 +577,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
         label: "diablo2.io - Eschuta's Temper",
         url: "https://diablo2.io/uniques/eschuta-s-temper-t757.html"
       },
-      notes: "Energy also varies, but the meaningful trade call is driven by sorceress skills plus the elemental damage lines."
+      notes: "Modeled variable rolls are sorceress skills, fire/lightning skill damage, and energy."
     }
   },
   {
@@ -555,7 +591,7 @@ export const uniqueItems: UniqueItemDefinition[] = [
     scnlPriority: "high",
     sclPriority: "high",
     liquidity: "High",
-    notes: "Staple merc polearm. ED matters, and eth is the version people want.",
+    notes: "Thresher. Staple merc polearm. ED and leech matter, and eth is the version people want.",
     source: "Arreat Summit / diablo2.io",
     rollDefinitions: [
       {
@@ -584,7 +620,38 @@ export const uniqueItems: UniqueItemDefinition[] = [
         label: "diablo2.io - The Reaper's Toll",
         url: "https://diablo2.io/uniques/the-reaper-s-toll-t939.html"
       },
-      notes: "Decrepify is fixed; the fast trade-quality check is enhanced damage, life leech, and whether the item is ethereal."
+      notes: "Decrepify and Deadly Strike are fixed. IAS was intentionally not modeled because Reaper's Toll has no IAS roll; fast triage checks ED, life leech, and ethereal state."
+    }
+  },
+  {
+    id: "windforce",
+    name: "Windforce",
+    category: "Bow",
+    hasVariableRolls: true,
+    keyRollFields: ["manaLeech"],
+    scnlPriority: "high",
+    sclPriority: "high",
+    liquidity: "Medium",
+    notes: "Hydra Bow. Classic bowazon unique. Mana leech is the roll; Knockback and 250 ED are fixed.",
+    source: "Arreat Summit / diablo2.io",
+    rollDefinitions: [
+      {
+        key: "manaLeech",
+        label: "Mana Leech",
+        min: 6,
+        max: 8,
+        higherIsBetter: true,
+        thresholds: { low: 6, mid: 7, high: 8 },
+        note: "The main variable roll for quick triage; enhanced damage and Knockback are fixed."
+      }
+    ],
+    sources: {
+      baselineSource: {
+        label: "The Arreat Summit - Elite Unique Bows",
+        url: "https://classic.battle.net/diablo2exp/items/elite/ubows.shtml"
+      },
+      validationSource: validationIndex,
+      notes: "Windforce's 250% enhanced damage and Knockback are fixed in LOD, so only mana leech is exposed as a roll input."
     }
   },
   {

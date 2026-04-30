@@ -53,6 +53,7 @@ const fieldLabels: Record<UniqueRollField, string> = {
   poisonAndBoneSkills: "Poison and Bone Skills",
   energy: "Energy",
   coldSkillDamage: "Cold Skill Damage",
+  coldAbsorb: "Cold Absorb",
   allSkills: "All Skills",
   lightningAbsorb: "Lightning Absorb",
   vitality: "Vitality"
@@ -112,6 +113,7 @@ const emptyForm: UniqueFormState = {
   poisonAndBoneSkills: "",
   energy: "",
   coldSkillDamage: "",
+  coldAbsorb: "",
   allSkills: "",
   lightningAbsorb: "",
   vitality: ""
@@ -207,6 +209,7 @@ export function UniqueChecker({ mode, ruleset }: { mode: GameMode; ruleset: Rule
         poisonAndBoneSkills: toOptionalNumber(form.poisonAndBoneSkills),
         energy: toOptionalNumber(form.energy),
         coldSkillDamage: toOptionalNumber(form.coldSkillDamage),
+        coldAbsorb: toOptionalNumber(form.coldAbsorb),
         allSkills: toOptionalNumber(form.allSkills),
         lightningAbsorb: toOptionalNumber(form.lightningAbsorb),
         vitality: toOptionalNumber(form.vitality),

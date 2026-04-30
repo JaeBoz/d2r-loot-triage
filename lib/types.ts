@@ -411,6 +411,7 @@ export type UniqueRollField =
   | "poisonAndBoneSkills"
   | "energy"
   | "coldSkillDamage"
+  | "coldAbsorb"
   | "allSkills"
   | "lightningAbsorb"
   | "vitality";
@@ -526,6 +527,7 @@ export interface UniqueCheckInput {
   poisonAndBoneSkills?: number;
   energy?: number;
   coldSkillDamage?: number;
+  coldAbsorb?: number;
   allSkills?: number;
   lightningAbsorb?: number;
   vitality?: number;

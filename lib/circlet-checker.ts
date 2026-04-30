@@ -72,6 +72,57 @@ function getSkillLabel(input: CircletCheckInput) {
   return "No standout skill line";
 }
 
+function compactCircletIdentity(input: CircletCheckInput) {
+  const skillLabel = getSkillLabel(input);
+  const parts: string[] = [];
+
+  if (skillLabel !== "No standout skill line") {
+    parts.push(skillLabel);
+  }
+
+  if ((input.fasterCastRate ?? 0) >= 20) {
+    parts.push("20 FCR");
+  } else if ((input.fasterCastRate ?? 0) >= 10) {
+    parts.push(`${input.fasterCastRate} FCR`);
+  }
+
+  if ((input.fasterRunWalk ?? 0) >= 20) {
+    parts.push(`${input.fasterRunWalk} FRW`);
+  }
+
+  if ((input.sockets ?? 0) > 0) {
+    parts.push(`${input.sockets}os`);
+  }
+
+  return parts.length > 0 ? parts.join(" / ") : "no standout core roll";
+}
+
+function compactCircletSupport(input: CircletCheckInput) {
+  const support: string[] = [];
+
+  if ((input.allResist ?? 0) >= 10) {
+    support.push(`${input.allResist} all res`);
+  } else if ((input.fireResist ?? 0) >= 25) {
+    support.push(`${input.fireResist} fire res`);
+  } else if ((input.lightningResist ?? 0) >= 25) {
+    support.push(`${input.lightningResist} lightning res`);
+  }
+
+  if ((input.strength ?? 0) >= 15) {
+    support.push(`${input.strength} strength`);
+  }
+
+  if ((input.dexterity ?? 0) >= 15) {
+    support.push(`${input.dexterity} dex`);
+  }
+
+  if ((input.life ?? 0) >= 20) {
+    support.push(`${input.life} life`);
+  }
+
+  return support.length > 0 ? `Support: ${support.slice(0, 3).join(", ")}.` : "Support is light.";
+}
+
 function scoreMagicCirclet(input: CircletCheckInput, details: string[], tags: Set<RingArchetype>) {
   let score = 0;
 
@@ -316,7 +367,7 @@ export function evaluateCirclet(rawInput: CircletCheckInput): CircletCheckResult
     recommendedAction = "Premium circlet. Compare it against strong examples before listing.";
   }
 
-  const explanation = `${input.family} ${input.quality.toLowerCase()} circlet: ${details.join(" ")} ${verdictSummary}`;
+  const explanation = `${input.quality} ${input.family}: ${compactCircletIdentity(input)}. ${compactCircletSupport(input)} ${verdictSummary}`;
 
   return {
     verdict,

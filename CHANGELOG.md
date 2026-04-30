@@ -3,6 +3,40 @@
 [2026-04-30]
 
 Change:
+- Expanded roll-dependent LOD Unique Triage coverage and roll fields for Death's Fathom, Eschuta's Temper, Nightwing's Veil, The Reaper's Toll, and Windforce.
+
+Type:
+- Data
+
+Why:
+- These high-signal uniques are common farming hesitation drops where verified variable rolls affect whether the item is worth checking.
+
+Impact:
+- Players can now enter the meaningful verified rolls for these uniques, with low rolls staying conservative and strong rolls standing out more clearly.
+
+Notes:
+- No global evaluation logic, Trade Value tier, decision mapping, pricing, Warlock data, or checker architecture changes were added. Prompt-suggested fields that are not LOD variable rolls were omitted.
+
+[2026-04-30]
+
+Change:
+- Tightened result wording and input clarity for circlets, jewels, amulets, and base search.
+
+Type:
+- UX
+
+Why:
+- UX QA found several results and controls were slower to scan than needed during farming, with some amulet copy sounding too confident.
+
+Impact:
+- Circlet explanations are shorter, Jewel -requirements is a fixed toggle, weak +2/10 FCR amulets are less listing-oriented, mismatched FCR amulets lead with the mismatch, and base search no longer shows stale selected-base details while results are open.
+
+Notes:
+- Includes a minimal evaluation adjustment for unsupported +2/10 FCR amulets. No Trade Value tier, decision mapping, data range, pricing, or architecture changes were added.
+
+[2026-04-30]
+
+Change:
 - Updated Unique Checker ruleset gating so Reign of the Warlock includes LOD uniques plus Warlock-only additions.
 
 Type:

@@ -56,6 +56,7 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 
 ## Circlets
 
+- Test rare circlet outputs such as `+2 skills only` and `2/20 with support`; expected: result wording is compact enough to understand in under 3 seconds.
 - Test a rare circlet socket selector; expected: `0`, `1`, and `2` sockets are selectable.
 - Test a rare circlet with only `+2 class skills`; expected: reads as a partial hit, not a clear jackpot.
 - Test a rare circlet with `+2 class skills + 20 FCR`; expected: strong caster result with trade-aware explanation.
@@ -67,6 +68,7 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 
 ## Bases
 
+- Type into Base Checker search on a narrow/mobile viewport; expected: search results do not visually conflict with stale selected-base details.
 - Confirm recently added bases such as `Colossus Voulge`, `Great Poleaxe`, `Balrog Skin`, `Long Sword`, and `Flail` appear in Base Checker search.
 - Select each new base and confirm socket options are possible for that base only.
 - Test ethereal mercenary bases such as eth polearms; expected: eth status improves relevant merc/runeword value.
@@ -77,7 +79,7 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 
 - Open Jewel Triage and confirm `Life Leech` is not available as a core or optional affix.
 - Open Jewel Triage and confirm `Strength Req` is not available as a core or optional affix.
-- Add `-15 Requirements`; expected: it behaves as the fixed verified `-15` jewel affix, not as an arbitrary lower numeric range.
+- Add `-15 Requirements`; expected: it is a fixed checkbox/toggle, not a numeric input, and behaves as the verified `-15` jewel affix.
 
 ## Rare / Crafted Jewelry
 
@@ -86,6 +88,8 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - Test a blood-style ring with high life leech but weak support; expected: high leech is represented but does not carry the ring by itself.
 - Test a blood-style ring with high life leech, attack rating, and melee support; expected: reads as a stronger melee/blood craft candidate.
 - Test a weak `+skills / 10 FCR` amulet; expected: partial hit, not an automatic premium.
+- Test a weak `+2 / 10 FCR` amulet with no support; expected: action copy does not say to list it.
+- Test mismatched class skill with `20 FCR`; expected: the opener immediately signals the mismatch.
 - Test a strong `+skills / 10 FCR` rare-style amulet; expected: strong caster result when support stats are present.
 - Test crafted-style `15 FCR` and `20 FCR` caster amulets; expected: higher FCR is represented and explained, but still needs support to become a true winner.
 
@@ -93,6 +97,11 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 
 - Test roll-sensitive uniques with low, mid, and top rolls, such as `War Travelers`, `Nagelring`, `Raven Frost`, `Griffon's Eye`, and `Death's Fathom`.
 - Expected: weak rolls sound common or limited, mid rolls are not overstated, and top rolls stand out clearly.
+- Test `Death's Fathom` low versus high rolls; expected: cold skill damage drives the result, fire/light res are secondary, and no all-res or -enemy cold res input appears.
+- Test `Eschuta's Temper` low versus high rolls; expected: sorceress skills and fire/lightning skill damage drive the result, with Energy as a minor roll.
+- Test `Nightwing's Veil` low versus high rolls; expected: cold skill damage is the main roll, with Dexterity and Cold Absorb as secondary fields.
+- Test `The Reaper's Toll` low versus high rolls, eth and non-eth; expected: Enhanced Damage, Life Leech, and eth state matter, and no IAS input appears.
+- Test `Windforce` low versus high mana leech; expected: Mana Leech is the only roll input because ED and Knockback are fixed.
 - Test newer curated uniques such as `Kira's Guardian`, `Vampire Gaze`, `Verdungo's Hearty Cord`, and `Thunderstroke`; expected: only meaningful roll fields appear and low/top rolls separate clearly.
 - Test `Ormus' Robes` with a wrong/low-demand skill versus a desirable skill and high elemental damage; expected: wrong skill stays low, while a good skill plus strong damage is worth checking.
 - Test `Crown of Ages` with `1 socket` and low defensive rolls; expected: not Trash, but still a weak/conditional CoA.

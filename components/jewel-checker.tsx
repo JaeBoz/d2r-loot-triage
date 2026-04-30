@@ -36,6 +36,8 @@ const emptyForm = jewelFormKeys.reduce<JewelFormState>((accumulator, key) => {
 
 const jewelCoreAffixes = getCoreAffixesForItemType("jewel") as Array<(ReturnType<typeof getAffixesForItemType>[number]) & { key: JewelAffixKey }>;
 const jewelOptionalAffixes = getOptionalAffixesForItemType("jewel") as Array<(ReturnType<typeof getAffixesForItemType>[number]) & { key: JewelAffixKey }>;
+const visibleJewelCoreAffixes = jewelCoreAffixes.filter((affix) => affix.key !== "requirementsReduction");
+const visibleJewelOptionalAffixes = jewelOptionalAffixes.filter((affix) => affix.key !== "requirementsReduction");
 const defaultOptionalKeys: JewelAffixKey[] = [];
 
 function toOptionalNumber(value: string) {
@@ -117,8 +119,8 @@ export function JewelChecker({ mode }: { mode: GameMode }) {
 
         <div className="mt-6">
           <AffixEntryPanel
-            coreAffixes={jewelCoreAffixes}
-            optionalAffixes={jewelOptionalAffixes}
+            coreAffixes={visibleJewelCoreAffixes}
+            optionalAffixes={visibleJewelOptionalAffixes}
             values={form}
             activeOptionalKeys={activeOptionalKeys}
             guidance={affixGuidanceByItemType.jewel}
@@ -127,6 +129,17 @@ export function JewelChecker({ mode }: { mode: GameMode }) {
             onRemoveAffix={handleRemoveAffix}
           />
         </div>
+
+        <label className="mt-4 flex items-center gap-3 rounded-xl border border-border bg-black/15 px-3 py-2.5 text-sm text-zinc-200">
+          <input
+            className="h-4 w-4 rounded border-border bg-black/20 text-accent focus:ring-accent"
+            type="checkbox"
+            checked={form.requirementsReduction !== ""}
+            onChange={(event) => handleValueChange("requirementsReduction", event.target.checked ? "15" : "")}
+            aria-label="Has -15 Requirements"
+          />
+          Has -15 Requirements
+        </label>
 
         <div className="mt-5 flex flex-wrap gap-2">
           <Pill>Pattern-based triage</Pill>

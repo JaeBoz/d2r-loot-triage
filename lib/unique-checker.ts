@@ -50,6 +50,29 @@ const uniqueRollWeights: Record<string, Partial<Record<UniqueRollDefinition["key
     elementalSkillDamage: 1,
     fasterCastRate: 0.2
   },
+  "deaths-fathom": {
+    coldSkillDamage: 1.2,
+    fireResist: 0.25,
+    lightningResist: 0.25
+  },
+  "eschutas-temper": {
+    allSkills: 1,
+    lightningSkillDamage: 0.8,
+    fireSkillDamage: 0.8,
+    energy: 0.25
+  },
+  "nightwings-veil": {
+    coldSkillDamage: 1.1,
+    dexterity: 0.35,
+    coldAbsorb: 0.2
+  },
+  "the-reapers-toll": {
+    enhancedDamage: 0.8,
+    lifeLeech: 0.6
+  },
+  windforce: {
+    manaLeech: 1.1
+  },
   dreadfang: {
     enhancedDamage: 1,
     manaLeech: 0.8
@@ -364,6 +387,11 @@ function applyItemSpecificScoreAdjustments(item: UniqueItemDefinition, score: nu
   if (item.id === "entropy-locket" && score > 15) {
     details.push("Entropy Locket is niche, so even a great roll caps as a high-value check.");
     return 15;
+  }
+
+  if (item.id === "eschutas-temper" && score <= 1) {
+    details.push("Low Eschuta roll, but it is still a known sorc orb check.");
+    return 2;
   }
 
   return score;
