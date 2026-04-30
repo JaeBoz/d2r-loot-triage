@@ -106,6 +106,12 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 
 ## Charms
 
+- Test `Small Charm` with `45 life`; expected: life is clamped or blocked at the valid small charm cap instead of remaining representable.
+- Test `Small Charm` with `20 life`; expected: valid max life remains representable.
+- Test `Small Charm` with `7 MF`; expected: valid max small charm magic find remains representable.
+- Test `Small Charm` with `3 FRW`; expected: valid small charm FRW remains representable.
+- Test `Grand Charm` with a skiller; expected: skiller support remains valid.
+- Test `Grand Charm` FRW if available; expected: it uses the source-backed `7 FRW` cap and does not allow impossible higher values.
 - Test a top poison small charm such as `451 poison damage`; expected: high-end standalone trade relevance is clear.
 - Test lower poison values; expected: does not inflate into premium trade value.
 - Test common valuable patterns such as `7 MF small charm`, `life + resist small charm`, and plain skill grand charm; expected: tradability is clearly communicated.

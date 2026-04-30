@@ -3,6 +3,23 @@
 [2026-04-30]
 
 Change:
+- Added size-aware Charm Checker input guardrails.
+
+Type:
+- Data
+
+Why:
+- Full-app QA found impossible charm size/stat combinations, such as 45 life on a Small Charm, could be entered.
+
+Impact:
+- Charm life, magic find, FRW, and FHR inputs now clamp to size-specific LOD caps where verified, while valid skiller and poison small charm checks remain available.
+
+Notes:
+- No Trade Value tier, decision mapping, pricing, poison scoring, or unrelated checker changes were added.
+
+[2026-04-30]
+
+Change:
 - Adjusted Crown of Ages and Entropy Locket unique evaluation outliers.
 
 Type:

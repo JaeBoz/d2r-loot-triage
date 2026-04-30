@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { Card, Pill } from "@/components/ui";
 import { ResultPanel } from "@/components/result-panel";
+import { clampCharmValue, getCharmRangeRule } from "@/data/charm-size-ranges";
 import { charmSkillOptions, evaluateCharm } from "@/lib/charm-checker";
 import { CharmCheckInput, CharmSize, GameMode } from "@/lib/types";
 
@@ -47,6 +48,33 @@ const emptyForm: CharmFormState = {
 
 function toOptionalNumber(value: string) {
   return value.trim() === "" ? undefined : Number(value);
+}
+
+function clampCharmFormValue(size: CharmSize, key: keyof Omit<CharmCheckInput, "mode" | "size" | "skill">, value: string) {
+  if (value.trim() === "") {
+    return "";
+  }
+
+  const numericValue = Number(value);
+  if (Number.isNaN(numericValue)) {
+    return "";
+  }
+
+  return String(clampCharmValue(size, key, numericValue));
+}
+
+function clampCharmFormForSize(form: CharmFormState, size: CharmSize): CharmFormState {
+  const nextForm = {
+    ...form,
+    size,
+    skill: size === "Grand Charm" ? form.skill : ""
+  };
+
+  for (const field of numericFields) {
+    nextForm[field.key] = clampCharmFormValue(size, field.key, nextForm[field.key]);
+  }
+
+  return nextForm;
 }
 
 export function CharmChecker({ mode }: { mode: GameMode }) {
@@ -108,11 +136,7 @@ export function CharmChecker({ mode }: { mode: GameMode }) {
               className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
               value={form.size}
               onChange={(event) =>
-                setForm((current) => ({
-                  ...current,
-                  size: event.target.value as CharmSize,
-                  skill: event.target.value === "Grand Charm" ? current.skill : ""
-                }))
+                setForm((current) => clampCharmFormForSize(current, event.target.value as CharmSize))
               }
             >
               <option value="Small Charm">Small Charm</option>
@@ -149,27 +173,37 @@ export function CharmChecker({ mode }: { mode: GameMode }) {
         </div>
 
         <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-          {numericFields.map((field) => (
-            <label key={field.key} className="grid gap-2 text-sm text-zinc-300">
-              {field.label}
-              <input
-                className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
-                type="number"
-                min={0}
-                inputMode="numeric"
-                placeholder="Blank"
-                value={form[field.key]}
-                onChange={(event) =>
-                  setForm((current) => ({
-                    ...current,
-                    [field.key]: event.target.value
-                  }))
-                }
-                aria-label={field.label}
-              />
-            </label>
-          ))}
+          {numericFields.map((field) => {
+            const rangeRule = getCharmRangeRule(form.size, field.key);
+
+            return (
+              <label key={field.key} className="grid gap-2 text-sm text-zinc-300">
+                <span className="flex items-center justify-between gap-2">
+                  {field.label}
+                  {rangeRule ? <span className="text-xs text-zinc-500">max {rangeRule.max}</span> : null}
+                </span>
+                <input
+                  className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
+                  type="number"
+                  min={0}
+                  max={rangeRule?.max}
+                  inputMode="numeric"
+                  placeholder="Blank"
+                  value={form[field.key]}
+                  onChange={(event) =>
+                    setForm((current) => ({
+                      ...current,
+                      [field.key]: clampCharmFormValue(current.size, field.key, event.target.value)
+                    }))
+                  }
+                  aria-label={field.label}
+                />
+              </label>
+            );
+          })}
         </div>
+
+        <p className="mt-3 text-xs text-zinc-500">Charm ranges depend on size; capped fields are clamped to valid LOD ranges.</p>
 
         <div className="mt-5 flex flex-wrap gap-2">
           <Pill>Pattern-based triage</Pill>

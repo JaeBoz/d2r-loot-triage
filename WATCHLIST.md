@@ -12,11 +12,9 @@ Use this file to preserve iteration quality between Codex batches.
 - [ ] [Evaluation] IAS + weak support may be inflated.
 
 ### Uniques
-- [ ] [Evaluation] Crown of Ages 1os low roll may be too harsh as Drop / Trash.
 
 ### Warlock
 - [ ] [Evaluation] Ars Dul'Mephistos mid rolls may feel slightly harsh.
-- [ ] [Evaluation] Entropy Locket max rolls may be overvalued as Premium despite niche/self-use positioning.
 - [ ] [UX] Measured Wrath mid rolls: Keep/High plus niche wording may feel mixed.
 
 ### Charms
@@ -55,3 +53,5 @@ Example:
 - [x] [UX] Magic skill glove wording ignores skill type. Tuning pass verified Bow and Martial Arts wording now reflects the selected skill type.
 - [x] [Data] Rare circlets only allow 1 socket -> fixed (0-2 sockets enabled for rares).
 - [x] [Data] Jewel affixes invalid fields -> fixed (removed life leech & strength req; -requirements normalized to -15).
+- [x] [Evaluation] Crown of Ages 1os low roll may be too harsh as Drop / Trash -> fixed (1os low roll now lands Low/Conditional instead of Trash).
+- [x] [Evaluation] Entropy Locket max rolls may be overvalued as Premium despite niche/self-use positioning -> fixed (max rolls now cap at High Trade Value).

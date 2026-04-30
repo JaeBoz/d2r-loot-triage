@@ -1,4 +1,5 @@
 import { charmModeAdjustments, charmPatterns } from "@/data/charm-rules";
+import { sanitizeCharmSizeInput } from "@/data/charm-size-ranges";
 import { sanitizeMechanicsInput } from "@/data/mechanics-affixes";
 import { CharmCheckInput, CharmCheckResult, CharmPatternInput, Liquidity, RingArchetype, Verdict } from "@/lib/types";
 
@@ -224,7 +225,7 @@ function topSummary(input: CharmCheckInput) {
 }
 
 function toCharmPatternInput(input: CharmCheckInput): CharmPatternInput {
-  const stats = sanitizeMechanicsInput("charm", input);
+  const stats = sanitizeMechanicsInput("charm", sanitizeCharmSizeInput(input));
 
   return {
     size: input.size,
@@ -245,23 +246,24 @@ function toCharmPatternInput(input: CharmCheckInput): CharmPatternInput {
   };
 }
 
-export function evaluateCharm(input: CharmCheckInput): CharmCheckResult {
+export function evaluateCharm(rawInput: CharmCheckInput): CharmCheckResult {
+  const checkedInput = sanitizeCharmSizeInput(rawInput);
   const hasInput =
-    !!input.skill?.trim() ||
+    !!checkedInput.skill?.trim() ||
     [
-      input.life,
-      input.mana,
-      input.magicFind,
-      input.allResist,
-      input.fireResist,
-      input.lightningResist,
-      input.coldResist,
-      input.poisonResist,
-      input.fasterRunWalk,
-      input.fasterHitRecovery,
-      input.poisonDamage,
-      input.maxDamage,
-      input.attackRating
+      checkedInput.life,
+      checkedInput.mana,
+      checkedInput.magicFind,
+      checkedInput.allResist,
+      checkedInput.fireResist,
+      checkedInput.lightningResist,
+      checkedInput.coldResist,
+      checkedInput.poisonResist,
+      checkedInput.fasterRunWalk,
+      checkedInput.fasterHitRecovery,
+      checkedInput.poisonDamage,
+      checkedInput.maxDamage,
+      checkedInput.attackRating
     ].some((value) => typeof value === "number" && value > 0);
 
   if (!hasInput) {
@@ -276,6 +278,7 @@ export function evaluateCharm(input: CharmCheckInput): CharmCheckResult {
     };
   }
 
+  const input = checkedInput;
   let score = charmModeAdjustments[input.mode].scoreBias;
   let floorVerdict: Verdict = "Ignore";
   const matchedPatterns: string[] = [];
