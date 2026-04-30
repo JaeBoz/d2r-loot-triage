@@ -25,6 +25,12 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - Test a weak non-Grimoire Warlock unique such as min `Wraithstep` or min `Opalvein`; expected: weak rolls stay low/conditional, not a fake winner.
 - Test isolated `-Enemy Magic Resistance` on `Sling`, `Gheed's Wager`, or `Hellwarden's Will`; expected: it does not reach high value by itself.
 
+## Quick ID Targets
+
+- Confirm Quick ID Targets shows compact categories for Rings, Amulets, Gloves, Boots, Charms, Jewels, Circlets, and Bases.
+- Confirm Rings and Boots are present with one-line high-signal patterns.
+- Confirm the panel is still readable in under 2 seconds and does not overlap the checker UI on desktop or narrow/mobile viewport.
+
 ## Rare / Crafted Boots
 
 - Open Rare / Crafted Boots triage and confirm `All Resist` is not available as a core or optional affix.

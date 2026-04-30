@@ -17,12 +17,46 @@ import { CATEGORY_TABS, MODE_OPTIONS, RULESET_OPTIONS } from "@/lib/constants";
 import { GameMode, ItemCategory, Ruleset } from "@/lib/types";
 
 const quickIdTargets = [
-  "Rare Amulets: +2 skills + FCR -> always check",
-  "Circlets: 2/20 -> jackpot potential",
-  "Jewels: IAS + ED -> check",
-  "Charms: Skiller + life -> high value",
-  "Bases: Eth elite polearms -> pick up",
-  "Gloves: 2/20 -> always check"
+  {
+    category: "Rings",
+    hint: "FCR drives caster value",
+    targets: ["10 FCR + res/stats", "10 FCR + dual res"]
+  },
+  {
+    category: "Amulets",
+    hint: "+skills need support",
+    targets: ["+2 skills + FCR", "+2 skills + life/res"]
+  },
+  {
+    category: "Gloves",
+    hint: "IAS is the anchor",
+    targets: ["+3 Jav / 20 IAS", "+2 Jav / 20 IAS"]
+  },
+  {
+    category: "Boots",
+    hint: "FRW is key",
+    targets: ["FRW + dual/triple res", "FRW + FHR + res"]
+  },
+  {
+    category: "Charms",
+    hint: "Small charms and skillers",
+    targets: ["7 MF (SC)", "451 poison (SC)", "Skiller (+life best)"]
+  },
+  {
+    category: "Jewels",
+    hint: "IAS or ED shells",
+    targets: ["15 IAS", "IAS + ED", "ED + -15 req"]
+  },
+  {
+    category: "Circlets",
+    hint: "Skills plus support",
+    targets: ["2/20 + support", "2os + skills/support"]
+  },
+  {
+    category: "Bases",
+    hint: "Sockets and eth matter",
+    targets: ["4os/5os elite bases", "eth merc bases"]
+  }
 ];
 
 export function AppShell() {
@@ -109,12 +143,15 @@ export function AppShell() {
       </Card>
 
       <Card className="py-3">
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap gap-2">
           <Pill active>Quick ID Targets</Pill>
-          {quickIdTargets.map((target) => (
-            <span key={target} className="rounded-xl border border-border bg-black/20 px-3 py-1.5 text-xs font-semibold text-zinc-200">
-              {target}
-            </span>
+          {quickIdTargets.map((group) => (
+            <div key={group.category} className="rounded-xl border border-border bg-black/20 px-3 py-1.5 text-xs text-zinc-200">
+              <div className="font-bold text-amber-100">
+                {group.category}: <span className="font-semibold text-zinc-400">{group.hint}</span>
+              </div>
+              <div className="mt-0.5 font-semibold text-zinc-200">{group.targets.join(" | ")}</div>
+            </div>
           ))}
         </div>
       </Card>

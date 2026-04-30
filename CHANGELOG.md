@@ -3,6 +3,23 @@
 [2026-04-30]
 
 Change:
+- Reworked Quick ID Targets into compact category sections and added Rings and Boots patterns.
+
+Type:
+- Guide
+
+Why:
+- QA found the flat Quick ID list was fast but did not clearly show category coverage and was missing Rings and Boots.
+
+Impact:
+- The panel now gives faster category-based recognition for common jackpot patterns without adding scoring, long guide text, or checker logic.
+
+Notes:
+- No evaluation logic, Trade Value tiers, item data, pricing, or checker architecture changes were added.
+
+[2026-04-30]
+
+Change:
 - Expanded roll-dependent LOD Unique Triage coverage and roll fields for Death's Fathom, Eschuta's Temper, Nightwing's Veil, The Reaper's Toll, and Windforce.
 
 Type:

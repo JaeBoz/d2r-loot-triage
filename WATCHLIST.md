@@ -39,6 +39,10 @@ Use this file to preserve iteration quality between Codex batches.
 - [ ] [UX] Weak +2 / 10 FCR amulet uses overly confident listing-oriented action copy.
 - [ ] [UX] Mismatched +20 FCR amulet opener sounds too positive before explaining mismatch.
 
+### Guide
+- [ ] [Guide] Quick ID Targets lacks explicit Rings and Boots entries
+- [ ] [UX] Quick ID Targets should use simple category sections instead of a flat list
+
 ---
 
 ## In Progress
