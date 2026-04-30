@@ -5,6 +5,7 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 ## Rulesets
 
 - Load the app fresh; expected: `LOD` is the default active ruleset.
+- Confirm the header no longer duplicates selected `LOD`/`SCNL` state as passive pills; selected toggle buttons are the state indicator.
 - Open Unique Triage in `LOD`; expected: Standard LOD uniques such as `Stone of Jordan` appear and Warlock-only uniques do not.
 - Switch to `Reign of the Warlock`; expected: Warlock-only uniques appear in the Unique Checker, alongside LOD staples such as `Stone of Jordan` and `Arachnid Mesh`.
 - Switch back to `LOD`; expected: Warlock-only uniques are hidden again and LOD uniques are available.
@@ -28,8 +29,9 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 ## Quick ID Targets
 
 - Confirm Quick ID Targets shows compact categories for Rings, Amulets, Gloves, Boots, Charms, Jewels, Circlets, and Bases.
+- Confirm Quick ID Targets can collapse and expand with the `Show` / `Hide` control.
 - Confirm Rings and Boots are present with one-line high-signal patterns.
-- Confirm the panel is still readable in under 2 seconds and does not overlap the checker UI on desktop or narrow/mobile viewport.
+- Confirm the panel uses a compact grid, stays readable in under 2 seconds, and does not overlap the checker UI on desktop or narrow/mobile viewport.
 
 ## Rare / Crafted Boots
 

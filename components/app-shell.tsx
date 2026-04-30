@@ -63,21 +63,19 @@ export function AppShell() {
   const [ruleset, setRuleset] = useState<Ruleset>("lod");
   const [mode, setMode] = useState<GameMode>("SCNL");
   const [category, setCategory] = useState<ItemCategory>("Bases");
-  const activeRulesetLabel = RULESET_OPTIONS.find((option) => option.value === ruleset)?.label ?? "LOD";
+  const [quickIdOpen, setQuickIdOpen] = useState(false);
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-7xl flex-col gap-3 px-3 py-4 sm:px-5 lg:px-8">
+    <main className="mx-auto flex min-h-screen max-w-7xl flex-col gap-2.5 px-3 py-3 sm:px-5 lg:px-8">
       <header>
         <Card className="overflow-hidden">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
               <Pill active>D2R Loot Triage</Pill>
-              <Pill>{activeRulesetLabel}</Pill>
-              <Pill>{mode}</Pill>
             </div>
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-1.5">
               <a
-                className="rounded-xl border border-border bg-black/20 px-3 py-2 text-sm font-semibold text-zinc-200 transition hover:border-amber-500/60 hover:text-white"
+                className="rounded-xl border border-border bg-black/20 px-3 py-1.5 text-sm font-semibold text-zinc-200 transition hover:border-amber-500/60 hover:text-white"
                 href="https://forms.gle/TPfgMKG5xeRPPZqw6"
                 target="_blank"
                 rel="noreferrer noopener"
@@ -87,7 +85,7 @@ export function AppShell() {
             </div>
           </div>
 
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div className="mt-2 flex flex-wrap gap-1.5">
             {RULESET_OPTIONS.map((option) => (
               <button
                 key={option.value}
@@ -104,7 +102,7 @@ export function AppShell() {
             ))}
           </div>
 
-          <div className="mt-2 flex flex-wrap gap-2">
+          <div className="mt-1.5 flex flex-wrap gap-1.5">
             {MODE_OPTIONS.map((option) => (
               <button
                 key={option.value}
@@ -142,18 +140,36 @@ export function AppShell() {
         </div>
       </Card>
 
-      <Card className="py-3">
-        <div className="flex flex-wrap gap-2">
-          <Pill active>Quick ID Targets</Pill>
-          {quickIdTargets.map((group) => (
-            <div key={group.category} className="rounded-xl border border-border bg-black/20 px-3 py-1.5 text-xs text-zinc-200">
-              <div className="font-bold text-amber-100">
-                {group.category}: <span className="font-semibold text-zinc-400">{group.hint}</span>
-              </div>
-              <div className="mt-0.5 font-semibold text-zinc-200">{group.targets.join(" | ")}</div>
-            </div>
-          ))}
+      <Card className="py-2.5">
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <Pill active>Quick ID Targets</Pill>
+            <span className="text-xs font-semibold text-zinc-400">Jackpot patterns at a glance</span>
+          </div>
+          <button
+            aria-expanded={quickIdOpen}
+            className="rounded-xl border border-border bg-black/20 px-3 py-1.5 text-xs font-bold text-zinc-200 transition hover:border-amber-500/60 hover:text-white"
+            onClick={() => setQuickIdOpen((open) => !open)}
+            type="button"
+          >
+            {quickIdOpen ? "Hide" : "Show"}
+          </button>
         </div>
+
+        {quickIdOpen ? (
+          <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+            {quickIdTargets.map((group) => (
+              <div
+                key={group.category}
+                className="flex min-h-[72px] flex-col justify-center rounded-xl border border-border bg-black/20 px-3 py-2 text-center text-xs text-zinc-200"
+              >
+                <div className="font-bold text-amber-100">{group.category}</div>
+                <div className="mt-0.5 font-semibold text-zinc-400">{group.hint}</div>
+                <div className="mt-1 font-semibold leading-4 text-zinc-200">{group.targets.join(" | ")}</div>
+              </div>
+            ))}
+          </div>
+        ) : null}
       </Card>
 
       {category === "Bases" ? <BaseChecker mode={mode} /> : null}

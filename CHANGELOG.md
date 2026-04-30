@@ -3,6 +3,23 @@
 [2026-04-30]
 
 Change:
+- Cleaned up the main header and made Quick ID Targets collapsible with a compact responsive grid.
+
+Type:
+- UX
+
+Why:
+- The 1.0 interface needed less duplicate state noise, tighter top spacing, and a more stable Quick ID layout.
+
+Impact:
+- The checker flow is more prominent, selected ruleset/mode state is shown only by toggles, and Quick ID can be opened only when needed.
+
+Notes:
+- No evaluation logic, data, Trade Value tiers, decision mapping, pricing, or checker architecture changes were added.
+
+[2026-04-30]
+
+Change:
 - Reworked Quick ID Targets into compact category sections and added Rings and Boots patterns.
 
 Type:
