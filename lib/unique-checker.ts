@@ -6,10 +6,16 @@ import {
   UniqueCheckResult,
   UniqueItemDefinition,
   UniqueRollDefinition,
-  Verdict
+  Verdict,
+  Ruleset
 } from "@/lib/types";
 
 const uniqueItemMap = new Map(uniqueItems.map((item) => [item.id, item]));
+
+function isUniqueAvailableInRuleset(item: UniqueItemDefinition, ruleset: Ruleset) {
+  const itemRuleset = item.ruleset ?? "lod";
+  return ruleset === "warlock" ? itemRuleset === "lod" || itemRuleset === "warlock" : itemRuleset === "lod";
+}
 
 const tierScore: Record<BasePriorityTier, number> = {
   low: 2,
@@ -410,7 +416,7 @@ export function evaluateUnique(input: UniqueCheckInput): UniqueCheckResult {
   }
 
   const activeRuleset = input.ruleset ?? "lod";
-  if ((item.ruleset ?? "lod") !== activeRuleset) {
+  if (!isUniqueAvailableInRuleset(item, activeRuleset)) {
     return {
       verdict: "Ignore",
       priority: "Trash",
@@ -516,4 +522,4 @@ export function evaluateUnique(input: UniqueCheckInput): UniqueCheckResult {
   };
 }
 
-export { uniqueItems };
+export { isUniqueAvailableInRuleset, uniqueItems };

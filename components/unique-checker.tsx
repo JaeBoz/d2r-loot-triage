@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Card, Pill } from "@/components/ui";
 import { ResultPanel } from "@/components/result-panel";
-import { evaluateUnique, uniqueItems } from "@/lib/unique-checker";
+import { evaluateUnique, isUniqueAvailableInRuleset, uniqueItems } from "@/lib/unique-checker";
 import { GameMode, Ruleset, UniqueRollField, UniqueSelectField } from "@/lib/types";
 
 const fieldLabels: Record<UniqueRollField, string> = {
@@ -128,7 +128,7 @@ function toOptionalNumber(value: string) {
 
 export function UniqueChecker({ mode, ruleset }: { mode: GameMode; ruleset: Ruleset }) {
   const availableUniqueItems = useMemo(
-    () => uniqueItems.filter((item) => (item.ruleset ?? "lod") === ruleset),
+    () => uniqueItems.filter((item) => isUniqueAvailableInRuleset(item, ruleset)),
     [ruleset]
   );
   const defaultItemId = availableUniqueItems[0]?.id ?? "";

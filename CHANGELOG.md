@@ -3,6 +3,23 @@
 [2026-04-30]
 
 Change:
+- Updated Unique Checker ruleset gating so Reign of the Warlock includes LOD uniques plus Warlock-only additions.
+
+Type:
+- UX / Data
+
+Why:
+- Warlock gameplay still includes many LOD uniques, so the ruleset toggle should add Warlock data instead of replacing the unique pool.
+
+Impact:
+- Warlock mode can now check LOD staples like Stone of Jordan and Arachnid Mesh while still exposing Warlock-only uniques.
+
+Notes:
+- Warlock-only uniques remain hidden in LOD. No evaluation, roll range, Trade Value tier, decision mapping, or item coverage changes were added.
+
+[2026-04-30]
+
+Change:
 - Added size-aware Charm Checker input guardrails.
 
 Type:
