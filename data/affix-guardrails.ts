@@ -13,6 +13,12 @@ const sharedStatCaps: Partial<Record<MechanicsAffixKey, number>> = {
   fasterCastRate: 20,
   fasterRunWalk: 30,
   fasterHitRecovery: 20,
+  magicFind: 40,
+  lifeLeech: 8,
+  manaLeech: 8,
+  attackRating: 150,
+  minDamage: 6,
+  maxDamage: 12,
   increasedAttackSpeed: 15,
   enhancedDamage: 40,
   requirementsReduction: 15

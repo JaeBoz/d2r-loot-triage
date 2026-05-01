@@ -137,6 +137,10 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 ## Final Pass
 
 - Enter extreme shared numeric values such as `1000+ strength`, `1000+ life`, and `1000+ resist` in Rings, Amulets, Boots, Jewels, and Circlets; expected: values are clamped to conservative guardrails and do not create fake jackpot results.
+- Enter `999 Magic Find`; expected: it clamps and does not create Premium by itself.
+- Enter `999 Life Leech` or `999 Mana Leech`; expected: leech clamps and does not create Premium by itself.
+- Enter `999 Attack Rating`, `999 Min Damage`, or `999 Max Damage`; expected: AR/damage clamps and does not create Premium without a real item pattern.
+- After hostile values, click Reset; expected: clamped values clear cleanly.
 - Test a circlet with no +skills and extreme support values; expected: it cannot reach High or Premium Trade Value from raw stat stacking alone.
 - Test realistic strong values after the clamp pass, such as strong caster jewelry, strong boots, and real circlet patterns; expected: valid strong items still behave correctly.
 - Enter a Unique Checker roll above the item-defined maximum; expected: the value is clamped to the roll definition max and does not exceed the known range.

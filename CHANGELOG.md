@@ -3,6 +3,23 @@
 [2026-05-01]
 
 Change:
+- Extended numeric affix guardrails to Magic Find, leech, attack rating, and min/max damage fields.
+
+Type:
+- Data / Evaluation
+
+Why:
+- Hostile secondary-stat inputs could still exceed realistic ranges and create fake Premium outcomes.
+
+Impact:
+- Rings, amulets, boots, and jewels now clamp the remaining high-impact secondary fields so MF, leech, AR, and damage cannot inflate weak items by themselves.
+
+Notes:
+- Reuses the existing guardrail system with conservative caps. No Trade Value tier names, decision mapping, feature changes, or affix simulation were added.
+
+[2026-05-01]
+
+Change:
 - Added lightweight numeric guardrails for shared affix inputs, circlet support stats, Jewel caps, and Unique Checker roll ranges.
 
 Type:
