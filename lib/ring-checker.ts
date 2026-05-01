@@ -275,6 +275,23 @@ function rollPackageAdjustment(
   return 0;
 }
 
+function isSecondaryOnlyStack(stats: NormalizedRingStats) {
+  const secondaryOnlyKeys = new Set<StatKey>([
+    "magicFind",
+    "lifeLeech",
+    "manaLeech",
+    "attackRating",
+    "minDamage",
+    "maxDamage",
+    "energy",
+    "replenishLife",
+    "extraGold"
+  ]);
+  const presentKeys = Object.keys(stats).filter((key) => key !== "levelRequirement") as StatKey[];
+
+  return presentKeys.length > 0 && presentKeys.every((key) => secondaryOnlyKeys.has(key));
+}
+
 function liquidityFrom(score: number, mode: RingCheckInput["mode"], tags: RingArchetype[]): Liquidity {
   let liquidityScore = score + ringModeAdjustments[mode].liquidityBias;
 
@@ -311,34 +328,34 @@ function explanationFor(
   const lowOnly = rated.length > 0 && rated.every((entry) => entry.score <= 1);
   const craftedLeechNote =
     topRated.some((entry) => entry.key === "lifeLeech" && entry.value >= 9)
-      ? "High leech can matter on blood rings, but the rest still needs to be good. "
+      ? "high blood leech, but support still matters; "
       : "";
 
   if (verdict === "Ignore") {
-    return `Charsi-level ring. ${summaryText} is not enough for ${input.mode}.`;
+    return `Charsi-level ring: ${summaryText} is not enough.`;
   }
 
   if (verdict === "Low Priority") {
-    return `Some useful stats, but not enough together. ${craftedLeechNote}${summaryText} is mostly self-use or niche.`;
+    return `Mostly self-use: ${craftedLeechNote}${summaryText} does not come together.`;
   }
 
   if (verdict === "Check") {
-    return `Decent partial hit. ${craftedLeechNote}${summaryText} gives it some ${leadTag} appeal, but it is not a clean winner. Check because of ${comboText}.`;
+    return `Decent partial hit: ${craftedLeechNote}${summaryText}, but it needs a cleaner combo.`;
   }
 
   if (verdict === "Keep") {
-    return `Solid ${leadTag} ring. ${craftedLeechNote}${summaryText}. ${comboText} is the reason to keep it.`;
+    return `Solid ${leadTag} ring: ${craftedLeechNote}${summaryText} is worth comparing.`;
   }
 
   if (verdict === "List") {
-    return `Good ${leadTag} ring. ${craftedLeechNote}${summaryText}. ${comboText} is the value here.`;
+    return `Good ${leadTag} ring: ${comboText} is the value.`;
   }
 
   if (highCount >= 2 && !lowOnly) {
-    return `Premium ${leadTag} ring. ${craftedLeechNote}${summaryText}. ${comboText} is the hit.`;
+    return `Premium ${leadTag} ring: ${comboText} is the hit.`;
   }
 
-  return "Looks premium at a glance. Check the full stat mix before calling it a true trophy.";
+  return "Looks strong at a glance, but check the full mix.";
 }
 
 function recommendedActionFor(verdict: Verdict, mode: RingCheckInput["mode"]) {
@@ -351,18 +368,18 @@ function recommendedActionFor(verdict: Verdict, mode: RingCheckInput["mode"]) {
   }
 
   if (verdict === "Check") {
-    return "Check the full mod mix before tossing it.";
+    return "Check the full mix before tossing it.";
   }
 
   if (verdict === "Keep") {
-    return `Keep it. Good enough to stash and compare against other ${mode} rings.`;
+    return `Keep it. Compare against your other ${mode} rings.`;
   }
 
   if (verdict === "List") {
-    return "List it or compare it against similar rare rings.";
+    return "Worth checking against similar rings.";
   }
 
-  return "Premium rare ring. Compare before listing.";
+  return "Premium ring. Compare before listing.";
 }
 
 export function evaluateRing(input: RingCheckInput): RingCheckResult {
@@ -404,6 +421,11 @@ export function evaluateRing(input: RingCheckInput): RingCheckResult {
 
   if (input.mode === "SCL" && ((stats.fasterCastRate ?? 0) >= 10 || (stats.allResist ?? 0) >= 7)) {
     score += 1;
+  }
+
+  if (isSecondaryOnlyStack(stats) && score > 4) {
+    score = 4;
+    highlights.push("secondary stats need a real anchor");
   }
 
   const verdict = verdictFromScore(score);

@@ -348,20 +348,20 @@ export function evaluateCharm(rawInput: CharmCheckInput): CharmCheckResult {
   let explanation = "";
   if (matchedPatterns.length > 0) {
     if (isTopPoisonSmallCharm(input, matchedPatternIds)) {
-      explanation = `${summary} is a top poison small charm roll. This is the poison SC jackpot, not filler.`;
+      explanation = `${summary} is a top poison SC roll, not filler.`;
     } else if (matchedPatternIds.includes("sc-poison")) {
       explanation = `${summary} is a moderate poison small charm. Niche, not a jackpot.`;
     } else if (input.size === "Grand Charm" && isPlainSkiller(matchedPatternIds)) {
-      explanation = `${summary} is a plain skiller. Often tradable, but the skill tree decides how good it really is.`;
+      explanation = `${summary} is a plain skiller; the tree decides how good it is.`;
     } else if (input.size === "Grand Charm" && input.skill?.trim()) {
-      explanation = `${summary} is a skiller hit. The secondary mod is what pushes it higher.`;
+      explanation = `${summary} is a skiller hit; the second mod pushes it higher.`;
     } else if (input.size === "Small Charm") {
-      explanation = `Good small charm. ${patternText} is the pattern that matters.`;
+      explanation = `Good small charm: ${patternText} is the pattern.`;
     } else {
-      explanation = `Decent ${input.size.toLowerCase()}. ${patternText} makes it worth a second look.`;
+      explanation = `Decent ${input.size.toLowerCase()}: ${patternText} is worth a look.`;
     }
   } else {
-    explanation = `${summary} is present, but it does not make a real charm pattern for ${input.mode}.`;
+    explanation = `${summary} is present, but it is not a real ${input.mode} charm pattern.`;
   }
 
   let recommendedAction = "";
@@ -370,15 +370,15 @@ export function evaluateCharm(rawInput: CharmCheckInput): CharmCheckResult {
   } else if (verdict === "Low Priority") {
     recommendedAction = "Only keep it as a stopgap charm.";
   } else if (verdict === "Check") {
-    recommendedAction = "Check it once before tossing. The pattern is at least usable.";
+    recommendedAction = "Check once before tossing. The pattern is usable.";
   } else if (isTopPoisonSmallCharm(input, matchedPatternIds)) {
     recommendedAction = "Premium poison small charm. List it or mule it.";
   } else if (isPlainSkiller(matchedPatternIds)) {
-    recommendedAction = "Check market activity or list it if the skill tree is useful. Plain skillers are commonly tradable.";
+    recommendedAction = "Worth checking if the skill tree is useful.";
   } else if (verdict === "Keep") {
     recommendedAction = "Keep it. This matches a real charm pattern.";
   } else if (verdict === "List") {
-    recommendedAction = "List it or compare it against similar charms.";
+    recommendedAction = "Worth checking against similar charms.";
   } else {
     recommendedAction = "Premium charm. List it or mule it.";
   }

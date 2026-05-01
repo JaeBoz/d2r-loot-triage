@@ -99,11 +99,11 @@ function baseDemandPhrase(item: BaseItem, input: BaseCheckInput) {
 
   if (item.socketSensitive && item.desiredSockets.includes(input.sockets)) {
     if (item.tags.includes("spirit")) {
-      return "Sockets are the value here. This is a commonly traded utility base, but easy to find.";
+      return "Sockets are the value here. Useful base, but easy to find.";
     }
 
     if (item.tags.includes("caster") || item.tags.includes("merc")) {
-      return "Sockets are the value here. This is a recognizable trade candidate, but buyer need matters.";
+      return "Sockets are the value here. Worth checking if someone needs this base.";
     }
 
     return "Sockets are the value here.";
@@ -122,7 +122,7 @@ function baseDemandPhrase(item: BaseItem, input: BaseCheckInput) {
   }
 
   if (item.scnlPriority === "low" || item.tags.includes("staffmods")) {
-    return "Niche base. Mostly a specific-buyer or self-use check.";
+    return "Niche base. Mostly self-use or a specific buyer.";
   }
 
   return "Only keep it if the visible state matches a real runeword plan.";
@@ -315,7 +315,7 @@ function buildRecommendedAction(item: BaseItem, input: BaseCheckInput, verdict: 
   }
 
   if (item.socketSensitive && item.desiredSockets.includes(input.sockets)) {
-    return "Right sockets. Keep it, then compare demand before listing.";
+    return "Right sockets. Keep it and compare later.";
   }
 
   if (verdict === "Ignore") {

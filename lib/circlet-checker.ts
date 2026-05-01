@@ -353,31 +353,31 @@ export function evaluateCirclet(rawInput: CircletCheckInput): CircletCheckResult
   const liquidity = liquidityFor(input, verdict, tags);
   const verdictSummary =
     verdict === "Premium"
-      ? "Premium circlet hit. This should stand out immediately."
+      ? "Premium circlet hit."
       : verdict === "List"
-        ? "Good circlet. This is a real listing candidate."
+        ? "Good circlet, worth checking."
         : verdict === "Keep"
           ? "Solid circlet, but not a jackpot."
-          : verdict === "Check"
-            ? "Partial hit. At least one useful line, but not a clean winner."
+        : verdict === "Check"
+            ? "Partial hit, not a clean winner."
             : verdict === "Low Priority"
               ? "Some utility, but the combo is weak."
               : "No real circlet pattern here.";
 
   let recommendedAction = "Charsi unless you specifically collect niche circlets.";
   if (verdict === "Low Priority") {
-    recommendedAction = "Only keep for a specific niche use case or self-use placeholder.";
+    recommendedAction = "Only keep for niche self-use.";
   } else if (verdict === "Check") {
-    recommendedAction = "Check it once before tossing. It is not clearly tradable yet.";
+    recommendedAction = "Check once before tossing.";
   } else if (verdict === "Keep") {
-    recommendedAction = "Keep it if the archetype matters. Demand may be selective.";
+    recommendedAction = "Keep if the archetype matters.";
   } else if (verdict === "List") {
-    recommendedAction = "Check market activity or list it. This circlet has a real pattern.";
+    recommendedAction = "Worth checking. This has a real pattern.";
   } else if (verdict === "Premium") {
     recommendedAction = "Premium circlet. Compare it against strong examples before listing.";
   }
 
-  const explanation = `${input.quality} ${input.family}: ${compactCircletIdentity(input)}. ${compactCircletSupport(input)} ${verdictSummary}`;
+  const explanation = `${input.quality} ${input.family}: ${compactCircletIdentity(input)}. ${verdictSummary}`;
 
   return {
     verdict,

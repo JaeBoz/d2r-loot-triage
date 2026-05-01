@@ -63,6 +63,7 @@ export function AppShell() {
   const [ruleset, setRuleset] = useState<Ruleset>("lod");
   const [mode, setMode] = useState<GameMode>("SCNL");
   const [category, setCategory] = useState<ItemCategory>("Bases");
+  const [howItWorksOpen, setHowItWorksOpen] = useState(false);
   const [quickIdOpen, setQuickIdOpen] = useState(false);
 
   return (
@@ -138,6 +139,32 @@ export function AppShell() {
             </button>
           ))}
         </div>
+      </Card>
+
+      <Card className="py-2.5 opacity-95">
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <Pill>How this works</Pill>
+            <span className="text-xs font-semibold text-zinc-500">Fast loot triage basics</span>
+          </div>
+          <button
+            aria-expanded={howItWorksOpen}
+            className="rounded-xl border border-border bg-black/20 px-3 py-1.5 text-xs font-bold text-zinc-200 transition hover:border-amber-500/60 hover:text-white"
+            onClick={() => setHowItWorksOpen((open) => !open)}
+            type="button"
+          >
+            {howItWorksOpen ? "Hide" : "Show"}
+          </button>
+        </div>
+
+        {howItWorksOpen ? (
+          <div className="mt-2 grid gap-1.5 text-sm leading-5 text-zinc-300 sm:grid-cols-2 lg:grid-cols-4">
+            <div>Pick the item type</div>
+            <div>Enter what you see on the item</div>
+            <div>If a stat isn't listed, it usually doesn't add value</div>
+            <div>Decision tells you what to do; Trade Value shows strength</div>
+          </div>
+        ) : null}
       </Card>
 
       <Card className="py-2.5">

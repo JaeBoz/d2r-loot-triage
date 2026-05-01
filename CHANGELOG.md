@@ -3,6 +3,40 @@
 [2026-05-01]
 
 Change:
+- Normalized final result wording across checkers for the 1.0 tone pass.
+
+Type:
+- UX
+
+Why:
+- Result copy needed to sound more like fast Diablo 2 item triage and less like system-generated analysis.
+
+Impact:
+- Decision lines, recommendations, and Why It Matters text are shorter, more player-native, and easier to scan during farming.
+
+Notes:
+- Copy-only pass. No evaluation logic, Trade Value tiers, decision mapping behavior, data, pricing, or new features changed.
+
+[2026-05-01]
+
+Change:
+- Added final 1.0 trust and scan-speed polish for secondary stat stacks, onboarding, Unique output copy, and amulet phrasing.
+
+Type:
+- Evaluation / UX
+
+Why:
+- Final QA found secondary-only stats could still read too strong, onboarding guidance was missing, and some result text was too slow to scan.
+
+Impact:
+- Secondary-only ring/amulet stacks are capped below clean trade wins, new users get a compact How this works panel, and Unique/Amulet explanations are shorter and less repetitive.
+
+Notes:
+- No Trade Value tier names, decision mapping, pricing, new systems, or dataset expansion were added.
+
+[2026-05-01]
+
+Change:
 - Extended numeric affix guardrails to Magic Find, leech, attack rating, and min/max damage fields.
 
 Type:

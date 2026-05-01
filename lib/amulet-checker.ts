@@ -441,6 +441,23 @@ function hasWeakRareStyleCasterShell(stats: NormalizedAmuletStats) {
   return hasTwoCasterSkills && hasOnlyRareStyleFcr && !hasMeaningfulSupport;
 }
 
+function isSecondaryOnlyStack(stats: NormalizedAmuletStats) {
+  const secondaryOnlyKeys = new Set<StatKey>([
+    "magicFind",
+    "attackRating",
+    "minDamage",
+    "maxDamage",
+    "energy",
+    "replenishLife",
+    "extraGold"
+  ]);
+  const presentKeys = Object.keys(stats).filter(
+    (key) => key !== "levelRequirement" && key !== "classSkillType" && key !== "skillTreeType"
+  ) as StatKey[];
+
+  return presentKeys.length > 0 && presentKeys.every((key) => secondaryOnlyKeys.has(key));
+}
+
 function summaryTextFor(
   topRated: Array<{ key: StatKey; value: number }>,
   input: AmuletCheckInput,
@@ -478,57 +495,55 @@ function explanationFor(
   const leadTag = tags[0] ?? "niche";
   const hasCasterSkillMismatch = highlights.includes("class skill does not fit the caster-style stats");
   const summaryText = summaryTextFor(topRated, input, hasCasterSkillMismatch);
-  const comboText = comboTextFor(highlights);
-  const craftedFcrNote =
-    topRated.some((entry) => entry.key === "fasterCastRate" && entry.value >= 15)
-      ? "High FCR usually means caster craft territory. "
-      : "";
-  const mismatchNote = hasCasterSkillMismatch
-    ? "Good FCR shell, but the class skill does not line up cleanly. "
-    : "";
+  const isCraftFcr = topRated.some((entry) => entry.key === "fasterCastRate" && entry.value >= 15);
+  const craftLabel = isCraftFcr ? " craft-style" : "";
 
   if (verdict === "Ignore") {
-    return `Charsi-level amulet. ${summaryText} is not enough for ${input.mode}.`;
+    return `Charsi-level amulet: ${summaryText} is not enough.`;
   }
 
   if (verdict === "Low Priority") {
-    return `Some useful stats, but not enough together. ${craftedFcrNote}${mismatchNote}This ${leadTag} amulet is mostly self-use or niche.`;
+    return hasCasterSkillMismatch
+      ? "High FCR shell, but the skill roll makes it niche."
+      : `Mostly self-use: ${summaryText} does not come together.`;
   }
 
   if (verdict === "Check") {
-    return `Decent partial hit. ${craftedFcrNote}${mismatchNote}${summaryText} gives it ${leadTag} appeal. Check because of ${comboText}.`;
+    return hasCasterSkillMismatch
+      ? "High FCR shell, but the class skill does not line up."
+      : `Decent partial hit: ${summaryText}, but it needs better support.`;
   }
 
   if (verdict === "Keep") {
     if (hasCasterSkillMismatch) {
-      return `High FCR, but mismatch. ${craftedFcrNote}${mismatchNote}You're mainly paying for ${summaryText}.`;
+      return `High FCR, but mismatch: ${summaryText} keeps it niche.`;
     }
 
-    return `Solid ${leadTag} amulet. ${craftedFcrNote}You're mainly paying for ${summaryText}. ${comboText} is the reason.`;
+    return `Solid${craftLabel} ${leadTag} amulet: ${summaryText} is worth comparing.`;
   }
 
   if (verdict === "List") {
     if (hasCasterSkillMismatch) {
-      return `High FCR, but mismatch. ${craftedFcrNote}${mismatchNote}${summaryText} is the value here.`;
+      return `High FCR, but mismatch: ${summaryText} is the value.`;
     }
 
-    return `Good ${leadTag} amulet. ${craftedFcrNote}${summaryText}. ${comboText} is the value here.`;
+    return `Good${craftLabel} ${leadTag} amulet: ${summaryText} is the value.`;
   }
 
   if (hasCasterSkillMismatch) {
-    return `High FCR, but mismatch. ${craftedFcrNote}${mismatchNote}${summaryText} is the value here.`;
+    return `High FCR, but mismatch: ${summaryText} is the value.`;
   }
 
-  return `Premium ${leadTag} amulet. ${craftedFcrNote}${summaryText}. ${comboText} is the hit.`;
+  return `Premium${craftLabel} ${leadTag} amulet: ${summaryText} is the hit.`;
 }
 
 function recommendedActionFor(verdict: Verdict, mode: AmuletCheckInput["mode"]) {
   if (verdict === "Ignore") return "Charsi unless you need a temporary self-use amulet.";
   if (verdict === "Low Priority") return "Only keep it as a progression filler.";
   if (verdict === "Check") return "Give it a second pass before tossing it.";
-  if (verdict === "Keep") return `Keep it and compare it against your other ${mode} amulets.`;
-  if (verdict === "List") return "List it or compare it against similar rare amulets.";
-  return "Premium rare amulet. Compare before listing.";
+  if (verdict === "Keep") return `Keep it. Compare against your other ${mode} amulets.`;
+  if (verdict === "List") return "Worth checking against similar amulets.";
+  return "Premium amulet. Compare before listing.";
 }
 
 export function evaluateAmulet(input: AmuletCheckInput): AmuletCheckResult {
@@ -578,6 +593,11 @@ export function evaluateAmulet(input: AmuletCheckInput): AmuletCheckResult {
       (stats.fasterCastRate ?? 0) >= 10)
   ) {
     score += 1;
+  }
+
+  if (isSecondaryOnlyStack(stats) && score > 5) {
+    score = 5;
+    highlights.push("secondary stats need a real anchor");
   }
 
   const verdict = verdictFromScore(score);

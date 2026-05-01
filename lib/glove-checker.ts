@@ -81,35 +81,35 @@ function liquidityFor(input: GloveCheckInput, verdict: Verdict, matchedPatterns:
 
 function explanationFor(input: GloveCheckInput, verdict: Verdict, matchedPatterns: string[]) {
   if (matchedPatterns.includes("+3 Jav / 20 IAS")) {
-    return "Jav + IAS is the chase roll. +3/20 magic gloves are a real hit.";
+    return "+3 Jav / 20 IAS is the chase glove hit.";
   }
 
   if (matchedPatterns.includes("+2 Jav / 20 IAS")) {
-    return "Strong Jav gloves. +2/20 is worth checking, even if it sits below the +3 magic chase.";
+    return "+2 Jav / 20 IAS is strong, but below the +3 magic chase.";
   }
 
   if (input.quality === "Magic" && input.skillType === "Bow and Crossbow" && input.increasedAttackSpeed === 20) {
-    return "Bow + IAS can be useful, but it needs support. Niche without strong stats.";
+    return "Bow + IAS can be useful, but it needs support.";
   }
 
   if (input.quality === "Magic" && input.skillType === "Martial Arts" && input.increasedAttackSpeed === 20) {
-    return "Martial Arts + IAS is niche. Needs strong support before it is a real hit.";
+    return "Martial Arts + IAS is niche without strong support.";
   }
 
   if (matchedPatterns.includes("IAS + Crushing Blow")) {
-    return "Blood-style hit. Crushing Blow helps, but IAS and support are what make it real.";
+    return "Blood-style hit: CB helps, but IAS and support make it real.";
   }
 
   if (matchedPatterns.includes("skills + IAS")) {
-    return "Skills plus IAS is the reason to care. Check the support before calling it a winner.";
+    return "Skills + IAS is the reason to care.";
   }
 
   if (input.increasedAttackSpeed === 20 && matchedPatterns.includes("IAS + strong support")) {
-    return "IAS is the anchor here. Good support makes these worth checking.";
+    return "IAS is the anchor; good support makes these worth checking.";
   }
 
   if (input.increasedAttackSpeed === 20) {
-    return "IAS only. Useful line, but not enough by itself.";
+    return "IAS only is useful, but not enough by itself.";
   }
 
   if (input.skillType !== "None" && input.skillLevel > 0) {
@@ -130,7 +130,7 @@ function explanationFor(input: GloveCheckInput, verdict: Verdict, matchedPattern
 function recommendedActionFor(verdict: Verdict, input: GloveCheckInput, matchedPatterns: string[]) {
   if (verdict === "Ignore") return "Charsi unless you need them for temporary self-use.";
   if (verdict === "Low Priority") return "Only keep for self-use or a very specific build.";
-  if (matchedPatterns.includes("+3 Jav / 20 IAS")) return "Keep and compare. This is the big magic glove hit.";
+  if (matchedPatterns.includes("+3 Jav / 20 IAS")) return "Keep and compare. Big magic glove hit.";
   if (matchedPatterns.includes("+2 Jav / 20 IAS")) return "Check before tossing. Jav + IAS has real demand.";
   if (matchedPatterns.includes("IAS + Crushing Blow")) return "Check the full support package before tossing.";
   if (input.increasedAttackSpeed === 20) return "Check if the support lines are useful together.";

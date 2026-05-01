@@ -414,20 +414,47 @@ function liquidityFor(item: UniqueItemDefinition, mode: UniqueCheckInput["mode"]
   return item.liquidity;
 }
 
-function demandContext(item: UniqueItemDefinition, verdict: Verdict) {
-  if (item.liquidity === "High" && verdict !== "Premium") {
-    return "Staple demand is steady even when the roll is not perfect.";
+function firstSentence(text: string) {
+  return text.split(".")[0]?.trim() ?? text;
+}
+
+function lowerFirst(text: string) {
+  return text ? `${text[0].toLowerCase()}${text.slice(1)}` : text;
+}
+
+function conciseUniqueExplanation(item: UniqueItemDefinition, rollAssessment: RollAssessment, verdict: Verdict) {
+  const itemNote = lowerFirst(firstSentence(item.notes));
+  const demandNote =
+    item.liquidity === "High" && verdict !== "Premium"
+      ? itemNote.toLowerCase().includes("staple")
+        ? "easy to move"
+        : "staple demand helps"
+      : item.liquidity === "Low"
+        ? "niche or mostly self-use"
+        : "";
+  const demandClause = demandNote ? `, ${demandNote}` : "";
+
+  if (!item.hasVariableRolls) {
+    return `${item.name} is a staple unique; the drop itself is the value${demandClause}.`;
   }
 
-  if (item.liquidity === "Medium") {
-    return "More niche. Rolls or the right buyer matter here.";
+  if (rollAssessment.high >= 2) {
+    return `${item.name}: Good roll package; ${itemNote}${demandClause}.`;
   }
 
-  if (item.liquidity === "Low") {
-    return "Mostly self-use or a niche-market check.";
+  if (rollAssessment.high >= 1 && rollAssessment.low === 0) {
+    return `${item.name}: Good roll; ${itemNote}${demandClause}.`;
   }
 
-  return "";
+  if (rollAssessment.low >= rollAssessment.provided && rollAssessment.provided > 0) {
+    return `${item.name}: Low roll; ${itemNote}${demandClause}.`;
+  }
+
+  if (rollAssessment.mid > 0 || rollAssessment.low > 0) {
+    return `${item.name}: Decent, not a standout; ${itemNote}${demandClause}.`;
+  }
+
+  return `${item.name}: Rolls matter here; ${itemNote}${demandClause}.`;
 }
 
 export function evaluateUnique(input: UniqueCheckInput): UniqueCheckResult {
@@ -488,48 +515,30 @@ export function evaluateUnique(input: UniqueCheckInput): UniqueCheckResult {
             ? "High Trade Value"
             : "Premium Trade Value";
 
-  let explanation = "";
-  const demandNote = demandContext(item, verdict);
-  if (!item.hasVariableRolls) {
-    explanation = `${item.name} is a staple unique. ${item.notes} ${demandNote}`.trim();
-  } else if (item.rollDefinitions) {
-    const rollSummary =
-      rollAssessment.high >= 2
-        ? "Good roll package."
-        : rollAssessment.high >= 1 && rollAssessment.low === 0
-          ? "At least one key roll is strong."
-          : rollAssessment.low >= rollAssessment.provided && rollAssessment.provided > 0
-            ? "Low roll copy."
-            : rollAssessment.mid > 0 || rollAssessment.low > 0
-              ? "Decent, but not a standout."
-              : "Rolls matter here.";
-    explanation = `${item.name}: ${rollSummary} You're mainly paying for the key rolls here. ${details.join(" ")} ${demandNote}`.trim();
-  } else {
-    explanation = `${item.name}: worth a look. The visible rolls decide whether it is more than self-use. ${details.join(" ")} ${demandNote}`.trim();
-  }
+  const explanation = conciseUniqueExplanation(item, rollAssessment, verdict);
 
   let recommendedAction = "";
   if (verdict === "Ignore") {
-    recommendedAction = "Usually Charsi unless you need this exact unique for self-use.";
+    recommendedAction = "Usually Charsi unless you need this exact item.";
   } else if (verdict === "Low Priority") {
-    recommendedAction = "Keep only as a placeholder or specific self-use piece.";
+    recommendedAction = "Keep only as a placeholder or self-use piece.";
   } else if (verdict === "Check") {
     recommendedAction =
       item.liquidity === "High"
-        ? "Check the roll, but do not toss it quickly. This is a commonly sought-after unique."
+        ? "Check the roll before tossing. Staple demand helps."
         : "Check the roll before tossing it. Low copies may just be self-use.";
   } else if (verdict === "Keep") {
     recommendedAction =
       item.liquidity === "High"
-        ? "Keep it and check market activity. Staple demand is steady even when the roll is not perfect."
+        ? "Keep it. Staple demand helps even off-perfect rolls."
         : "Keep if you have room. Useful, but more niche.";
   } else if (verdict === "List") {
     recommendedAction =
       !item.hasVariableRolls && item.liquidity === "High"
-        ? "Keep it. The drop itself is the value and it is commonly traded."
+        ? "Keep it. The drop itself is the value."
         : item.liquidity === "High"
-          ? "Check market activity or list it. It is commonly traded, but rolls still matter."
-          : "List only if the roll is competitive. This one is more niche.";
+          ? "Worth checking. Rolls still matter."
+          : "List only if the roll is competitive.";
   } else {
     recommendedAction = "Premium hit. Compare it against strong examples before listing.";
   }
@@ -538,7 +547,7 @@ export function evaluateUnique(input: UniqueCheckInput): UniqueCheckResult {
     recommendedAction =
       verdict === "Premium"
         ? "Premium eth hit. Compare it against strong examples before listing."
-        : "Keep or list it. Eth is a real reason this copy matters.";
+        : "Keep it. Eth is why this copy matters.";
   }
 
   return {

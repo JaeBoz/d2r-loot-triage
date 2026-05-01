@@ -24,14 +24,14 @@ export function mapDecisionOutput(input: DecisionInput): DecisionOutput {
   const text = `${input.recommendedAction} ${input.explanation}`.toLowerCase();
   const isSocketDependent = includesAny(text, ["socket-dependent", "socket it", "socket path", "right socket", "correct sockets"]);
   const isSelfUse = includesAny(text, ["self-use", "personal placeholder", "temporary", "specific buyer", "specific use case"]);
-  const isMarketCheck = includesAny(text, ["check market", "list it", "commonly sought", "commonly traded", "easy to trade"]);
+  const isMarketCheck = includesAny(text, ["check market", "list it", "worth checking", "commonly sought", "commonly traded", "easy to trade"]);
   const isNoRollStapleUnique = includesAny(text, ["is a staple unique"]);
 
   if (input.priority === "Trash" || input.verdict === "Ignore") {
     return {
       label: "Drop",
-      actionLine: "Drop it unless you need it for immediate self-use.",
-      caveat: isSelfUse ? "Useful for you does not always mean tradable." : undefined
+      actionLine: "Drop it unless you need it right now.",
+      caveat: isSelfUse ? "Self-use does not always trade." : undefined
     };
   }
 
@@ -39,15 +39,15 @@ export function mapDecisionOutput(input: DecisionInput): DecisionOutput {
     if (isNoRollStapleUnique) {
       return {
         label: "Keep",
-        actionLine: "Keep this. It has clear value or staple demand.",
-        caveat: "No-roll staples are keeps. The drop itself is the value."
+        actionLine: "Keep this. Staple value.",
+        caveat: "No-roll staple. The drop itself is the value."
       };
     }
 
     return {
       label: "Check Before Tossing",
-      actionLine: "Do not drop this blindly. Compare or review it before tossing.",
-      caveat: "Premium hits deserve a real look before listing or muling."
+      actionLine: "Check it before you toss it.",
+      caveat: "Real hit. Compare before you list or mule it."
     };
   }
 
@@ -55,15 +55,15 @@ export function mapDecisionOutput(input: DecisionInput): DecisionOutput {
     if (isNoRollStapleUnique) {
       return {
         label: "Keep",
-        actionLine: "Keep this. It has clear value or staple demand.",
-        caveat: isSocketDependent ? "Make sure the sockets are the reason it matters." : undefined
+        actionLine: "Keep this. Staple value.",
+        caveat: isSocketDependent ? "Sockets are the reason it matters." : undefined
       };
     }
 
     return {
       label: isMarketCheck ? "Check Before Tossing" : "Keep",
-      actionLine: isMarketCheck ? "Do not drop this blindly. Compare or review it before tossing." : "Keep it for trade or comparison.",
-      caveat: isSocketDependent ? "Make sure the sockets are the reason it matters." : undefined
+      actionLine: isMarketCheck ? "Check it before you toss it." : "Keep it and compare later.",
+      caveat: isSocketDependent ? "Sockets are the reason it matters." : undefined
     };
   }
 
@@ -72,19 +72,19 @@ export function mapDecisionOutput(input: DecisionInput): DecisionOutput {
       label: isMarketCheck && !isSelfUse ? "Check Before Tossing" : "Conditional",
       actionLine:
         isMarketCheck && !isSelfUse
-          ? "Do not drop this blindly. Compare or review it before tossing."
+          ? "Check it before you toss it."
           : isSocketDependent
-            ? "Keep only if you plan to socket, reroll, or re-check the final state."
-            : "Keep only if the use case matters to you or the roll deserves a closer look.",
-      caveat: isSelfUse ? "Likely niche or self-use, not an easy trade." : undefined
+            ? "Keep only if you will socket or reroll it."
+            : "Keep only if you will use it or compare it.",
+      caveat: isSelfUse ? "Niche or self-use." : undefined
     };
   }
 
   return {
     label: isSocketDependent || isSelfUse ? "Conditional" : "Drop",
     actionLine: isSocketDependent
-      ? "Only keep if you plan to complete the socket or crafting path."
-      : "Usually drop it unless you have a specific use case.",
-    caveat: isSelfUse ? "Mostly self-use or niche demand." : undefined
+      ? "Keep only if you will finish the socket path."
+      : "Usually drop it unless you need it.",
+    caveat: isSelfUse ? "Mostly self-use." : undefined
   };
 }

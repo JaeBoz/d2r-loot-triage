@@ -2,6 +2,13 @@
 
 Use this checklist before pushing or deploying. The goal is to catch obvious gameplay-facing regressions, not verify exact scores.
 
+## Final Output Tone
+
+- Smoke-test representative outputs across Uniques, Rings, Amulets, Gloves, Boots, Charms, Jewels, and Circlets; expected: Decision, Recommended Action, and Why It Matters are readable in under 3 seconds.
+- Confirm Why It Matters is one short value-focused sentence where possible; expected: no repeated ideas, long stat essays, or system-style phrasing.
+- Confirm player-native wording stays clear for newer players; expected: common D2 terms like `Charsi`, `worth checking`, `decent`, and `Premium` are used sparingly and only where they fit.
+- Confirm copy-only changes did not alter Decision labels, Trade Value tiers, scores, or available inputs.
+
 ## Rulesets
 
 - Load the app fresh; expected: `LOD` is the default active ruleset.
@@ -28,6 +35,7 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 
 ## Quick ID Targets
 
+- Confirm the `How this works` panel is visible near the top, defaults collapsed, expands cleanly, and explains the basic workflow in under 2 seconds.
 - Confirm Quick ID Targets shows compact categories for Rings, Amulets, Gloves, Boots, Charms, Jewels, Circlets, and Bases.
 - Confirm Quick ID Targets can collapse and expand with the `Show` / `Hide` control.
 - Confirm Rings and Boots are present with one-line high-signal patterns.
@@ -140,6 +148,8 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - Enter `999 Magic Find`; expected: it clamps and does not create Premium by itself.
 - Enter `999 Life Leech` or `999 Mana Leech`; expected: leech clamps and does not create Premium by itself.
 - Enter `999 Attack Rating`, `999 Min Damage`, or `999 Max Damage`; expected: AR/damage clamps and does not create Premium without a real item pattern.
+- Test a ring with only MF/leech/AR secondary stats; expected: it cannot reach High Trade Value.
+- Test weak or mid roll-sensitive uniques; expected: Unique explanations stay short enough to read in under 3 seconds.
 - After hostile values, click Reset; expected: clamped values clear cleanly.
 - Test a circlet with no +skills and extreme support values; expected: it cannot reach High or Premium Trade Value from raw stat stacking alone.
 - Test realistic strong values after the clamp pass, such as strong caster jewelry, strong boots, and real circlet patterns; expected: valid strong items still behave correctly.

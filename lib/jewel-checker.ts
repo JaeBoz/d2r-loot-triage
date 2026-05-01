@@ -186,29 +186,29 @@ function explanationFor(
   const leadTag = tags[0] ?? "niche";
 
   if (verdict === "Ignore") {
-    return `Charsi-level jewel. ${summary} does not make a real ${input.mode} jewel pattern.`;
+    return `Charsi-level jewel: ${summary} is not a real pattern.`;
   }
 
   if (verdict === "Low Priority") {
-    return `Some useful stats, but not enough together. ${summary} is mostly self-use or niche.`;
+    return `Mostly self-use: ${summary} does not come together.`;
   }
 
   if (verdict === "Check") {
-    return `Decent jewel. ${summary} gives it some ${leadTag} appeal. Check because of ${comboText}.`;
+    return `Decent jewel: ${summary} is worth a second look.`;
   }
 
   if (verdict === "Keep") {
-    return `Solid ${leadTag} jewel. ${summary}. ${comboText} is the reason to keep it.`;
+    return `Solid ${leadTag} jewel: ${comboText} is the reason to keep it.`;
   }
 
   if (verdict === "List") {
     if (highlights.includes("enhanced damage with -requirements")) {
-      return `Good niche jewel. ${summary} matters for socketing awkward bases.`;
+      return `Good niche jewel: ${summary} helps awkward sockets.`;
     }
-    return `Good ${leadTag} jewel. ${summary}. ${comboText} is the value here.`;
+    return `Good ${leadTag} jewel: ${comboText} is the value.`;
   }
 
-  return `Premium ${leadTag} jewel. ${summary}. ${comboText} is the hit.`;
+  return `Premium ${leadTag} jewel: ${comboText} is the hit.`;
 }
 
 function recommendedActionFor(verdict: Verdict, highlights: string[]) {
@@ -218,12 +218,12 @@ function recommendedActionFor(verdict: Verdict, highlights: string[]) {
   if (verdict === "Keep") return "Keep it. Useful enough to stash for a future socket.";
   if (verdict === "List") {
     if (highlights.includes("IAS with resist support")) {
-      return "Check market activity or list it. IAS + resist is commonly traded.";
+      return "Worth checking. IAS + res is easy to trade.";
     }
     if (highlights.includes("enhanced damage with -requirements")) {
-      return "Check market activity or list it. ED + -requirements is niche but real.";
+      return "Worth checking. ED + -req is niche but real.";
     }
-    return "List it or compare it against similar jewels.";
+    return "Worth checking against similar jewels.";
   }
   return "Premium jewel. Compare before listing.";
 }

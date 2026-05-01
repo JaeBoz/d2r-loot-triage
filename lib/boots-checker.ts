@@ -319,62 +319,62 @@ function explanationFor(
   const support = supportScore(stats);
 
   if (!hasFrw && verdict !== "Ignore") {
-    return `Useful stats, but no movement. ${summary} is conditional without FRW.`;
+    return `Useful stats, but no FRW: ${summary} is conditional.`;
   }
 
   if (verdict === "Ignore") {
     return hasFrw
-      ? `FRW is here, but the support is too light. ${summary} is not a real ${input.mode} boot pattern.`
-      : `No FRW. Usually Charsi. ${summary} does not make a real boot pattern.`;
+      ? `FRW is here, but ${summary} is too light.`
+      : `No FRW: ${summary} is usually Charsi.`;
   }
 
   if (verdict === "Low Priority") {
     return hasFrw
-      ? `FRW is the anchor here, but the support is weak. ${summary} is mostly self-use.`
-      : `Useful stats, but no movement. ${summary} is mostly self-use or niche.`;
+      ? `FRW is the anchor, but ${summary} is mostly filler.`
+      : `Useful stats, but no FRW: ${summary} is mostly self-use.`;
   }
 
   if (verdict === "Check") {
     if (hasFrw && resists >= 2) {
-      return `Decent boot shell. FRW + dual res is worth a look, but it needs stronger support to be a real hit.`;
+      return "Decent boot shell: FRW + dual res is worth a look.";
     }
-    return `Decent partial hit. ${summary} is usable, but not a clean winner. Check because of ${comboText}.`;
+    return `Decent partial hit: ${summary} is usable, but not clean.`;
   }
 
   if (verdict === "Keep") {
     if (hasFrw && support >= 2) {
-      return `Solid boots. FRW plus support is what makes them worth keeping.`;
+      return "Solid boots: FRW plus support is what matters.";
     }
-    return `Solid boots. ${summary}. ${comboText} is the reason to keep them.`;
+    return `Solid boots: ${comboText} is the reason to keep them.`;
   }
 
   if (verdict === "List") {
-    return `Good boots. FRW is the anchor, and ${comboText} is the value here.`;
+    return `Good boots: FRW plus ${comboText} is the value.`;
   }
 
   if (highCount >= 2 && !lowOnly) {
-    return `Premium boots. ${summary}. ${comboText} is the hit.`;
+    return `Premium boots: ${comboText} is the hit.`;
   }
 
-  return "Looks premium at a glance. Check the full boot mix before calling it a trophy.";
+  return "Looks strong, but check the full boot mix.";
 }
 
 function recommendedActionFor(verdict: Verdict, highlights: string[]) {
-  if (highlights.includes("useful stats, but no movement")) return "Only keep if you personally need the stats. No FRW makes them hard to move.";
-  if (highlights.includes("FRW is the anchor, but support is light")) return "Do not over-stash these. FRW alone is usually filler.";
-  if (highlights.includes("FRW with MF, but no support")) return "MF helps, but this needs res or other support before it is a strong pair.";
-  if (highlights.includes("FRW with dual res, but little extra support")) return "Check before tossing, but do not treat plain dual-res boots like a trophy.";
+  if (highlights.includes("useful stats, but no movement")) return "Only keep if you need the stats. No FRW is rough.";
+  if (highlights.includes("FRW is the anchor, but support is light")) return "Do not over-stash these. FRW alone is filler.";
+  if (highlights.includes("FRW with MF, but no support")) return "MF helps, but it still needs res or support.";
+  if (highlights.includes("FRW with dual res, but little extra support")) return "Check before tossing, but not a trophy.";
   if (verdict === "Ignore") return "Charsi unless you need temporary self-use boots.";
   if (verdict === "Low Priority") return "Only keep them as a filler or specific self-use pair.";
   if (verdict === "Check") return "Check the full boot mix before tossing them.";
   if (verdict === "Keep") return "Keep them. Useful enough to stash or compare.";
   if (verdict === "List") {
     if (highlights.includes("FRW with magic find")) {
-      return "Compare before tossing or listing. FRW + MF is easy to understand.";
+      return "Worth checking. FRW + MF is easy to read.";
     }
-    return "List them or compare them against similar rare boots.";
+    return "Worth checking against similar boots.";
   }
-  return "Premium rare/crafted boots. Compare before listing.";
+  return "Premium boots. Compare before listing.";
 }
 
 export function evaluateBoots(input: BootsCheckInput): BootsCheckResult {
