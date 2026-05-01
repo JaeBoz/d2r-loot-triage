@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { clampAffixInputValue, getAffixValueCap } from "@/data/affix-guardrails";
 import { Pill } from "@/components/ui";
 import { VarianceAffixDefinition, VarianceAffixKey } from "@/lib/types";
 
@@ -68,10 +69,11 @@ export function AffixEntryPanel<TAffixKey extends VarianceAffixKey>({
               className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
               type="number"
               min={0}
+              max={getAffixValueCap(affix.key)}
               inputMode="numeric"
               placeholder="Blank"
               value={values[affix.key] ?? ""}
-              onChange={(event) => onValueChange(affix.key, event.target.value)}
+              onChange={(event) => onValueChange(affix.key, clampAffixInputValue(affix.key, event.target.value))}
               aria-label={affix.label}
             />
           </label>
@@ -114,10 +116,11 @@ export function AffixEntryPanel<TAffixKey extends VarianceAffixKey>({
                   className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
                   type="number"
                   min={0}
+                  max={getAffixValueCap(affix.key)}
                   inputMode="numeric"
                   placeholder="Blank"
                   value={values[affix.key] ?? ""}
-                  onChange={(event) => onValueChange(affix.key, event.target.value)}
+                  onChange={(event) => onValueChange(affix.key, clampAffixInputValue(affix.key, event.target.value))}
                   aria-label={affix.label}
                 />
               </label>

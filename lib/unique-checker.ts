@@ -170,12 +170,13 @@ function baseTier(item: UniqueItemDefinition, mode: UniqueCheckInput["mode"]) {
 }
 
 function getRollBand(input: UniqueCheckInput, definition: UniqueRollDefinition): RollBand {
-  const value = input[definition.key];
+  const rawValue = input[definition.key];
 
-  if (typeof value !== "number") {
+  if (typeof rawValue !== "number") {
     return null;
   }
 
+  const value = Math.min(definition.max, Math.max(definition.min, rawValue));
   const thresholds = definition.thresholds;
   if (!thresholds) {
     return null;

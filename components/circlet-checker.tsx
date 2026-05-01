@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Card, Pill } from "@/components/ui";
+import { clampAffixInputValue, getAffixValueCap } from "@/data/affix-guardrails";
 import { circletFamilies } from "@/data/circlet-rules";
 import { ResultPanel } from "@/components/result-panel";
 import { evaluateCirclet } from "@/lib/circlet-checker";
@@ -70,6 +71,10 @@ function toOptionalNumber(value: string) {
 function getMagicSocketOptions(family: CircletFamily) {
   const familyData = circletFamilies.find((entry) => entry.family === family);
   return Array.from({ length: familyData?.maxMagicSockets ?? 0 }, (_, index) => String(index + 1));
+}
+
+function clampCircletValue(key: keyof CircletFormState, value: string) {
+  return key === "sockets" ? value : clampAffixInputValue(key, value);
 }
 
 export function CircletChecker({ mode }: { mode: GameMode }) {
@@ -295,10 +300,11 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
               className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
               type="number"
               min={0}
+              max={getAffixValueCap("fasterCastRate")}
               inputMode="numeric"
               placeholder="Blank"
               value={form.fasterCastRate}
-              onChange={(event) => setForm((current) => ({ ...current, fasterCastRate: event.target.value }))}
+              onChange={(event) => setForm((current) => ({ ...current, fasterCastRate: clampCircletValue("fasterCastRate", event.target.value) }))}
             />
           </label>
 
@@ -308,10 +314,11 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
               className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
               type="number"
               min={0}
+              max={getAffixValueCap("fasterRunWalk")}
               inputMode="numeric"
               placeholder="Blank"
               value={form.fasterRunWalk}
-              onChange={(event) => setForm((current) => ({ ...current, fasterRunWalk: event.target.value }))}
+              onChange={(event) => setForm((current) => ({ ...current, fasterRunWalk: clampCircletValue("fasterRunWalk", event.target.value) }))}
             />
           </label>
 
@@ -339,10 +346,11 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
               className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
               type="number"
               min={0}
+              max={getAffixValueCap("strength")}
               inputMode="numeric"
               placeholder="Blank"
               value={form.strength}
-              onChange={(event) => setForm((current) => ({ ...current, strength: event.target.value }))}
+              onChange={(event) => setForm((current) => ({ ...current, strength: clampCircletValue("strength", event.target.value) }))}
             />
           </label>
 
@@ -352,10 +360,11 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
               className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
               type="number"
               min={0}
+              max={getAffixValueCap("dexterity")}
               inputMode="numeric"
               placeholder="Blank"
               value={form.dexterity}
-              onChange={(event) => setForm((current) => ({ ...current, dexterity: event.target.value }))}
+              onChange={(event) => setForm((current) => ({ ...current, dexterity: clampCircletValue("dexterity", event.target.value) }))}
             />
           </label>
 
@@ -365,10 +374,11 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
               className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
               type="number"
               min={0}
+              max={getAffixValueCap("life")}
               inputMode="numeric"
               placeholder="Blank"
               value={form.life}
-              onChange={(event) => setForm((current) => ({ ...current, life: event.target.value }))}
+              onChange={(event) => setForm((current) => ({ ...current, life: clampCircletValue("life", event.target.value) }))}
             />
           </label>
 
@@ -378,10 +388,11 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
               className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
               type="number"
               min={0}
+              max={getAffixValueCap("allResist")}
               inputMode="numeric"
               placeholder="Blank"
               value={form.allResist}
-              onChange={(event) => setForm((current) => ({ ...current, allResist: event.target.value }))}
+              onChange={(event) => setForm((current) => ({ ...current, allResist: clampCircletValue("allResist", event.target.value) }))}
             />
           </label>
 
@@ -391,10 +402,11 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
               className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
               type="number"
               min={0}
+              max={getAffixValueCap("fireResist")}
               inputMode="numeric"
               placeholder="Blank"
               value={form.fireResist}
-              onChange={(event) => setForm((current) => ({ ...current, fireResist: event.target.value }))}
+              onChange={(event) => setForm((current) => ({ ...current, fireResist: clampCircletValue("fireResist", event.target.value) }))}
             />
           </label>
 
@@ -404,10 +416,11 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
               className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
               type="number"
               min={0}
+              max={getAffixValueCap("lightningResist")}
               inputMode="numeric"
               placeholder="Blank"
               value={form.lightningResist}
-              onChange={(event) => setForm((current) => ({ ...current, lightningResist: event.target.value }))}
+              onChange={(event) => setForm((current) => ({ ...current, lightningResist: clampCircletValue("lightningResist", event.target.value) }))}
             />
           </label>
         </div>

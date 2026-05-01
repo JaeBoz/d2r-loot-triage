@@ -6,6 +6,7 @@ import {
   RingArchetype,
   Verdict
 } from "@/lib/types";
+import { clampNumericAffixValue } from "@/data/affix-guardrails";
 import { circletClassSkillDemand, circletFamilies, circletQualityNotes, circletTreeSkillDemand } from "@/data/circlet-rules";
 import { sanitizeMechanicsInput } from "@/data/mechanics-affixes";
 
@@ -27,15 +28,15 @@ function normalizeCircletInput(input: CircletCheckInput): CircletCheckInput {
     classSkillValue: stats.classSkillValue,
     skillTreeType: stats.skillTreeType,
     skillTreeValue: stats.skillTreeValue,
-    fasterCastRate: stats.fasterCastRate,
-    fasterRunWalk: stats.fasterRunWalk,
+    fasterCastRate: typeof stats.fasterCastRate === "number" ? clampNumericAffixValue("fasterCastRate", stats.fasterCastRate) : undefined,
+    fasterRunWalk: typeof stats.fasterRunWalk === "number" ? clampNumericAffixValue("fasterRunWalk", stats.fasterRunWalk) : undefined,
     sockets: stats.sockets,
-    strength: stats.strength,
-    dexterity: stats.dexterity,
-    life: stats.life,
-    allResist: stats.allResist,
-    fireResist: stats.fireResist,
-    lightningResist: stats.lightningResist
+    strength: typeof stats.strength === "number" ? clampNumericAffixValue("strength", stats.strength) : undefined,
+    dexterity: typeof stats.dexterity === "number" ? clampNumericAffixValue("dexterity", stats.dexterity) : undefined,
+    life: typeof stats.life === "number" ? clampNumericAffixValue("life", stats.life) : undefined,
+    allResist: typeof stats.allResist === "number" ? clampNumericAffixValue("allResist", stats.allResist) : undefined,
+    fireResist: typeof stats.fireResist === "number" ? clampNumericAffixValue("fireResist", stats.fireResist) : undefined,
+    lightningResist: typeof stats.lightningResist === "number" ? clampNumericAffixValue("lightningResist", stats.lightningResist) : undefined
   };
 }
 
@@ -331,6 +332,15 @@ export function evaluateCirclet(rawInput: CircletCheckInput): CircletCheckResult
   }
 
   score += input.quality === "Magic" ? scoreMagicCirclet(input, details, tags) : scoreRareCirclet(input, details, tags);
+
+  const hasSkillLine =
+    (input.skillMode === "class" && Boolean(input.classSkillType) && Boolean(input.classSkillValue)) ||
+    (input.skillMode === "tree" && Boolean(input.skillTreeType) && Boolean(input.skillTreeValue));
+
+  if (!hasSkillLine && score > 15) {
+    score = 15;
+    details.push("No +skills. Big support stats alone are capped below true jackpot circlet value.");
+  }
 
   if (score <= 4 && !tags.size) {
     tags.add("niche");

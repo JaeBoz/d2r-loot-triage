@@ -1,5 +1,22 @@
 # D2R Loot Triage App - Internal Changelog
 
+[2026-05-01]
+
+Change:
+- Added lightweight numeric guardrails for shared affix inputs, circlet support stats, Jewel caps, and Unique Checker roll ranges.
+
+Type:
+- Data / Evaluation
+
+Why:
+- Hostile oversized numeric inputs could represent impossible item states and inflate farming decisions.
+
+Impact:
+- Rings, amulets, boots, jewels, circlets, and uniques now clamp key numeric inputs so unrealistic values stay grounded while normal strong items still evaluate correctly.
+
+Notes:
+- Conservative caps are used where exact ranges are not modeled. No Trade Value tier names, decision mapping, pricing, or broad affix simulation were added.
+
 [2026-04-30]
 
 Change:

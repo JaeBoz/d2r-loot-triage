@@ -1,4 +1,5 @@
 import { jewelModeAdjustments, jewelStatWeights, jewelSynergies } from "@/data/jewel-rules";
+import { clampNumericAffixValue } from "@/data/affix-guardrails";
 import {
   EvaluationPriority,
   JewelCheckInput,
@@ -34,7 +35,7 @@ function normalizeStats(input: JewelCheckInput): NormalizedJewelStats {
   for (const [key, value] of Object.entries(input)) {
     if (key === "mode") continue;
     if (typeof value === "number" && !Number.isNaN(value) && value > 0) {
-      stats[key as keyof NormalizedJewelStats] = value;
+      stats[key as keyof NormalizedJewelStats] = clampNumericAffixValue(key as keyof NormalizedJewelStats, value);
     }
   }
 

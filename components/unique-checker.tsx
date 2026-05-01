@@ -63,6 +63,10 @@ function getFieldLabel(field: UniqueRollField, selectedItem?: (typeof uniqueItem
   return selectedItem?.rollDefinitions?.find((definition) => definition.key === field)?.label ?? fieldLabels[field];
 }
 
+function getRollDefinition(field: UniqueRollField, selectedItem?: (typeof uniqueItems)[number]) {
+  return selectedItem?.rollDefinitions?.find((definition) => definition.key === field);
+}
+
 type UniqueFormState = Record<UniqueRollField, string>;
 type UniqueSelectFormState = Record<UniqueSelectField, string>;
 
@@ -126,6 +130,24 @@ const emptySelectForm: UniqueSelectFormState = {
 
 function toOptionalNumber(value: string) {
   return value.trim() === "" ? undefined : Number(value);
+}
+
+function clampUniqueRollInput(value: string, field: UniqueRollField, selectedItem?: (typeof uniqueItems)[number]) {
+  if (value.trim() === "") {
+    return "";
+  }
+
+  const numericValue = Number(value);
+  if (Number.isNaN(numericValue)) {
+    return "";
+  }
+
+  const definition = getRollDefinition(field, selectedItem);
+  if (!definition) {
+    return String(Math.max(0, numericValue));
+  }
+
+  return String(Math.min(definition.max, Math.max(definition.min, numericValue)));
 }
 
 export function UniqueChecker({ mode, ruleset }: { mode: GameMode; ruleset: Ruleset }) {
@@ -301,26 +323,31 @@ export function UniqueChecker({ mode, ruleset }: { mode: GameMode; ruleset: Rule
           ))}
 
           {selectedItem?.hasVariableRolls ? (
-            selectedItem.keyRollFields.map((field) => (
-              <label key={field} className="grid gap-2 text-sm text-zinc-300">
-                {getFieldLabel(field, selectedItem)}
-                <input
-                  className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
-                  type="number"
-                  min={0}
-                  inputMode="numeric"
-                  placeholder="Blank"
-                  value={form[field]}
-                  onChange={(event) =>
-                    setForm((current) => ({
-                      ...current,
-                      [field]: event.target.value
-                    }))
-                  }
-                  aria-label={getFieldLabel(field, selectedItem)}
-                />
-              </label>
-            ))
+            selectedItem.keyRollFields.map((field) => {
+              const definition = getRollDefinition(field, selectedItem);
+
+              return (
+                <label key={field} className="grid gap-2 text-sm text-zinc-300">
+                  {getFieldLabel(field, selectedItem)}
+                  <input
+                    className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
+                    type="number"
+                    min={definition?.min ?? 0}
+                    max={definition?.max}
+                    inputMode="numeric"
+                    placeholder="Blank"
+                    value={form[field]}
+                    onChange={(event) =>
+                      setForm((current) => ({
+                        ...current,
+                        [field]: clampUniqueRollInput(event.target.value, field, selectedItem)
+                      }))
+                    }
+                    aria-label={getFieldLabel(field, selectedItem)}
+                  />
+                </label>
+              );
+            })
           ) : (
             <div className="rounded-xl border border-dashed border-border bg-black/10 px-3 py-2.5 text-sm leading-5 text-zinc-400 md:col-span-2">
               This unique is mostly judged by whether it is a staple at all. No roll input is needed for the MVP.

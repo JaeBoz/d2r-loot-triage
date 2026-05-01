@@ -1,4 +1,5 @@
 import { bootsModeAdjustments, bootsStatWeights, bootsSynergies } from "@/data/boots-rules";
+import { clampNumericAffixValue } from "@/data/affix-guardrails";
 import { isValidMechanicsAffix } from "@/data/mechanics-affixes";
 import { BootsCheckInput, BootsCheckResult, EvaluationPriority, Liquidity, RingArchetype, Verdict } from "@/lib/types";
 
@@ -55,7 +56,7 @@ function normalizeStats(input: BootsCheckInput): NormalizedBootsStats {
 
     const value = input[key];
     if (typeof value === "number" && !Number.isNaN(value) && value > 0) {
-      stats[key] = value;
+      stats[key] = clampNumericAffixValue(key, value);
     }
   }
 
