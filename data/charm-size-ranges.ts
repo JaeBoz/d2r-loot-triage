@@ -74,11 +74,11 @@ export function clampCharmValue(size: CharmSize, key: CharmRangeKey, value: numb
 }
 
 export function sanitizeCharmSizeInput(input: CharmCheckInput): CharmCheckInput {
-  return {
-    ...input,
-    life: clampCharmValue(input.size, "life", input.life),
-    magicFind: clampCharmValue(input.size, "magicFind", input.magicFind),
-    fasterRunWalk: clampCharmValue(input.size, "fasterRunWalk", input.fasterRunWalk),
-    fasterHitRecovery: clampCharmValue(input.size, "fasterHitRecovery", input.fasterHitRecovery)
-  };
+  const cappedInput: CharmCheckInput = { ...input };
+
+  for (const key of Object.keys(charmSizeRanges[input.size]) as CharmRangeKey[]) {
+    cappedInput[key] = clampCharmValue(input.size, key, input[key]);
+  }
+
+  return cappedInput;
 }

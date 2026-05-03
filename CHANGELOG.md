@@ -3,6 +3,23 @@
 [2026-05-03]
 
 Change:
+- Applied all defined charm size caps during Charm Checker evaluator sanitization.
+
+Type:
+- Data
+
+Why:
+- Charm size caps for mana, resists, poison damage, max damage, and attack rating were defined but not all applied to direct evaluator-style inputs.
+
+Impact:
+- Hostile charm inputs now clamp consistently before evaluation while valid high-end charms remain representable.
+
+Notes:
+- No scoring, Trade Value tier, decision-output mapping, poison charm evaluation, or affix modeling changes were made.
+
+[2026-05-03]
+
+Change:
 - Replaced shared conservative affix input caps with item-type caps for amulets, boots, circlets, jewels, gloves, and charms.
 - Expanded charm size caps beyond life/MF/FRW so resist, mana, FHR, poison damage, max damage, and attack rating inputs clamp by charm size.
 

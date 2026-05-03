@@ -140,12 +140,17 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 
 ## Charms
 
+- Directly evaluate hostile charm values such as `999 all resist`, `999 poison damage`, `999 max damage`, and `999 attack rating`; expected: sanitizer clamps them before evaluation and they cannot bypass charm-size caps.
 - Test `Small Charm` with `45 life`; expected: life is clamped or blocked at the valid small charm cap instead of remaining representable.
 - Test `Small Charm` with `20 life`; expected: valid max life remains representable.
 - Test `Small Charm` with `7 MF`; expected: valid max small charm magic find remains representable.
 - Test `Small Charm` with `3 FRW`; expected: valid small charm FRW remains representable.
+- Test `Small Charm` with `999 poison damage`; expected: it clamps to the source-backed small charm cap.
+- Test `Small Charm` with `451 poison damage`; expected: valid high-end poison small charm behavior remains unchanged.
 - Test oversized charm mana, all resist, single resist, FHR, max damage, and attack rating across all three charm sizes; expected: each clamps to the selected charm size's cap.
 - Test `Grand Charm` with `50 life`; expected: it clamps to `45`.
+- Test `Grand Charm` with `999 life`; expected: it clamps to `45` before evaluation.
+- Test `Grand Charm` skiller with `45 life`; expected: valid high-end skiller behavior remains unchanged.
 - Test `Grand Charm` with a skiller; expected: skiller support remains valid.
 - Test `Grand Charm` FRW if available; expected: it uses the source-backed `7 FRW` cap and does not allow impossible higher values.
 - Test a top poison small charm such as `451 poison damage`; expected: high-end standalone trade relevance is clear.
