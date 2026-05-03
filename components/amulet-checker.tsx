@@ -256,6 +256,7 @@ export function AmuletChecker({ mode }: { mode: GameMode }) {
             values={form}
             activeOptionalKeys={activeOptionalKeys}
             guidance={affixGuidanceByItemType.amulet}
+            capItemType="amulet"
             onValueChange={handleValueChange}
             onAddAffix={handleAddAffix}
             onRemoveAffix={handleRemoveAffix}

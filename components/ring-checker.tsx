@@ -133,6 +133,7 @@ export function RingChecker({ mode }: { mode: GameMode }) {
             values={form}
             activeOptionalKeys={activeOptionalKeys}
             guidance={affixGuidanceByItemType.ring}
+            capItemType="ring"
             onValueChange={handleValueChange}
             onAddAffix={handleAddAffix}
             onRemoveAffix={handleRemoveAffix}

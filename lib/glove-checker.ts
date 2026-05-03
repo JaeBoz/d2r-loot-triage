@@ -1,4 +1,5 @@
 import { glovePatternRules, gloveQualityBias, gloveSkillDemand } from "@/data/glove-rules";
+import { clampNumericAffixValue } from "@/data/affix-guardrails";
 import { EvaluationPriority, GloveCheckInput, GloveCheckResult, Liquidity, RingArchetype, Verdict } from "@/lib/types";
 
 const verdictFromScore = (score: number): Verdict => {
@@ -139,6 +140,17 @@ function recommendedActionFor(verdict: Verdict, input: GloveCheckInput, matchedP
 }
 
 export function evaluateGloves(input: GloveCheckInput): GloveCheckResult {
+  const checkedInput: GloveCheckInput = {
+    ...input,
+    crushingBlow: typeof input.crushingBlow === "number" ? Math.min(Math.max(0, input.crushingBlow), 10) : undefined,
+    lifeLeech: typeof input.lifeLeech === "number" ? clampNumericAffixValue("lifeLeech", input.lifeLeech, "glove") : undefined,
+    life: typeof input.life === "number" ? clampNumericAffixValue("life", input.life, "glove") : undefined,
+    magicFind: typeof input.magicFind === "number" ? clampNumericAffixValue("magicFind", input.magicFind, "glove") : undefined,
+    strength: typeof input.strength === "number" ? clampNumericAffixValue("strength", input.strength, "glove") : undefined,
+    dexterity: typeof input.dexterity === "number" ? clampNumericAffixValue("dexterity", input.dexterity, "glove") : undefined,
+    resistSupport: typeof input.resistSupport === "number" ? Math.min(Math.max(0, input.resistSupport), 30) : undefined
+  };
+  input = checkedInput;
   const tags = new Set<RingArchetype>();
   const matchedPatterns: string[] = [];
   let score = gloveQualityBias[input.quality];

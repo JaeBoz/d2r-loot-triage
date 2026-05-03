@@ -144,7 +144,7 @@ function normalizeStats(input: AmuletCheckInput): NormalizedAmuletStats {
 
     const value = input[key];
     if (typeof value === "number" && !Number.isNaN(value) && value > 0) {
-      stats[key] = clampNumericAffixValue(key, value);
+      stats[key] = clampNumericAffixValue(key, value, "amulet");
     }
   }
 

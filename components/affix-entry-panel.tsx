@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { clampAffixInputValue, getAffixValueCap } from "@/data/affix-guardrails";
+import type { MechanicsAffixItemType } from "@/data/mechanics-affixes";
 import { Pill } from "@/components/ui";
 import { VarianceAffixDefinition, VarianceAffixKey } from "@/lib/types";
 
@@ -11,6 +12,7 @@ interface AffixEntryPanelProps<TAffixKey extends VarianceAffixKey> {
   values: Record<TAffixKey, string>;
   activeOptionalKeys: TAffixKey[];
   guidance: string;
+  capItemType?: MechanicsAffixItemType;
   onValueChange: (key: TAffixKey, value: string) => void;
   onAddAffix: (key: TAffixKey) => void;
   onRemoveAffix: (key: TAffixKey) => void;
@@ -28,6 +30,7 @@ export function AffixEntryPanel<TAffixKey extends VarianceAffixKey>({
   values,
   activeOptionalKeys,
   guidance,
+  capItemType,
   onValueChange,
   onAddAffix,
   onRemoveAffix
@@ -69,11 +72,11 @@ export function AffixEntryPanel<TAffixKey extends VarianceAffixKey>({
               className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
               type="number"
               min={0}
-              max={getAffixValueCap(affix.key)}
+              max={getAffixValueCap(affix.key, capItemType)}
               inputMode="numeric"
               placeholder="Blank"
               value={values[affix.key] ?? ""}
-              onChange={(event) => onValueChange(affix.key, clampAffixInputValue(affix.key, event.target.value))}
+              onChange={(event) => onValueChange(affix.key, clampAffixInputValue(affix.key, event.target.value, capItemType))}
               aria-label={affix.label}
             />
           </label>
@@ -116,11 +119,11 @@ export function AffixEntryPanel<TAffixKey extends VarianceAffixKey>({
                   className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
                   type="number"
                   min={0}
-                  max={getAffixValueCap(affix.key)}
+                  max={getAffixValueCap(affix.key, capItemType)}
                   inputMode="numeric"
                   placeholder="Blank"
                   value={values[affix.key] ?? ""}
-                  onChange={(event) => onValueChange(affix.key, clampAffixInputValue(affix.key, event.target.value))}
+                  onChange={(event) => onValueChange(affix.key, clampAffixInputValue(affix.key, event.target.value, capItemType))}
                   aria-label={affix.label}
                 />
               </label>

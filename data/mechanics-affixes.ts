@@ -1,6 +1,6 @@
 import { AmuletCheckInput, CharmCheckInput, CircletCheckInput, VarianceAffixKey, VarianceItemType } from "@/lib/types";
 
-export type MechanicsAffixItemType = VarianceItemType | "charm" | "circlet";
+export type MechanicsAffixItemType = VarianceItemType | "charm" | "circlet" | "glove";
 export type AmuletMechanicsAffixKey = keyof Omit<AmuletCheckInput, "mode">;
 export type CharmMechanicsAffixKey = keyof Omit<CharmCheckInput, "mode" | "size" | "skill">;
 export type CircletMechanicsAffixKey = keyof Omit<CircletCheckInput, "mode" | "family" | "quality" | "skillMode">;

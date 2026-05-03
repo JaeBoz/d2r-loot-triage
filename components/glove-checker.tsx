@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { clampAffixInputValue, getAffixValueCap } from "@/data/affix-guardrails";
 import { Card, Pill } from "@/components/ui";
 import { ResultPanel } from "@/components/result-panel";
 import { evaluateGloves } from "@/lib/glove-checker";
@@ -37,6 +38,18 @@ const emptyForm: GloveFormState = {
 const skillTypes: GloveSkillType[] = ["None", "Javelin and Spear", "Bow and Crossbow", "Martial Arts"];
 const qualities: GloveQuality[] = ["Magic", "Rare", "Crafted"];
 const iasValues = ["0", "10", "20"] as const;
+const gloveFieldCaps: Partial<Record<keyof GloveFormState, number>> = {
+  crushingBlow: 10,
+  resistSupport: 30
+};
+
+function getGloveFieldCap(key: keyof GloveFormState) {
+  if (key === "magicFind" || key === "strength" || key === "dexterity" || key === "life" || key === "lifeLeech") {
+    return getAffixValueCap(key, "glove");
+  }
+
+  return gloveFieldCaps[key];
+}
 
 function toOptionalNumber(value: string) {
   return value.trim() === "" ? undefined : Number(value);
@@ -76,7 +89,14 @@ export function GloveChecker({ mode }: { mode: GameMode }) {
 
   const updateForm = (key: keyof GloveFormState, value: string) => {
     setForm((current) => {
-      const next = { ...current, [key]: value };
+      const cap = getGloveFieldCap(key);
+      const cappedValue =
+        key === "magicFind" || key === "strength" || key === "dexterity" || key === "life" || key === "lifeLeech"
+          ? clampAffixInputValue(key, value, "glove")
+          : cap === undefined || value.trim() === "" || Number.isNaN(Number(value))
+            ? value
+            : String(Math.min(Math.max(0, Number(value)), cap));
+      const next = { ...current, [key]: cappedValue };
 
       if (key === "quality" && value !== "Magic" && next.skillLevel === "3") {
         next.skillLevel = "2";
@@ -99,6 +119,7 @@ export function GloveChecker({ mode }: { mode: GameMode }) {
         className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
         type="number"
         min={0}
+        max={getGloveFieldCap(key)}
         inputMode="numeric"
         placeholder={placeholder}
         value={form[key]}

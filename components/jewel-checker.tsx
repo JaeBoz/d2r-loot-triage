@@ -124,6 +124,7 @@ export function JewelChecker({ mode }: { mode: GameMode }) {
             values={form}
             activeOptionalKeys={activeOptionalKeys}
             guidance={affixGuidanceByItemType.jewel}
+            capItemType="jewel"
             onValueChange={handleValueChange}
             onAddAffix={handleAddAffix}
             onRemoveAffix={handleRemoveAffix}

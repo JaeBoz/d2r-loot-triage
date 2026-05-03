@@ -1,5 +1,40 @@
 # D2R Loot Triage App - Internal Changelog
 
+[2026-05-03]
+
+Change:
+- Replaced shared conservative affix input caps with item-type caps for amulets, boots, circlets, jewels, gloves, and charms.
+- Expanded charm size caps beyond life/MF/FRW so resist, mana, FHR, poison damage, max damage, and attack rating inputs clamp by charm size.
+
+Type:
+- Data
+
+Why:
+- The old shared guardrails allowed several impossible or misleading stat values across non-ring item types.
+
+Impact:
+- Extreme inputs now clamp closer to real Diablo 2 affix ranges before scoring, reducing fake jackpot results while preserving valid high-end patterns such as 20 FCR caster amulets and 451 poison small charms.
+
+Notes:
+- This is still deterministic triage only. No pricing, affix generation, prefix/suffix balancing, or roll simulation was added.
+
+[2026-05-02]
+
+Change:
+- Tightened ring-specific numeric caps for FCR, dexterity, all resist, Magic Find, and strength.
+
+Type:
+- Data
+
+Why:
+- User feedback flagged several shared guardrail caps that were too loose for real Diablo 2 ring ranges.
+
+Impact:
+- Rare / Crafted Ring inputs now clamp closer to real D2 expectations while amulet and other checker ranges remain unchanged.
+
+Notes:
+- No affix system, evaluation logic, Trade Value tier, decision mapping, pricing, or scope expansion was added.
+
 [2026-05-01]
 
 Change:

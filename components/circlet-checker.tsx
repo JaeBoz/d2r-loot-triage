@@ -74,7 +74,7 @@ function getMagicSocketOptions(family: CircletFamily) {
 }
 
 function clampCircletValue(key: keyof CircletFormState, value: string) {
-  return key === "sockets" ? value : clampAffixInputValue(key, value);
+  return key === "sockets" ? value : clampAffixInputValue(key, value, "circlet");
 }
 
 export function CircletChecker({ mode }: { mode: GameMode }) {
@@ -300,7 +300,7 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
               className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
               type="number"
               min={0}
-              max={getAffixValueCap("fasterCastRate")}
+              max={getAffixValueCap("fasterCastRate", "circlet")}
               inputMode="numeric"
               placeholder="Blank"
               value={form.fasterCastRate}
@@ -314,7 +314,7 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
               className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
               type="number"
               min={0}
-              max={getAffixValueCap("fasterRunWalk")}
+              max={getAffixValueCap("fasterRunWalk", "circlet")}
               inputMode="numeric"
               placeholder="Blank"
               value={form.fasterRunWalk}
@@ -346,7 +346,7 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
               className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
               type="number"
               min={0}
-              max={getAffixValueCap("strength")}
+              max={getAffixValueCap("strength", "circlet")}
               inputMode="numeric"
               placeholder="Blank"
               value={form.strength}
@@ -360,7 +360,7 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
               className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
               type="number"
               min={0}
-              max={getAffixValueCap("dexterity")}
+              max={getAffixValueCap("dexterity", "circlet")}
               inputMode="numeric"
               placeholder="Blank"
               value={form.dexterity}
@@ -374,7 +374,7 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
               className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
               type="number"
               min={0}
-              max={getAffixValueCap("life")}
+              max={getAffixValueCap("life", "circlet")}
               inputMode="numeric"
               placeholder="Blank"
               value={form.life}
@@ -388,7 +388,7 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
               className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
               type="number"
               min={0}
-              max={getAffixValueCap("allResist")}
+              max={getAffixValueCap("allResist", "circlet")}
               inputMode="numeric"
               placeholder="Blank"
               value={form.allResist}
@@ -402,7 +402,7 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
               className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
               type="number"
               min={0}
-              max={getAffixValueCap("fireResist")}
+              max={getAffixValueCap("fireResist", "circlet")}
               inputMode="numeric"
               placeholder="Blank"
               value={form.fireResist}
@@ -416,7 +416,7 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
               className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
               type="number"
               min={0}
-              max={getAffixValueCap("lightningResist")}
+              max={getAffixValueCap("lightningResist", "circlet")}
               inputMode="numeric"
               placeholder="Blank"
               value={form.lightningResist}

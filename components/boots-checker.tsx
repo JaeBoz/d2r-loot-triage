@@ -118,6 +118,7 @@ export function BootsChecker({ mode }: { mode: GameMode }) {
             values={form}
             activeOptionalKeys={activeOptionalKeys}
             guidance={affixGuidanceByItemType.boots}
+            capItemType="boots"
             onValueChange={handleValueChange}
             onAddAffix={handleAddAffix}
             onRemoveAffix={handleRemoveAffix}

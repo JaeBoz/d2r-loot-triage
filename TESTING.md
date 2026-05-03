@@ -44,6 +44,8 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 ## Rare / Crafted Boots
 
 - Open Rare / Crafted Boots triage and confirm `All Resist` is not available as a core or optional affix.
+- Enter oversized values such as `999 FRW`, `999 Magic Find`, and `999 Lightning Resist`; expected: they clamp to boot-specific caps before scoring.
+- Enter oversized `Life` or `Replenish Life` on crafted-style boots; expected: they clamp to the supported crafted boot ranges.
 - Enter single resists such as `Fire Resist`, `Lightning Resist`, and `Cold Resist`; confirm they can be represented and affect the result.
 - Test `30 FRW` only; expected: low/filler value because FRW needs support.
 - Test no-FRW weak stats; expected: Drop/Trash or clearly self-use only.
@@ -58,6 +60,7 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 
 ## Magic / Rare / Crafted Gloves
 
+- Enter oversized `Crushing Blow`, `Life Leech`, `Magic Find`, `Strength`, `Dexterity`, `Life`, and `Resist support`; expected: they clamp to glove-appropriate caps.
 - Test magic `+3 Javelin and Spear / 20 IAS`; expected: Premium glove hit.
 - Test magic `+2 Javelin and Spear / 20 IAS`; expected: High, clearly worth checking but below +3/20.
 - Test magic `+3 Javelin and Spear` with no IAS; expected: conditional/low, not a clean trade hit.
@@ -72,6 +75,7 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 
 ## Circlets
 
+- Enter `999 FCR`, `999 FRW`, `999 Strength`, `999 Life`, or `999 All Resist`; expected: each clamps to a circlet-specific cap.
 - Test rare circlet outputs such as `+2 skills only` and `2/20 with support`; expected: result wording is compact enough to understand in under 3 seconds.
 - Test a rare circlet socket selector; expected: `0`, `1`, and `2` sockets are selectable.
 - Test a rare circlet with only `+2 class skills`; expected: reads as a partial hit, not a clear jackpot.
@@ -95,10 +99,15 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 
 - Open Jewel Triage and confirm `Life Leech` is not available as a core or optional affix.
 - Open Jewel Triage and confirm `Strength Req` is not available as a core or optional affix.
+- Enter oversized `IAS`, `Enhanced Damage`, `All Resist`, `Strength`, `Dexterity`, `Min Damage`, `Max Damage`, and `Attack Rating`; expected: each clamps to jewel-specific caps.
 - Add `-15 Requirements`; expected: it is a fixed checkbox/toggle, not a numeric input, and behaves as the verified `-15` jewel affix.
 
 ## Rare / Crafted Jewelry
 
+- Enter `999 FCR` on a ring; expected: it clamps to `10`.
+- Enter `999 Magic Find` on a ring; expected: it clamps to the realistic rare-ring range and does not exceed `15`.
+- Enter oversized ring `Dexterity` or `All Resist`; expected: values clamp to ring-appropriate caps and outputs still behave correctly.
+- Enter oversized amulet `FCR`, `Strength`, `Dexterity`, `All Resist`, `single resist`, `Magic Find`, and damage stats; expected: values clamp to amulet-specific caps.
 - Test a weak rare-style FCR ring; expected: one useful FCR line alone does not inflate into a strong trade item.
 - Test a strong rare-style FCR ring with stats and resists; expected: reads as a real caster ring worth checking.
 - Test a blood-style ring with high life leech but weak support; expected: high leech is represented but does not carry the ring by itself.
@@ -135,6 +144,8 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - Test `Small Charm` with `20 life`; expected: valid max life remains representable.
 - Test `Small Charm` with `7 MF`; expected: valid max small charm magic find remains representable.
 - Test `Small Charm` with `3 FRW`; expected: valid small charm FRW remains representable.
+- Test oversized charm mana, all resist, single resist, FHR, max damage, and attack rating across all three charm sizes; expected: each clamps to the selected charm size's cap.
+- Test `Grand Charm` with `50 life`; expected: it clamps to `45`.
 - Test `Grand Charm` with a skiller; expected: skiller support remains valid.
 - Test `Grand Charm` FRW if available; expected: it uses the source-backed `7 FRW` cap and does not allow impossible higher values.
 - Test a top poison small charm such as `451 poison damage`; expected: high-end standalone trade relevance is clear.

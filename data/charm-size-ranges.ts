@@ -7,22 +7,55 @@ type CharmRangeRule = {
   note?: string;
 };
 
+// Charm maxima are size-specific. Poison uses displayed top combined charm rolls
+// rather than a single prefix value, because poison damage is shown as one total.
+// https://diablo-archive.fandom.com/wiki/Affixes_(Diablo_II)
+// https://diablo2.diablowiki.net/Poison_damage_items
 export const charmSizeRanges: Record<CharmSize, Partial<Record<CharmRangeKey, CharmRangeRule>>> = {
   "Small Charm": {
     life: { max: 20 },
+    mana: { max: 17 },
     magicFind: { max: 7 },
-    fasterRunWalk: { max: 3 }
+    allResist: { max: 5 },
+    fireResist: { max: 11 },
+    lightningResist: { max: 11 },
+    coldResist: { max: 11 },
+    poisonResist: { max: 11 },
+    fasterRunWalk: { max: 3 },
+    fasterHitRecovery: { max: 5 },
+    poisonDamage: { max: 451 },
+    maxDamage: { max: 3 },
+    attackRating: { max: 36 }
   },
   "Large Charm": {
     life: { max: 35 },
+    mana: { max: 34 },
     magicFind: { max: 6 },
-    fasterRunWalk: { max: 5 }
+    allResist: { max: 8 },
+    fireResist: { max: 15 },
+    lightningResist: { max: 15 },
+    coldResist: { max: 15 },
+    poisonResist: { max: 15 },
+    fasterRunWalk: { max: 5 },
+    fasterHitRecovery: { max: 8 },
+    poisonDamage: { max: 451 },
+    maxDamage: { max: 6 },
+    attackRating: { max: 77 }
   },
   "Grand Charm": {
-    life: { max: 50 },
+    life: { max: 45 },
+    mana: { max: 59 },
     magicFind: { max: 12 },
-    fasterRunWalk: { max: 7, note: "Grand charm FRW is source-backed at 7%." },
-    fasterHitRecovery: { max: 12 }
+    allResist: { max: 15 },
+    fireResist: { max: 30 },
+    lightningResist: { max: 30 },
+    coldResist: { max: 30 },
+    poisonResist: { max: 30 },
+    fasterRunWalk: { max: 7 },
+    fasterHitRecovery: { max: 12 },
+    poisonDamage: { max: 301 },
+    maxDamage: { max: 10 },
+    attackRating: { max: 132 }
   }
 };
 

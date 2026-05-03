@@ -28,15 +28,15 @@ function normalizeCircletInput(input: CircletCheckInput): CircletCheckInput {
     classSkillValue: stats.classSkillValue,
     skillTreeType: stats.skillTreeType,
     skillTreeValue: stats.skillTreeValue,
-    fasterCastRate: typeof stats.fasterCastRate === "number" ? clampNumericAffixValue("fasterCastRate", stats.fasterCastRate) : undefined,
-    fasterRunWalk: typeof stats.fasterRunWalk === "number" ? clampNumericAffixValue("fasterRunWalk", stats.fasterRunWalk) : undefined,
+    fasterCastRate: typeof stats.fasterCastRate === "number" ? clampNumericAffixValue("fasterCastRate", stats.fasterCastRate, "circlet") : undefined,
+    fasterRunWalk: typeof stats.fasterRunWalk === "number" ? clampNumericAffixValue("fasterRunWalk", stats.fasterRunWalk, "circlet") : undefined,
     sockets: stats.sockets,
-    strength: typeof stats.strength === "number" ? clampNumericAffixValue("strength", stats.strength) : undefined,
-    dexterity: typeof stats.dexterity === "number" ? clampNumericAffixValue("dexterity", stats.dexterity) : undefined,
-    life: typeof stats.life === "number" ? clampNumericAffixValue("life", stats.life) : undefined,
-    allResist: typeof stats.allResist === "number" ? clampNumericAffixValue("allResist", stats.allResist) : undefined,
-    fireResist: typeof stats.fireResist === "number" ? clampNumericAffixValue("fireResist", stats.fireResist) : undefined,
-    lightningResist: typeof stats.lightningResist === "number" ? clampNumericAffixValue("lightningResist", stats.lightningResist) : undefined
+    strength: typeof stats.strength === "number" ? clampNumericAffixValue("strength", stats.strength, "circlet") : undefined,
+    dexterity: typeof stats.dexterity === "number" ? clampNumericAffixValue("dexterity", stats.dexterity, "circlet") : undefined,
+    life: typeof stats.life === "number" ? clampNumericAffixValue("life", stats.life, "circlet") : undefined,
+    allResist: typeof stats.allResist === "number" ? clampNumericAffixValue("allResist", stats.allResist, "circlet") : undefined,
+    fireResist: typeof stats.fireResist === "number" ? clampNumericAffixValue("fireResist", stats.fireResist, "circlet") : undefined,
+    lightningResist: typeof stats.lightningResist === "number" ? clampNumericAffixValue("lightningResist", stats.lightningResist, "circlet") : undefined
   };
 }
 
