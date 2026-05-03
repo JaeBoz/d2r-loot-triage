@@ -13,6 +13,16 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - Confirm value sentences lead with the primary signal; expected: FCR, IAS, FRW, sockets, skills, or ED appears before secondary support when that stat drives value.
 - Confirm Premium circlet output reflects support when support contributes; expected: short one-sentence copy includes the 2/20 core and meaningful support.
 - Confirm 7 MF small charm output includes max-roll context.
+- Confirm typing oversized values does not auto-jump while the field is focused; expected: clamping happens only after blur.
+- Confirm Warlock item presentation no longer says `Warlock-only`; expected: visible labels and output use `Reign of the Warlock item` or `RotW item`.
+- Confirm result colors follow Trade Value consistently, including charms; expected: Premium/High green, Moderate orange, Low/Trash red.
+- Confirm tags and Why It Matters do not conflict; expected: strong results avoid weak-looking context labels.
+- Confirm result panel hierarchy is fast to scan; expected: Decision is dominant, Trade Value is secondary, then Action, Why It Matters, and Tags.
+- Confirm no redundant strength labels appear; expected: no extra `Strong`, `Conditional`, or `Weak` badge competing with Decision.
+- Confirm action text aligns with Decision; expected: Conditional says `Compare or keep for use`, Keep says `Keep it`, and Drop says `Drop it`.
+- Confirm Trade Value has subtle micro-context; expected: Premium/High/Moderate/Low/Trash explain demand in one short line.
+- Confirm Why It Matters follows anchor/support into value meaning; expected: one tight sentence with no item-name prefix or soft phrasing.
+- Confirm context tags are actionable; expected: no vague `Specialty` tag.
 - Confirm no repeated phrases or duplicated signals appear in result output.
 - Confirm copy-only changes did not alter Trade Value tiers, scores, available inputs, or scoring logic.
 

@@ -1,4 +1,4 @@
-import { ItemCategory, Ruleset, Verdict } from "@/lib/types";
+import { EvaluationPriority, ItemCategory, Ruleset } from "@/lib/types";
 
 export const MODE_OPTIONS = [
   { value: "SCNL", label: "SCNL" },
@@ -23,12 +23,10 @@ export const CATEGORY_TABS: ItemCategory[] = [
   "Gloves"
 ];
 
-export const VERDICT_STYLES: Record<Verdict, string> = {
-  Ignore: "border-zinc-700 bg-zinc-900/70 text-zinc-300",
-  "Low Priority": "border-stone-700 bg-stone-900/80 text-stone-200",
-  Check: "border-amber-700/60 bg-amber-950/35 text-amber-100",
-  "Check sockets": "border-orange-600/50 bg-orange-950/30 text-orange-100",
-  Keep: "border-emerald-500/45 bg-emerald-950/30 text-emerald-100",
-  List: "border-amber-400/55 bg-amber-900/25 text-amber-100",
-  Premium: "border-yellow-300/60 bg-gradient-to-br from-yellow-500/20 via-amber-900/25 to-black/25 text-yellow-100"
+export const TRADE_VALUE_STYLES: Record<EvaluationPriority, string> = {
+  "Premium Trade Value": "border-emerald-400/60 bg-emerald-950/35 text-emerald-100",
+  "High Trade Value": "border-emerald-500/50 bg-emerald-950/30 text-emerald-100",
+  "Moderate Trade Value": "border-orange-500/55 bg-orange-950/35 text-orange-100",
+  "Low Trade Value": "border-red-700/60 bg-red-950/35 text-red-100",
+  Trash: "border-red-800/70 bg-red-950/45 text-red-100"
 };

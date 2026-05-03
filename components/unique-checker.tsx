@@ -150,6 +150,10 @@ function clampUniqueRollInput(value: string, field: UniqueRollField, selectedIte
   return String(Math.min(definition.max, Math.max(definition.min, numericValue)));
 }
 
+function displayUniqueNote(note: string) {
+  return note.replace(/Warlock-only item/gi, "Reign of the Warlock item");
+}
+
 export function UniqueChecker({ mode, ruleset }: { mode: GameMode; ruleset: Ruleset }) {
   const availableUniqueItems = useMemo(
     () => uniqueItems.filter((item) => isUniqueAvailableInRuleset(item, ruleset)),
@@ -340,6 +344,12 @@ export function UniqueChecker({ mode, ruleset }: { mode: GameMode; ruleset: Rule
                     onChange={(event) =>
                       setForm((current) => ({
                         ...current,
+                        [field]: event.target.value
+                      }))
+                    }
+                    onBlur={(event) =>
+                      setForm((current) => ({
+                        ...current,
                         [field]: clampUniqueRollInput(event.target.value, field, selectedItem)
                       }))
                     }
@@ -361,11 +371,11 @@ export function UniqueChecker({ mode, ruleset }: { mode: GameMode; ruleset: Rule
             <h3 className="mt-1 text-xl font-black text-white">{selectedItem.name}</h3>
             <div className="mt-2 flex flex-wrap gap-2">
               <Pill>Unique {selectedItem.category}</Pill>
-              {selectedItem.ruleset === "warlock" ? <Pill>Warlock-only item</Pill> : null}
+              {selectedItem.ruleset === "warlock" ? <Pill>Reign of the Warlock item</Pill> : null}
               <Pill>{selectedItem.liquidity} liquidity</Pill>
               <Pill>{mode === "SCNL" ? selectedItem.scnlPriority : selectedItem.sclPriority}</Pill>
             </div>
-            <p className="mt-2 text-sm leading-5 text-zinc-300">{selectedItem.notes}</p>
+            <p className="mt-2 text-sm leading-5 text-zinc-300">{displayUniqueNote(selectedItem.notes)}</p>
           </div>
         ) : null}
       </Card>

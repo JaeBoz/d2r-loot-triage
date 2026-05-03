@@ -3,6 +3,57 @@
 [2026-05-03]
 
 Change:
+- Refined result action text, Trade Value micro-context, and visible Why It Matters formatting.
+
+Type:
+- UX
+
+Why:
+- Final output QA needed faster action language, clearer Trade Value meaning, and stricter value-signal explanations.
+
+Impact:
+- Results now show a tighter action call, subtle trade context, and one-sentence value explanations built around the main signal.
+
+Notes:
+- No evaluation logic, scoring, Trade Value tiers, data ranges, or new features changed.
+
+[2026-05-03]
+
+Change:
+- Simplified the result panel hierarchy by removing redundant strength labels, normalizing action text, and lowering tag prominence.
+
+Type:
+- UX
+
+Why:
+- Final presentation QA found the result card still had too many overlapping signals competing with the core decision.
+
+Impact:
+- Results are faster to scan: Decision leads, Trade Value supports it, actions are consistent, and tags are lower-priority context.
+
+Notes:
+- No evaluation logic, scoring, Trade Value tiers, data ranges, or new features changed.
+
+[2026-05-03]
+
+Change:
+- Standardized result presentation colors, value meaning labels, Warlock item wording, context tags, and input clamping behavior.
+
+Type:
+- UX
+
+Why:
+- Final manual QA found presentation inconsistencies where colors, tags, labels, and input behavior could send mixed signals.
+
+Impact:
+- Result colors now match Trade Value strength across checkers, strong results read as strong, Warlock items avoid class-restriction wording, and inputs no longer jump while typing.
+
+Notes:
+- No evaluation logic, scoring, Trade Value tiers, data ranges, or new features changed.
+
+[2026-05-03]
+
+Change:
 - Tightened final result copy for strong outputs, primary value signals, circlet support, Warlock uniques, and 7 MF small charms.
 
 Type:

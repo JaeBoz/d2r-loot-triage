@@ -42,7 +42,7 @@ export function mapDecisionOutput(input: DecisionInput): DecisionOutput {
   if (input.priority === "Trash" || input.verdict === "Ignore") {
     return {
       label: "Drop",
-      actionLine: "Drop it unless you need it.",
+      actionLine: "Drop it.",
       caveat: isSelfUse ? "Self-use does not always trade." : undefined
     };
   }
@@ -51,14 +51,14 @@ export function mapDecisionOutput(input: DecisionInput): DecisionOutput {
     if (isNoRollStapleUnique) {
       return {
         label: "Keep",
-        actionLine: "Keep this. Staple value.",
+        actionLine: "Keep it.",
         caveat: "No-roll staple. The drop itself is the value."
       };
     }
 
     return {
       label: "Keep",
-      actionLine: "Keep this. Strong hit.",
+      actionLine: "Keep it.",
       caveat: "Compare before you list or mule it."
     };
   }
@@ -67,14 +67,14 @@ export function mapDecisionOutput(input: DecisionInput): DecisionOutput {
     if (isNoRollStapleUnique) {
       return {
         label: "Keep",
-        actionLine: "Keep this. Staple value.",
+        actionLine: "Keep it.",
         caveat: isSocketDependent ? "Sockets are the reason it matters." : undefined
       };
     }
 
     return {
       label: "Keep",
-      actionLine: "Keep it and compare later.",
+      actionLine: "Keep it.",
       caveat: isSocketDependent ? "Sockets are the reason it matters." : undefined
     };
   }
@@ -82,10 +82,7 @@ export function mapDecisionOutput(input: DecisionInput): DecisionOutput {
   if (input.priority === "Moderate Trade Value") {
     return {
       label: "Conditional",
-      actionLine:
-        isSocketDependent
-            ? "Keep only if you will socket or reroll it."
-            : "Keep only if you will use it or compare it.",
+      actionLine: "Compare or keep for use.",
       caveat: isSelfUse ? "Niche or self-use." : undefined
     };
   }
@@ -93,8 +90,8 @@ export function mapDecisionOutput(input: DecisionInput): DecisionOutput {
   return {
     label: isSocketDependent || isSelfUse ? "Conditional" : "Drop",
     actionLine: isSocketDependent
-      ? "Keep only if you will finish the socket path."
-      : "Usually drop it unless you need it.",
+      ? "Compare or keep for use."
+      : "Drop it.",
     caveat: isSelfUse ? "Mostly self-use." : undefined
   };
 }

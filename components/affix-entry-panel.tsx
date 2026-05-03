@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { clampAffixInputValue, getAffixValueCap } from "@/data/affix-guardrails";
 import type { MechanicsAffixItemType } from "@/data/mechanics-affixes";
 import { Pill } from "@/components/ui";
@@ -36,6 +36,32 @@ export function AffixEntryPanel<TAffixKey extends VarianceAffixKey>({
   onRemoveAffix
 }: AffixEntryPanelProps<TAffixKey>) {
   const [query, setQuery] = useState("");
+  const focusedAffixKeyRef = useRef<TAffixKey | null>(null);
+
+  const handleAffixFocus = (key: TAffixKey) => {
+    const previousKey = focusedAffixKeyRef.current;
+    if (previousKey && previousKey !== key) {
+      onValueChange(
+        previousKey,
+        clampAffixInputValue(previousKey, values[previousKey] ?? "", capItemType)
+      );
+    }
+
+    focusedAffixKeyRef.current = key;
+  };
+
+  const handleAffixBlur = (key: TAffixKey, value: string) => {
+    onValueChange(key, clampAffixInputValue(key, value, capItemType));
+    if (focusedAffixKeyRef.current === key) {
+      focusedAffixKeyRef.current = null;
+    }
+  };
+
+  const handleAffixKeyDown = (key: TAffixKey, value: string, keyboardKey: string) => {
+    if (keyboardKey === "Tab" || keyboardKey === "Enter") {
+      onValueChange(key, clampAffixInputValue(key, value, capItemType));
+    }
+  };
 
   const activeOptionalAffixes = useMemo(
     () => activeOptionalKeys.map((key) => optionalAffixes.find((affix) => affix.key === key)).filter(Boolean) as Array<VarianceAffixDefinition & { key: TAffixKey }>,
@@ -76,7 +102,11 @@ export function AffixEntryPanel<TAffixKey extends VarianceAffixKey>({
               inputMode="numeric"
               placeholder="Blank"
               value={values[affix.key] ?? ""}
-              onChange={(event) => onValueChange(affix.key, clampAffixInputValue(affix.key, event.target.value, capItemType))}
+              onChange={(event) => onValueChange(affix.key, event.target.value)}
+              onMouseDown={() => handleAffixFocus(affix.key)}
+              onFocus={() => handleAffixFocus(affix.key)}
+              onKeyDown={(event) => handleAffixKeyDown(affix.key, event.currentTarget.value, event.key)}
+              onBlur={(event) => handleAffixBlur(affix.key, event.target.value)}
               aria-label={affix.label}
             />
           </label>
@@ -123,7 +153,11 @@ export function AffixEntryPanel<TAffixKey extends VarianceAffixKey>({
                   inputMode="numeric"
                   placeholder="Blank"
                   value={values[affix.key] ?? ""}
-                  onChange={(event) => onValueChange(affix.key, clampAffixInputValue(affix.key, event.target.value, capItemType))}
+                  onChange={(event) => onValueChange(affix.key, event.target.value)}
+                  onMouseDown={() => handleAffixFocus(affix.key)}
+                  onFocus={() => handleAffixFocus(affix.key)}
+                  onKeyDown={(event) => handleAffixKeyDown(affix.key, event.currentTarget.value, event.key)}
+                  onBlur={(event) => handleAffixBlur(affix.key, event.target.value)}
                   aria-label={affix.label}
                 />
               </label>

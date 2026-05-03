@@ -193,6 +193,12 @@ export function CharmChecker({ mode }: { mode: GameMode }) {
                   onChange={(event) =>
                     setForm((current) => ({
                       ...current,
+                      [field.key]: event.target.value
+                    }))
+                  }
+                  onBlur={(event) =>
+                    setForm((current) => ({
+                      ...current,
                       [field.key]: clampCharmFormValue(current.size, field.key, event.target.value)
                     }))
                   }
@@ -203,7 +209,7 @@ export function CharmChecker({ mode }: { mode: GameMode }) {
           })}
         </div>
 
-        <p className="mt-3 text-xs text-zinc-500">Charm ranges depend on size; capped fields are clamped to valid LOD ranges.</p>
+        <p className="mt-3 text-xs text-zinc-500">Charm ranges depend on size; capped fields clamp when you leave the field.</p>
 
         <div className="mt-5 flex flex-wrap gap-2">
           <Pill>Pattern-based triage</Pill>

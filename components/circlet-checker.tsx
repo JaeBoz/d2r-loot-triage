@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useMemo, useState } from "react";
 import { Card, Pill } from "@/components/ui";
 import { clampAffixInputValue, getAffixValueCap } from "@/data/affix-guardrails";
 import { circletFamilies } from "@/data/circlet-rules";
@@ -75,6 +75,18 @@ function getMagicSocketOptions(family: CircletFamily) {
 
 function clampCircletValue(key: keyof CircletFormState, value: string) {
   return key === "sockets" ? value : clampAffixInputValue(key, value, "circlet");
+}
+
+function updateCircletTextField(
+  setForm: Dispatch<SetStateAction<CircletFormState>>,
+  key: keyof CircletFormState,
+  value: string,
+  shouldClamp = false
+) {
+  setForm((current) => ({
+    ...current,
+    [key]: shouldClamp ? clampCircletValue(key, value) : value
+  }));
 }
 
 export function CircletChecker({ mode }: { mode: GameMode }) {
@@ -304,7 +316,8 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
               inputMode="numeric"
               placeholder="Blank"
               value={form.fasterCastRate}
-              onChange={(event) => setForm((current) => ({ ...current, fasterCastRate: clampCircletValue("fasterCastRate", event.target.value) }))}
+              onChange={(event) => updateCircletTextField(setForm, "fasterCastRate", event.target.value)}
+              onBlur={(event) => updateCircletTextField(setForm, "fasterCastRate", event.target.value, true)}
             />
           </label>
 
@@ -318,7 +331,8 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
               inputMode="numeric"
               placeholder="Blank"
               value={form.fasterRunWalk}
-              onChange={(event) => setForm((current) => ({ ...current, fasterRunWalk: clampCircletValue("fasterRunWalk", event.target.value) }))}
+              onChange={(event) => updateCircletTextField(setForm, "fasterRunWalk", event.target.value)}
+              onBlur={(event) => updateCircletTextField(setForm, "fasterRunWalk", event.target.value, true)}
             />
           </label>
 
@@ -350,7 +364,8 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
               inputMode="numeric"
               placeholder="Blank"
               value={form.strength}
-              onChange={(event) => setForm((current) => ({ ...current, strength: clampCircletValue("strength", event.target.value) }))}
+              onChange={(event) => updateCircletTextField(setForm, "strength", event.target.value)}
+              onBlur={(event) => updateCircletTextField(setForm, "strength", event.target.value, true)}
             />
           </label>
 
@@ -364,7 +379,8 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
               inputMode="numeric"
               placeholder="Blank"
               value={form.dexterity}
-              onChange={(event) => setForm((current) => ({ ...current, dexterity: clampCircletValue("dexterity", event.target.value) }))}
+              onChange={(event) => updateCircletTextField(setForm, "dexterity", event.target.value)}
+              onBlur={(event) => updateCircletTextField(setForm, "dexterity", event.target.value, true)}
             />
           </label>
 
@@ -378,7 +394,8 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
               inputMode="numeric"
               placeholder="Blank"
               value={form.life}
-              onChange={(event) => setForm((current) => ({ ...current, life: clampCircletValue("life", event.target.value) }))}
+              onChange={(event) => updateCircletTextField(setForm, "life", event.target.value)}
+              onBlur={(event) => updateCircletTextField(setForm, "life", event.target.value, true)}
             />
           </label>
 
@@ -392,7 +409,8 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
               inputMode="numeric"
               placeholder="Blank"
               value={form.allResist}
-              onChange={(event) => setForm((current) => ({ ...current, allResist: clampCircletValue("allResist", event.target.value) }))}
+              onChange={(event) => updateCircletTextField(setForm, "allResist", event.target.value)}
+              onBlur={(event) => updateCircletTextField(setForm, "allResist", event.target.value, true)}
             />
           </label>
 
@@ -406,7 +424,8 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
               inputMode="numeric"
               placeholder="Blank"
               value={form.fireResist}
-              onChange={(event) => setForm((current) => ({ ...current, fireResist: clampCircletValue("fireResist", event.target.value) }))}
+              onChange={(event) => updateCircletTextField(setForm, "fireResist", event.target.value)}
+              onBlur={(event) => updateCircletTextField(setForm, "fireResist", event.target.value, true)}
             />
           </label>
 
@@ -420,7 +439,8 @@ export function CircletChecker({ mode }: { mode: GameMode }) {
               inputMode="numeric"
               placeholder="Blank"
               value={form.lightningResist}
-              onChange={(event) => setForm((current) => ({ ...current, lightningResist: clampCircletValue("lightningResist", event.target.value) }))}
+              onChange={(event) => updateCircletTextField(setForm, "lightningResist", event.target.value)}
+              onBlur={(event) => updateCircletTextField(setForm, "lightningResist", event.target.value, true)}
             />
           </label>
         </div>

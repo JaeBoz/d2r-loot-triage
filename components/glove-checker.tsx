@@ -87,15 +87,20 @@ export function GloveChecker({ mode }: { mode: GameMode }) {
     [form, mode]
   );
 
-  const updateForm = (key: keyof GloveFormState, value: string) => {
+  const clampGloveFieldValue = (key: keyof GloveFormState, value: string) => {
+    const cap = getGloveFieldCap(key);
+    if (key === "magicFind" || key === "strength" || key === "dexterity" || key === "life" || key === "lifeLeech") {
+      return clampAffixInputValue(key, value, "glove");
+    }
+
+    return cap === undefined || value.trim() === "" || Number.isNaN(Number(value))
+      ? value
+      : String(Math.min(Math.max(0, Number(value)), cap));
+  };
+
+  const updateForm = (key: keyof GloveFormState, value: string, shouldClamp = false) => {
     setForm((current) => {
-      const cap = getGloveFieldCap(key);
-      const cappedValue =
-        key === "magicFind" || key === "strength" || key === "dexterity" || key === "life" || key === "lifeLeech"
-          ? clampAffixInputValue(key, value, "glove")
-          : cap === undefined || value.trim() === "" || Number.isNaN(Number(value))
-            ? value
-            : String(Math.min(Math.max(0, Number(value)), cap));
+      const cappedValue = shouldClamp ? clampGloveFieldValue(key, value) : value;
       const next = { ...current, [key]: cappedValue };
 
       if (key === "quality" && value !== "Magic" && next.skillLevel === "3") {
@@ -124,6 +129,7 @@ export function GloveChecker({ mode }: { mode: GameMode }) {
         placeholder={placeholder}
         value={form[key]}
         onChange={(event) => updateForm(key, event.target.value)}
+        onBlur={(event) => updateForm(key, event.target.value, true)}
         aria-label={label}
       />
     </label>

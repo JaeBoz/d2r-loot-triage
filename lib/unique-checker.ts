@@ -422,12 +422,16 @@ function lowerFirst(text: string) {
   return text ? `${text[0].toLowerCase()}${text.slice(1)}` : text;
 }
 
+function rotwLabel(text: string) {
+  return text.replace(/Warlock-only item/gi, "Reign of the Warlock item");
+}
+
 function conciseUniqueExplanation(item: UniqueItemDefinition, rollAssessment: RollAssessment, verdict: Verdict) {
-  const itemNote = lowerFirst(firstSentence(item.notes));
+  const itemNote = lowerFirst(rotwLabel(firstSentence(item.notes)));
   const isStrongWarlockHit = (item.ruleset ?? "lod") === "warlock" && (verdict === "List" || verdict === "Premium");
   const warlockNote = rollAssessment.high >= 2 ? "good roll package" : "good roll";
   if (isStrongWarlockHit) {
-    return `${item.name}: Warlock-only item with a ${warlockNote}.`;
+    return `${item.name}: Reign of the Warlock item with a ${warlockNote}.`;
   }
 
   const demandNote =
