@@ -106,7 +106,7 @@ function explanationFor(input: GloveCheckInput, verdict: Verdict, matchedPattern
   }
 
   if (input.increasedAttackSpeed === 20 && matchedPatterns.includes("IAS + strong support")) {
-    return "IAS is the anchor; good support makes these worth checking.";
+    return "IAS is the anchor; good support is the value signal.";
   }
 
   if (input.increasedAttackSpeed === 20) {
@@ -122,20 +122,20 @@ function explanationFor(input: GloveCheckInput, verdict: Verdict, matchedPattern
   }
 
   if (verdict === "Ignore") {
-    return "No IAS and no strong glove pattern. Charsi-level gloves.";
+    return "No IAS and no strong glove pattern. Drop gloves.";
   }
 
   return "Some support is present, but the glove pattern is not clean.";
 }
 
 function recommendedActionFor(verdict: Verdict, input: GloveCheckInput, matchedPatterns: string[]) {
-  if (verdict === "Ignore") return "Charsi unless you need them for temporary self-use.";
+  if (verdict === "Ignore") return "Drop them unless you need temporary gloves.";
   if (verdict === "Low Priority") return "Only keep for self-use or a very specific build.";
   if (matchedPatterns.includes("+3 Jav / 20 IAS")) return "Keep and compare. Big magic glove hit.";
-  if (matchedPatterns.includes("+2 Jav / 20 IAS")) return "Check before tossing. Jav + IAS has real demand.";
-  if (matchedPatterns.includes("IAS + Crushing Blow")) return "Check the full support package before tossing.";
-  if (input.increasedAttackSpeed === 20) return "Check if the support lines are useful together.";
-  if (verdict === "Premium") return "Premium glove pattern. Compare before listing.";
+  if (matchedPatterns.includes("+2 Jav / 20 IAS")) return "Keep them. Jav + IAS has real demand.";
+  if (matchedPatterns.includes("IAS + Crushing Blow")) return "Conditional keep. Support decides it.";
+  if (input.increasedAttackSpeed === 20) return "Conditional keep if the support lines fit.";
+  if (verdict === "Premium") return "Keep them. Premium glove pattern.";
   return "Keep only if the pattern fits a build you care about.";
 }
 

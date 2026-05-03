@@ -176,9 +176,9 @@ export function ReferenceList() {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-400">Static Guide</p>
-            <h2 className="mt-2 text-2xl font-bold text-white">Magic Items Worth Checking</h2>
+            <h2 className="mt-2 text-2xl font-bold text-white">Magic Item Keep Checks</h2>
           </div>
-          <Pill>Worth a Look</Pill>
+          <Pill>Keep Check</Pill>
         </div>
         <div className="mt-6 grid gap-3 lg:grid-cols-2">
           {magicItemsWorthChecking.map((entry) => (

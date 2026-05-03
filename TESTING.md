@@ -6,8 +6,15 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 
 - Smoke-test representative outputs across Uniques, Rings, Amulets, Gloves, Boots, Charms, Jewels, and Circlets; expected: Decision, Recommended Action, and Why It Matters are readable in under 3 seconds.
 - Confirm Why It Matters is one short value-focused sentence where possible; expected: no repeated ideas, long stat essays, or system-style phrasing.
-- Confirm player-native wording stays clear for newer players; expected: common D2 terms like `Charsi`, `worth checking`, `decent`, and `Premium` are used sparingly and only where they fit.
-- Confirm copy-only changes did not alter Decision labels, Trade Value tiers, scores, or available inputs.
+- Confirm player-native wording stays clear for newer players; expected: short phrases like `Good roll`, `Missing key stats`, `decent`, and `Premium` are used only where they fit.
+- Confirm Trade Value and Decision agree; expected: Premium/High are confident `Keep`, Moderate is `Conditional`, Low is `Conditional` or `Drop`, and Trash is `Drop`.
+- Confirm Premium and High outputs do not sound hesitant; expected: no `Check Before Tossing`, `worth checking`, or similar cautious language on strong results.
+- Confirm Premium and High outputs contain no conditional/weak phrasing; expected: no `if someone needs this`, `mostly self-use`, or `niche` framing on strong results.
+- Confirm value sentences lead with the primary signal; expected: FCR, IAS, FRW, sockets, skills, or ED appears before secondary support when that stat drives value.
+- Confirm Premium circlet output reflects support when support contributes; expected: short one-sentence copy includes the 2/20 core and meaningful support.
+- Confirm 7 MF small charm output includes max-roll context.
+- Confirm no repeated phrases or duplicated signals appear in result output.
+- Confirm copy-only changes did not alter Trade Value tiers, scores, available inputs, or scoring logic.
 
 ## Rulesets
 
@@ -50,11 +57,11 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - Test `30 FRW` only; expected: low/filler value because FRW needs support.
 - Test no-FRW weak stats; expected: Drop/Trash or clearly self-use only.
 - Test high dual res without FRW; expected: conditional/moderate at most because there is no movement roll.
-- Test `30 FRW + dual res`; expected: moderate/check-worthy, not automatically premium without support.
+- Test `30 FRW + dual res`; expected: moderate/conditional, not automatically premium without support.
 - Test `30 FRW + triple res + support`; expected: clearly strong and can reach premium.
 - Test `30 FRW + FHR + dual res`; expected: strong/high because the support lines fit together.
 - Test `30 FRW + MF` only; expected: low/moderate unless support is present.
-- Test `30 FRW + MF + res`; expected: worth checking when rolls are strong.
+- Test `30 FRW + MF + res`; expected: keep-worthy when rolls are strong.
 - Test mana or mana regeneration only; expected: does not carry value by itself.
 - Test weak mixed boots with scattered low rolls; expected: does not inflate into strong trade value.
 
@@ -62,16 +69,16 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 
 - Enter oversized `Crushing Blow`, `Life Leech`, `Magic Find`, `Strength`, `Dexterity`, `Life`, and `Resist support`; expected: they clamp to glove-appropriate caps.
 - Test magic `+3 Javelin and Spear / 20 IAS`; expected: Premium glove hit.
-- Test magic `+2 Javelin and Spear / 20 IAS`; expected: High, clearly worth checking but below +3/20.
+- Test magic `+2 Javelin and Spear / 20 IAS`; expected: High, clearly keep-worthy but below +3/20.
 - Test magic `+3 Javelin and Spear` with no IAS; expected: conditional/low, not a clean trade hit.
 - Test magic `Bow and Crossbow / 20 IAS`; expected: Moderate unless supported by strong stats.
 - Test magic `Martial Arts / 20 IAS`; expected: Moderate unless supported by strong stats.
 - Test magic `Bow and Crossbow / 20 IAS + strong support`; expected: High.
 - Test rare or crafted `20 IAS` only; expected: low value, not overhyped.
 - Test crafted `Crushing Blow` only; expected: low at most.
-- Test crafted `Crushing Blow + 20 IAS + support`; expected: check-worthy/high.
-- Test weak no-IAS gloves with filler stats; expected: Charsi/drop.
-- Test `20 IAS + MF/support`; expected: worth checking only when support is strong enough.
+- Test crafted `Crushing Blow + 20 IAS + support`; expected: conditional/high based on support.
+- Test weak no-IAS gloves with filler stats; expected: drop/self-use.
+- Test `20 IAS + MF/support`; expected: keep-worthy only when support is strong enough.
 
 ## Circlets
 
@@ -109,7 +116,7 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - Enter oversized ring `Dexterity` or `All Resist`; expected: values clamp to ring-appropriate caps and outputs still behave correctly.
 - Enter oversized amulet `FCR`, `Strength`, `Dexterity`, `All Resist`, `single resist`, `Magic Find`, and damage stats; expected: values clamp to amulet-specific caps.
 - Test a weak rare-style FCR ring; expected: one useful FCR line alone does not inflate into a strong trade item.
-- Test a strong rare-style FCR ring with stats and resists; expected: reads as a real caster ring worth checking.
+- Test a strong rare-style FCR ring with stats and resists; expected: reads as a real caster ring worth keeping.
 - Test a blood-style ring with high life leech but weak support; expected: high leech is represented but does not carry the ring by itself.
 - Test a blood-style ring with high life leech, attack rating, and melee support; expected: reads as a stronger melee/blood craft candidate.
 - Test a weak `+skills / 10 FCR` amulet; expected: partial hit, not an automatic premium.
@@ -128,7 +135,7 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - Test `The Reaper's Toll` low versus high rolls, eth and non-eth; expected: Enhanced Damage, Life Leech, and eth state matter, and no IAS input appears.
 - Test `Windforce` low versus high mana leech; expected: Mana Leech is the only roll input because ED and Knockback are fixed.
 - Test newer curated uniques such as `Kira's Guardian`, `Vampire Gaze`, `Verdungo's Hearty Cord`, and `Thunderstroke`; expected: only meaningful roll fields appear and low/top rolls separate clearly.
-- Test `Ormus' Robes` with a wrong/low-demand skill versus a desirable skill and high elemental damage; expected: wrong skill stays low, while a good skill plus strong damage is worth checking.
+- Test `Ormus' Robes` with a wrong/low-demand skill versus a desirable skill and high elemental damage; expected: wrong skill stays low, while a good skill plus strong damage is keep-worthy.
 - Test `Crown of Ages` with `1 socket` and low defensive rolls; expected: not Trash, but still a weak/conditional CoA.
 - Test `Crown of Ages` with `2 sockets` and high DR/res; expected: sockets drive the value and the 2os high-roll copy still stands out as Premium.
 - Test `Andariel's Visage` non-eth with weak rolls versus eth with high strength/leech; expected: eth merc copies get the better signal.
@@ -136,7 +143,7 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - Test `Highlord's Wrath`; expected: no roll input is needed and it reads as a staple keep/check item rather than a roll chase.
 - For eth-sensitive uniques, confirm ethereal state only helps when it makes sense for that item.
 - Test no-roll staple uniques such as `Stone of Jordan` and `Arachnid Mesh`; expected: decision label reads `Keep`, not `Check Before Tossing`.
-- Test a mid roll-sensitive unique; expected: decision label can still read `Check Before Tossing` when roll quality deserves review but is not an automatic keep.
+- Test a mid roll-sensitive unique; expected: decision label reads `Conditional` when roll quality deserves review but is not an automatic keep.
 
 ## Charms
 
@@ -173,4 +180,4 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - Toggle between `SCNL` and `SCL` on a few scenarios; expected: wording and liquidity feel mode-aware without changing the workflow.
 - Use Reset/Clear on active checkers; expected: inputs and results clear while the selected game mode remains intact.
 - Check the app on a narrow/mobile viewport; expected: forms remain compact and usable.
-- Test an unsocketed socket-potential base and a moderate partial rare item; expected: socket potential remains `Conditional`, while partial rares remain `Check Before Tossing` or `Conditional` based on existing mapping.
+- Test an unsocketed socket-potential base and a moderate partial rare item; expected: socket potential remains `Conditional`, while partial rares remain `Conditional` based on existing mapping.

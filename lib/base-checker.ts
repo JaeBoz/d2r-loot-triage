@@ -103,7 +103,7 @@ function baseDemandPhrase(item: BaseItem, input: BaseCheckInput) {
     }
 
     if (item.tags.includes("caster") || item.tags.includes("merc")) {
-      return "Sockets are the value here. Worth checking if someone needs this base.";
+      return "Sockets are the value here. Good runeword base.";
     }
 
     return "Sockets are the value here.";
@@ -122,7 +122,7 @@ function baseDemandPhrase(item: BaseItem, input: BaseCheckInput) {
   }
 
   if (item.scnlPriority === "low" || item.tags.includes("staffmods")) {
-    return "Niche base. Mostly self-use or a specific buyer.";
+    return "Specific-use base. Keep only for the right setup.";
   }
 
   return "Only keep it if the visible state matches a real runeword plan.";
@@ -210,7 +210,7 @@ function adjustForSockets(score: number, input: BaseCheckInput, item: BaseItem, 
         details.push("Unsocketed eth merc bases can still matter because buyers may want socket control.");
         nextScore += 1;
       } else {
-        details.push("Worth a look, but not the same as a finished socket hit.");
+        details.push("Socket potential, not a finished socket hit.");
       }
 
       return nextScore;
@@ -293,12 +293,20 @@ function buildExplanation(item: BaseItem, input: BaseCheckInput, verdict: Verdic
   const ethLabel = input.ethereal ? "Eth " : "Non-eth ";
   const useCase = useCaseLabel(item);
   const demandPhrase = baseDemandPhrase(item, input);
+  const priorityTone =
+    verdict === "Premium"
+      ? "premium base"
+      : verdict === "Keep"
+        ? "good base"
+        : verdict === "Low Priority"
+          ? "niche base"
+          : "weak base";
 
   if (item.tags.includes("circlet")) {
-    return `${ethLabel}${item.name} is a circlet-family base for ${input.mode}. ${details.join(" ")} ${demandPhrase}`;
+    return `${ethLabel}${item.name} is a ${priorityTone} for ${input.mode}; ${demandPhrase}`;
   }
 
-  return `${ethLabel}${item.name} is ${articleFor(useCase)} ${useCase} for ${input.mode}. ${details.join(" ")} ${demandPhrase}`;
+  return `${ethLabel}${item.name} is ${articleFor(useCase)} ${useCase}; ${demandPhrase}`;
 }
 
 function buildRecommendedAction(item: BaseItem, input: BaseCheckInput, verdict: Verdict) {
@@ -307,7 +315,7 @@ function buildRecommendedAction(item: BaseItem, input: BaseCheckInput, verdict: 
   }
 
   if (item.socketSensitive && input.sockets === 0 && !hasMeaningfulUnsocketedDemand(input, item)) {
-    return `Do not treat this as a clean trade base yet. Socket it, then re-check if it hits ${formatSockets(item.desiredSockets)}.`;
+    return `Conditional keep. It needs ${formatSockets(item.desiredSockets)} to be clean.`;
   }
 
   if (item.socketSensitive && input.sockets > 0 && !item.desiredSockets.includes(input.sockets)) {
@@ -319,18 +327,18 @@ function buildRecommendedAction(item: BaseItem, input: BaseCheckInput, verdict: 
   }
 
   if (verdict === "Ignore") {
-    return "Charsi unless you need the base personally.";
+    return "Drop it unless you need the base personally.";
   }
 
   if (verdict === "Low Priority") {
-    return "Stash only if you have room or a specific buyer/use case in mind.";
+    return "Only stash for a specific buyer or use case.";
   }
 
   if (verdict === "Keep") {
-    return "Keep it, but do not assume it is an instant trade.";
+    return "Keep it. Real base, not always instant trade.";
   }
 
-  return "Premium base. List it or mule it.";
+  return "Keep it. Premium base hit.";
 }
 
 export function evaluateBase(input: BaseCheckInput): BaseCheckResult {

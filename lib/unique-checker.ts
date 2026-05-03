@@ -146,7 +146,7 @@ function applyDemandFloor(item: UniqueItemDefinition, verdict: Verdict, details:
   if ((item.ruleset ?? "lod") === "warlock" && item.hasVariableRolls && uniqueVerdictRank[verdict] < uniqueVerdictRank["Low Priority"]) {
     details.push(
       primeEvilGrimoires.has(item.id)
-        ? "Prime Evil books are still worth a second look, even on low rolls."
+        ? "Prime Evil books still have demand, even on low rolls."
         : "Warlock demand is still settling, so weak copies are treated as low-value checks instead of automatic trash."
     );
     return "Low Priority" as Verdict;
@@ -357,7 +357,7 @@ function scoreEthereal(input: UniqueCheckInput, item: UniqueItemDefinition, deta
 function scoreUniqueSelects(input: UniqueCheckInput, item: UniqueItemDefinition, details: string[]) {
   if (item.id === "ormus-robes") {
     if (input.ormusSkillQuality === "desirable") {
-      details.push("Desirable skill roll. That's what makes Ormus worth checking.");
+      details.push("Desirable skill roll. That's what makes Ormus matter.");
       return 4;
     }
 
@@ -381,7 +381,7 @@ function scoreUniqueSelects(input: UniqueCheckInput, item: UniqueItemDefinition,
 
 function applyItemSpecificScoreAdjustments(item: UniqueItemDefinition, score: number, details: string[]) {
   if (item.id === "crown-of-ages" && score <= 1) {
-    details.push("Even a weak CoA is still worth a quick second look. Sockets are the value here.");
+    details.push("Even a weak CoA has socket value.");
     return 2;
   }
 
@@ -424,12 +424,18 @@ function lowerFirst(text: string) {
 
 function conciseUniqueExplanation(item: UniqueItemDefinition, rollAssessment: RollAssessment, verdict: Verdict) {
   const itemNote = lowerFirst(firstSentence(item.notes));
+  const isStrongWarlockHit = (item.ruleset ?? "lod") === "warlock" && (verdict === "List" || verdict === "Premium");
+  const warlockNote = rollAssessment.high >= 2 ? "good roll package" : "good roll";
+  if (isStrongWarlockHit) {
+    return `${item.name}: Warlock-only item with a ${warlockNote}.`;
+  }
+
   const demandNote =
     item.liquidity === "High" && verdict !== "Premium"
       ? itemNote.toLowerCase().includes("staple")
         ? "easy to move"
         : "staple demand helps"
-      : item.liquidity === "Low"
+      : item.liquidity === "Low" && verdict !== "List" && verdict !== "Premium"
         ? "niche or mostly self-use"
         : "";
   const demandClause = demandNote ? `, ${demandNote}` : "";
@@ -519,34 +525,34 @@ export function evaluateUnique(input: UniqueCheckInput): UniqueCheckResult {
 
   let recommendedAction = "";
   if (verdict === "Ignore") {
-    recommendedAction = "Usually Charsi unless you need this exact item.";
+    recommendedAction = "Drop it unless you need this exact item.";
   } else if (verdict === "Low Priority") {
     recommendedAction = "Keep only as a placeholder or self-use piece.";
   } else if (verdict === "Check") {
     recommendedAction =
       item.liquidity === "High"
-        ? "Check the roll before tossing. Staple demand helps."
-        : "Check the roll before tossing it. Low copies may just be self-use.";
+        ? "Conditional keep. Staple demand helps."
+        : "Conditional keep. Low copies may just be self-use.";
   } else if (verdict === "Keep") {
     recommendedAction =
       item.liquidity === "High"
         ? "Keep it. Staple demand helps even off-perfect rolls."
-        : "Keep if you have room. Useful, but more niche.";
+        : "Keep it. Useful roll with real demand.";
   } else if (verdict === "List") {
     recommendedAction =
       !item.hasVariableRolls && item.liquidity === "High"
         ? "Keep it. The drop itself is the value."
         : item.liquidity === "High"
-          ? "Worth checking. Rolls still matter."
-          : "List only if the roll is competitive.";
+          ? "Keep it. Rolls still matter."
+          : "Keep it. Good roll hit.";
   } else {
-    recommendedAction = "Premium hit. Compare it against strong examples before listing.";
+    recommendedAction = "Keep it. Premium unique hit.";
   }
 
   if (item.etherealRelevant && input.ethereal && verdict !== "Ignore" && verdict !== "Low Priority") {
     recommendedAction =
       verdict === "Premium"
-        ? "Premium eth hit. Compare it against strong examples before listing."
+        ? "Keep it. Premium eth hit."
         : "Keep it. Eth is why this copy matters.";
   }
 

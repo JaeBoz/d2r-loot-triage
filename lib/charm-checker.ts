@@ -355,10 +355,12 @@ export function evaluateCharm(rawInput: CharmCheckInput): CharmCheckResult {
       explanation = `${summary} is a plain skiller; the tree decides how good it is.`;
     } else if (input.size === "Grand Charm" && input.skill?.trim()) {
       explanation = `${summary} is a skiller hit; the second mod pushes it higher.`;
+    } else if (matchedPatternIds.includes("sc-mf") && input.size === "Small Charm" && (input.magicFind ?? 0) >= 7) {
+      explanation = "7 MF is the max small charm roll.";
     } else if (input.size === "Small Charm") {
       explanation = `Good small charm: ${patternText} is the pattern.`;
     } else {
-      explanation = `Decent ${input.size.toLowerCase()}: ${patternText} is worth a look.`;
+      explanation = `Decent ${input.size.toLowerCase()}: ${patternText} is the value signal.`;
     }
   } else {
     explanation = `${summary} is present, but it is not a real ${input.mode} charm pattern.`;
@@ -366,21 +368,21 @@ export function evaluateCharm(rawInput: CharmCheckInput): CharmCheckResult {
 
   let recommendedAction = "";
   if (verdict === "Ignore") {
-    recommendedAction = "Charsi unless you need a temporary filler charm.";
+    recommendedAction = "Drop it unless you need a temporary charm.";
   } else if (verdict === "Low Priority") {
     recommendedAction = "Only keep it as a stopgap charm.";
   } else if (verdict === "Check") {
-    recommendedAction = "Check once before tossing. The pattern is usable.";
+    recommendedAction = "Conditional keep. The pattern is usable.";
   } else if (isTopPoisonSmallCharm(input, matchedPatternIds)) {
-    recommendedAction = "Premium poison small charm. List it or mule it.";
+    recommendedAction = "Keep it. Premium poison small charm.";
   } else if (isPlainSkiller(matchedPatternIds)) {
-    recommendedAction = "Worth checking if the skill tree is useful.";
+    recommendedAction = "Keep it if the skill tree is useful.";
   } else if (verdict === "Keep") {
     recommendedAction = "Keep it. This matches a real charm pattern.";
   } else if (verdict === "List") {
-    recommendedAction = "Worth checking against similar charms.";
+    recommendedAction = "Keep it. Good charm hit.";
   } else {
-    recommendedAction = "Premium charm. List it or mule it.";
+    recommendedAction = "Keep it. Premium charm hit.";
   }
 
   return {

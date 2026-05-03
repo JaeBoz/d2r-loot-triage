@@ -1,6 +1,6 @@
 import { EvaluationPriority, Verdict } from "@/lib/types";
 
-export type DecisionLabel = "Keep" | "Check Before Tossing" | "Conditional" | "Drop";
+export type DecisionLabel = "Keep" | "Conditional" | "Drop";
 
 export type DecisionOutput = {
   label: DecisionLabel;
@@ -22,15 +22,27 @@ function includesAny(value: string, terms: string[]) {
 
 export function mapDecisionOutput(input: DecisionInput): DecisionOutput {
   const text = `${input.recommendedAction} ${input.explanation}`.toLowerCase();
-  const isSocketDependent = includesAny(text, ["socket-dependent", "socket it", "socket path", "right socket", "correct sockets"]);
+  const isSocketDependent = includesAny(text, [
+    "socket-dependent",
+    "socket potential",
+    "socket it",
+    "socket path",
+    "right socket",
+    "correct sockets",
+    "needs 1 socket",
+    "needs 2 sockets",
+    "needs 3 sockets",
+    "needs 4 sockets",
+    "needs 5 sockets",
+    "needs 6 sockets"
+  ]);
   const isSelfUse = includesAny(text, ["self-use", "personal placeholder", "temporary", "specific buyer", "specific use case"]);
-  const isMarketCheck = includesAny(text, ["check market", "list it", "worth checking", "commonly sought", "commonly traded", "easy to trade"]);
   const isNoRollStapleUnique = includesAny(text, ["is a staple unique"]);
 
   if (input.priority === "Trash" || input.verdict === "Ignore") {
     return {
       label: "Drop",
-      actionLine: "Drop it unless you need it right now.",
+      actionLine: "Drop it unless you need it.",
       caveat: isSelfUse ? "Self-use does not always trade." : undefined
     };
   }
@@ -45,9 +57,9 @@ export function mapDecisionOutput(input: DecisionInput): DecisionOutput {
     }
 
     return {
-      label: "Check Before Tossing",
-      actionLine: "Check it before you toss it.",
-      caveat: "Real hit. Compare before you list or mule it."
+      label: "Keep",
+      actionLine: "Keep this. Strong hit.",
+      caveat: "Compare before you list or mule it."
     };
   }
 
@@ -61,19 +73,17 @@ export function mapDecisionOutput(input: DecisionInput): DecisionOutput {
     }
 
     return {
-      label: isMarketCheck ? "Check Before Tossing" : "Keep",
-      actionLine: isMarketCheck ? "Check it before you toss it." : "Keep it and compare later.",
+      label: "Keep",
+      actionLine: "Keep it and compare later.",
       caveat: isSocketDependent ? "Sockets are the reason it matters." : undefined
     };
   }
 
   if (input.priority === "Moderate Trade Value") {
     return {
-      label: isMarketCheck && !isSelfUse ? "Check Before Tossing" : "Conditional",
+      label: "Conditional",
       actionLine:
-        isMarketCheck && !isSelfUse
-          ? "Check it before you toss it."
-          : isSocketDependent
+        isSocketDependent
             ? "Keep only if you will socket or reroll it."
             : "Keep only if you will use it or compare it.",
       caveat: isSelfUse ? "Niche or self-use." : undefined

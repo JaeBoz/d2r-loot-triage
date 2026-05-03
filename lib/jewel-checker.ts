@@ -186,15 +186,15 @@ function explanationFor(
   const leadTag = tags[0] ?? "niche";
 
   if (verdict === "Ignore") {
-    return `Charsi-level jewel: ${summary} is not a real pattern.`;
+    return `Drop jewel: ${summary} is not a real pattern.`;
   }
 
   if (verdict === "Low Priority") {
-    return `Mostly self-use: ${summary} does not come together.`;
+    return `Self-use jewel: ${summary} does not come together.`;
   }
 
   if (verdict === "Check") {
-    return `Decent jewel: ${summary} is worth a second look.`;
+    return `Decent jewel: ${summary} is usable, not a big trade item.`;
   }
 
   if (verdict === "Keep") {
@@ -212,20 +212,20 @@ function explanationFor(
 }
 
 function recommendedActionFor(verdict: Verdict, highlights: string[]) {
-  if (verdict === "Ignore") return "Charsi unless you need a temporary self-use jewel.";
+  if (verdict === "Ignore") return "Drop it unless you need a temporary jewel.";
   if (verdict === "Low Priority") return "Only keep it as a stash filler or niche socket option.";
-  if (verdict === "Check") return "Check the mod mix before tossing it.";
+  if (verdict === "Check") return "Conditional keep. The mod mix needs to line up.";
   if (verdict === "Keep") return "Keep it. Useful enough to stash for a future socket.";
   if (verdict === "List") {
     if (highlights.includes("IAS with resist support")) {
-      return "Worth checking. IAS + res is easy to trade.";
+      return "Keep it. IAS + res is easy to read.";
     }
     if (highlights.includes("enhanced damage with -requirements")) {
-      return "Worth checking. ED + -req is niche but real.";
+      return "Keep it. ED + -req is niche but real.";
     }
-    return "Worth checking against similar jewels.";
+    return "Keep it. Good jewel hit.";
   }
-  return "Premium jewel. Compare before listing.";
+  return "Keep it. Premium jewel hit.";
 }
 
 export function evaluateJewel(input: JewelCheckInput): JewelCheckResult {

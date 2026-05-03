@@ -128,7 +128,7 @@ export function BootsChecker({ mode }: { mode: GameMode }) {
         <div className="mt-5 flex flex-wrap gap-2">
           <Pill>FRW is the anchor</Pill>
           <Pill>Dual/triple res matters</Pill>
-          <Pill>No FRW is usually Charsi</Pill>
+          <Pill>No FRW is usually a drop</Pill>
           <Pill>Mana stays secondary</Pill>
         </div>
       </Card>

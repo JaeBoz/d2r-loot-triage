@@ -121,7 +121,7 @@ function compactCircletSupport(input: CircletCheckInput) {
     support.push(`${input.life} life`);
   }
 
-  return support.length > 0 ? `Support: ${support.slice(0, 3).join(", ")}.` : "Support is light.";
+  return support.slice(0, 3).join("/");
 }
 
 function scoreMagicCirclet(input: CircletCheckInput, details: string[], tags: Set<RingArchetype>) {
@@ -353,31 +353,36 @@ export function evaluateCirclet(rawInput: CircletCheckInput): CircletCheckResult
   const liquidity = liquidityFor(input, verdict, tags);
   const verdictSummary =
     verdict === "Premium"
-      ? "Premium circlet hit."
+      ? "premium circlet hit"
       : verdict === "List"
-        ? "Good circlet, worth checking."
+        ? "good circlet hit"
         : verdict === "Keep"
-          ? "Solid circlet, but not a jackpot."
+          ? "good circlet, not a jackpot"
         : verdict === "Check"
-            ? "Partial hit, not a clean winner."
+            ? "partial hit, not a clean winner"
             : verdict === "Low Priority"
-              ? "Some utility, but the combo is weak."
-              : "No real circlet pattern here.";
+              ? "some utility, but the combo is weak"
+              : "no real circlet pattern";
 
-  let recommendedAction = "Charsi unless you specifically collect niche circlets.";
+  let recommendedAction = "Drop it unless you collect niche circlets.";
   if (verdict === "Low Priority") {
     recommendedAction = "Only keep for niche self-use.";
   } else if (verdict === "Check") {
-    recommendedAction = "Check once before tossing.";
+    recommendedAction = "Conditional keep. The pattern is not clean.";
   } else if (verdict === "Keep") {
-    recommendedAction = "Keep if the archetype matters.";
+    recommendedAction = "Keep it if the archetype matters.";
   } else if (verdict === "List") {
-    recommendedAction = "Worth checking. This has a real pattern.";
+    recommendedAction = "Keep it. Good circlet pattern.";
   } else if (verdict === "Premium") {
-    recommendedAction = "Premium circlet. Compare it against strong examples before listing.";
+    recommendedAction = "Keep it. Premium circlet hit.";
   }
 
-  const explanation = `${input.quality} ${input.family}: ${compactCircletIdentity(input)}. ${verdictSummary}`;
+  const supportText = compactCircletSupport(input);
+  const coreText =
+    supportText && (verdict === "Premium" || verdict === "List")
+      ? `${compactCircletIdentity(input)} + ${supportText}`
+      : compactCircletIdentity(input);
+  const explanation = `${input.quality} ${input.family}: ${coreText} is a ${verdictSummary}.`;
 
   return {
     verdict,

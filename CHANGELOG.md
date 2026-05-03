@@ -3,6 +3,40 @@
 [2026-05-03]
 
 Change:
+- Tightened final result copy for strong outputs, primary value signals, circlet support, Warlock uniques, and 7 MF small charms.
+
+Type:
+- UX
+
+Why:
+- Final copy QA found a few High/Premium outputs still had conditional phrasing or omitted the stat that actually drove value.
+
+Impact:
+- Strong results read more confidently, value sentences lead with the main signal, Premium circlets show their support, and max-roll MF small charms are clearer.
+
+Notes:
+- No scoring logic, decision mapping, Trade Value tiers, data ranges, or new features changed.
+
+[2026-05-03]
+
+Change:
+- Standardized final output language and decision labels across checkers for the 1.0 copy pass.
+
+Type:
+- UX
+
+Why:
+- Final QA found some result wording was hesitant or inconsistent with the displayed Trade Value.
+
+Impact:
+- Premium and High results now produce confident keep calls, weaker results stay conditional or drop-oriented, and Why It Matters copy is shorter and faster to scan.
+
+Notes:
+- No scoring logic, Trade Value tiers, pricing, data ranges, or new features changed.
+
+[2026-05-03]
+
+Change:
 - Applied all defined charm size caps during Charm Checker evaluator sanitization.
 
 Type:

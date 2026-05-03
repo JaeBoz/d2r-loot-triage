@@ -224,9 +224,9 @@ export function GloveChecker({ mode }: { mode: GameMode }) {
           <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-400">What to look for</p>
           <div className="mt-2 grid gap-1 text-sm leading-5 text-zinc-300 sm:grid-cols-2">
             <span>+2/3 Jav + 20 IAS = big hit</span>
-            <span>IAS + strong support = worth checking</span>
+            <span>IAS + strong support = good hit</span>
             <span>Blood gloves: IAS + Crushing Blow can matter</span>
-            <span>No IAS = usually Charsi</span>
+            <span>No IAS = usually a drop</span>
           </div>
         </div>
       </Card>

@@ -499,19 +499,19 @@ function explanationFor(
   const craftLabel = isCraftFcr ? " craft-style" : "";
 
   if (verdict === "Ignore") {
-    return `Charsi-level amulet: ${summaryText} is not enough.`;
+    return `Drop amulet: ${summaryText} is not enough.`;
   }
 
   if (verdict === "Low Priority") {
     return hasCasterSkillMismatch
       ? "High FCR shell, but the skill roll makes it niche."
-      : `Mostly self-use: ${summaryText} does not come together.`;
+      : `Self-use amulet: ${summaryText} does not come together.`;
   }
 
   if (verdict === "Check") {
     return hasCasterSkillMismatch
       ? "High FCR shell, but the class skill does not line up."
-      : `Decent partial hit: ${summaryText}, but it needs better support.`;
+      : `Decent, not a big trade item: ${summaryText} needs better support.`;
   }
 
   if (verdict === "Keep") {
@@ -519,7 +519,7 @@ function explanationFor(
       return `High FCR, but mismatch: ${summaryText} keeps it niche.`;
     }
 
-    return `Solid${craftLabel} ${leadTag} amulet: ${summaryText} is worth comparing.`;
+    return `Good${craftLabel} ${leadTag} amulet: ${summaryText} is the reason to keep it.`;
   }
 
   if (verdict === "List") {
@@ -538,12 +538,12 @@ function explanationFor(
 }
 
 function recommendedActionFor(verdict: Verdict, mode: AmuletCheckInput["mode"]) {
-  if (verdict === "Ignore") return "Charsi unless you need a temporary self-use amulet.";
+  if (verdict === "Ignore") return "Drop it unless you need a temporary amulet.";
   if (verdict === "Low Priority") return "Only keep it as a progression filler.";
-  if (verdict === "Check") return "Give it a second pass before tossing it.";
+  if (verdict === "Check") return "Conditional keep. The support needs to line up.";
   if (verdict === "Keep") return `Keep it. Compare against your other ${mode} amulets.`;
-  if (verdict === "List") return "Worth checking against similar amulets.";
-  return "Premium amulet. Compare before listing.";
+  if (verdict === "List") return "Keep it. Good amulet hit.";
+  return "Keep it. Premium amulet hit.";
 }
 
 export function evaluateAmulet(input: AmuletCheckInput): AmuletCheckResult {

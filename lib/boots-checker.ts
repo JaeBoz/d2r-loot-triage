@@ -299,6 +299,11 @@ function comboTextFor(highlights: string[]) {
   const packageLabels = new Set(["premium boot shell", "multiple strong utility rolls", "strong overall boot package"]);
   const focusedHighlights = highlights.length > 1 ? highlights.filter((highlight) => !packageLabels.has(highlight)) : highlights;
   const displayHighlights = Array.from(new Set(focusedHighlights.map(displayHighlight)));
+
+  if (displayHighlights.includes("tri-res utility") && displayHighlights.includes("FRW + strong res")) {
+    return "FRW + tri-res";
+  }
+
   return displayHighlights.length > 0 ? displayHighlights.slice(0, 2).join(" and ") : "the overall stat mix";
 }
 
@@ -325,7 +330,7 @@ function explanationFor(
   if (verdict === "Ignore") {
     return hasFrw
       ? `FRW is here, but ${summary} is too light.`
-      : `No FRW: ${summary} is usually Charsi.`;
+      : `No FRW: ${summary} is usually a drop.`;
   }
 
   if (verdict === "Low Priority") {
@@ -336,7 +341,7 @@ function explanationFor(
 
   if (verdict === "Check") {
     if (hasFrw && resists >= 2) {
-      return "Decent boot shell: FRW + dual res is worth a look.";
+      return "Decent boot shell: FRW + dual res is the value signal.";
     }
     return `Decent partial hit: ${summary} is usable, but not clean.`;
   }
@@ -356,25 +361,25 @@ function explanationFor(
     return `Premium boots: ${comboText} is the hit.`;
   }
 
-  return "Looks strong, but check the full boot mix.";
+  return "Good roll, but the full boot mix decides the value.";
 }
 
 function recommendedActionFor(verdict: Verdict, highlights: string[]) {
   if (highlights.includes("useful stats, but no movement")) return "Only keep if you need the stats. No FRW is rough.";
   if (highlights.includes("FRW is the anchor, but support is light")) return "Do not over-stash these. FRW alone is filler.";
   if (highlights.includes("FRW with MF, but no support")) return "MF helps, but it still needs res or support.";
-  if (highlights.includes("FRW with dual res, but little extra support")) return "Check before tossing, but not a trophy.";
-  if (verdict === "Ignore") return "Charsi unless you need temporary self-use boots.";
+  if (highlights.includes("FRW with dual res, but little extra support")) return "Conditional keep. Good shell, light support.";
+  if (verdict === "Ignore") return "Drop them unless you need temporary boots.";
   if (verdict === "Low Priority") return "Only keep them as a filler or specific self-use pair.";
-  if (verdict === "Check") return "Check the full boot mix before tossing them.";
+  if (verdict === "Check") return "Conditional keep. The boot mix needs to line up.";
   if (verdict === "Keep") return "Keep them. Useful enough to stash or compare.";
   if (verdict === "List") {
     if (highlights.includes("FRW with magic find")) {
-      return "Worth checking. FRW + MF is easy to read.";
+      return "Keep them. FRW + MF is easy to read.";
     }
-    return "Worth checking against similar boots.";
+    return "Keep them. Good boot hit.";
   }
-  return "Premium boots. Compare before listing.";
+  return "Keep them. Premium boot hit.";
 }
 
 export function evaluateBoots(input: BootsCheckInput): BootsCheckResult {

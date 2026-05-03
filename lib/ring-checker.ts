@@ -220,6 +220,14 @@ function comboTextFor(highlights: string[]) {
   const packageLabels = new Set(["premium shell", "multiple high-impact rolls", "strong overall stat package"]);
   const focusedHighlights = highlights.length > 1 ? highlights.filter((highlight) => !packageLabels.has(highlight)) : highlights;
   const displayHighlights = Array.from(new Set(focusedHighlights.map(displayHighlight)));
+  const fcrSupport = displayHighlights
+    .filter((highlight) => highlight.startsWith("FCR + "))
+    .map((highlight) => highlight.replace("FCR + ", ""));
+
+  if (fcrSupport.length >= 2) {
+    return `FCR + ${fcrSupport.slice(0, 3).join("/")}`;
+  }
+
   return displayHighlights.length > 0 ? displayHighlights.slice(0, 2).join(" and ") : "the overall stat mix";
 }
 
@@ -324,6 +332,8 @@ function explanationFor(
   const summaryBits = topRated.slice(0, 3).map((entry) => `${entry.value} ${labelByKey[entry.key]}`);
   const summaryText = summaryBits.length > 0 ? summaryBits.join(", ") : "very little usable value";
   const comboText = comboTextFor(highlights);
+  const hasFcrAnchor = topRated.some((entry) => entry.key === "fasterCastRate" && entry.value >= 10);
+  const valueText = hasFcrAnchor && !comboText.includes("FCR") ? `FCR + ${comboText}` : comboText;
   const highCount = rated.filter((entry) => entry.score >= 4).length;
   const lowOnly = rated.length > 0 && rated.every((entry) => entry.score <= 1);
   const craftedLeechNote =
@@ -332,35 +342,35 @@ function explanationFor(
       : "";
 
   if (verdict === "Ignore") {
-    return `Charsi-level ring: ${summaryText} is not enough.`;
+    return `Drop ring: ${summaryText} is not enough.`;
   }
 
   if (verdict === "Low Priority") {
-    return `Mostly self-use: ${craftedLeechNote}${summaryText} does not come together.`;
+    return `Self-use ring: ${craftedLeechNote}${summaryText} does not come together.`;
   }
 
   if (verdict === "Check") {
-    return `Decent partial hit: ${craftedLeechNote}${summaryText}, but it needs a cleaner combo.`;
+    return `Decent, not a big trade item: ${craftedLeechNote}${summaryText} needs a cleaner combo.`;
   }
 
   if (verdict === "Keep") {
-    return `Solid ${leadTag} ring: ${craftedLeechNote}${summaryText} is worth comparing.`;
+    return `Good ${leadTag} ring: ${craftedLeechNote}${summaryText} is the reason to keep it.`;
   }
 
   if (verdict === "List") {
-    return `Good ${leadTag} ring: ${comboText} is the value.`;
+    return `Good ${leadTag} ring: ${valueText} is the value.`;
   }
 
   if (highCount >= 2 && !lowOnly) {
-    return `Premium ${leadTag} ring: ${comboText} is the hit.`;
+    return `Premium ${leadTag} ring: ${valueText} is the hit.`;
   }
 
-  return "Looks strong at a glance, but check the full mix.";
+  return "Good roll, but the full stat mix decides the value.";
 }
 
 function recommendedActionFor(verdict: Verdict, mode: RingCheckInput["mode"]) {
   if (verdict === "Ignore") {
-    return "Charsi unless you need a temporary self-use ring.";
+    return "Drop it unless you need a temporary ring.";
   }
 
   if (verdict === "Low Priority") {
@@ -368,7 +378,7 @@ function recommendedActionFor(verdict: Verdict, mode: RingCheckInput["mode"]) {
   }
 
   if (verdict === "Check") {
-    return "Check the full mix before tossing it.";
+    return "Conditional keep. The mix needs to line up.";
   }
 
   if (verdict === "Keep") {
@@ -376,10 +386,10 @@ function recommendedActionFor(verdict: Verdict, mode: RingCheckInput["mode"]) {
   }
 
   if (verdict === "List") {
-    return "Worth checking against similar rings.";
+    return "Keep it. Good ring hit.";
   }
 
-  return "Premium ring. Compare before listing.";
+  return "Keep it. Premium ring hit.";
 }
 
 export function evaluateRing(input: RingCheckInput): RingCheckResult {
