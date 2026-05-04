@@ -3,6 +3,23 @@
 [2026-05-04]
 
 Change:
+- Lightly tightened result panel spacing and allowed short natural anchor-first reasoning lines.
+
+Type:
+- UX
+
+Why:
+- Final presentation feedback found the action gap slightly loose and some `drives value` phrasing more robotic than player-native alternatives.
+
+Impact:
+- Result cards feel more compact while preserving the same Trade Value, action, and reasoning hierarchy.
+
+Notes:
+- Minor copy and spacing refinement only. No logic, data, features, Trade Value tiers, or action mapping changed.
+
+[2026-05-04]
+
+Change:
 - Added superior roll inputs and evaluation support to Base Checker for enhanced damage, enhanced defense, and durability.
 
 Type:

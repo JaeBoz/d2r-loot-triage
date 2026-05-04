@@ -127,7 +127,7 @@ function baseDemandPhrase(item: BaseItem, input: BaseCheckInput) {
   }
 
   if (item.socketSensitive && item.desiredSockets.includes(input.sockets)) {
-    return "Socket state drives value";
+    return `${input.sockets}os makes the ${primaryUseCase(item)} base`;
   }
 
   if (item.socketSensitive && input.sockets === 0 && item.tags.includes("merc") && input.ethereal && item.ethPriority !== "low") {

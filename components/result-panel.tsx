@@ -107,25 +107,10 @@ function displayExplanation(explanation: string) {
     .replace(/\bed\b/gi, "ED")
     .replace(/\bar\b/gi, "AR")
     .replace(/\bcb\b/gi, "CB")
-    .replace(/\bdecides value\b/gi, "drives value")
-    .replace(/\bdecides the value\b/gi, "drives value")
-    .replace(/\broll decides value\b/gi, "roll drives value")
-    .replace(/\bis the value signal\b/gi, "drives value")
-    .replace(/\bis the value\b/gi, "drives value")
-    .replace(/\bis the reason to care\b/gi, "drives value")
-    .replace(/\bdrives the result\b/gi, "drives value")
     .replace(/\bthis is\b/gi, "")
     .replace(/\bgood base, but\b/gi, "")
     .replace(/\bnot an easy trade as-is\b/gi, "")
     .trim();
-
-  if (/socket-dependent|socket dependent|socket state|desired sockets|valid sockets/i.test(normalized)) {
-    return "Socket state drives value";
-  }
-
-  if (/\bMF\b/i.test(normalized) && /drives value|roll/i.test(normalized)) {
-    return "MF roll drives value";
-  }
 
   const firstSentence = normalized.split(".")[0]?.trim() || normalized;
   return firstSentence.replace(/[.;,\s]+$/, "");
@@ -155,11 +140,11 @@ export function ResultPanel({
               <div className="mt-1 text-sm font-semibold leading-5 text-zinc-400">{tradeValueContext(result.priority)}</div>
             </div>
 
-            <div className="mb-5 mt-6 h-px bg-white/10" />
+            <div className="mb-4 mt-5 h-px bg-white/10" />
 
             <div className="text-lg font-black leading-6 text-white sm:text-xl">{recommendedAction(result.priority, itemType)}</div>
 
-            <div className="mt-3">
+            <div className="mt-2.5">
               <div className="text-sm leading-5 text-zinc-400">{displayExplanation(result.explanation)}</div>
             </div>
           </div>

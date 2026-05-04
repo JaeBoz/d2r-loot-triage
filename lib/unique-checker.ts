@@ -456,6 +456,10 @@ function uniqueAnchorStat(item: UniqueItemDefinition, rollAssessment: RollAssess
 }
 
 function uniqueRollReason(anchor: string) {
+  if (anchor === "MF roll") {
+    return "MF roll is the price check";
+  }
+
   return anchor.endsWith("roll") ? `${anchor} drives value` : `${anchor} roll drives value`;
 }
 
@@ -472,6 +476,10 @@ function conciseUniqueExplanation(item: UniqueItemDefinition, rollAssessment: Ro
   }
 
   if (verdict === "Premium" || verdict === "List") {
+    if (anchor === "MF roll") {
+      return "MF roll is the price check";
+    }
+
     return `${anchor} drives value`;
   }
 
