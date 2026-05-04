@@ -3,6 +3,23 @@
 [2026-05-04]
 
 Change:
+- Cleaned up result panel layout with separated Trade Value context, plain action text, quieter reasoning, and subtler tier color.
+
+Type:
+- UX
+
+Why:
+- User feedback found the result panel visually crowded, with arrow action text and heavy color competing against readability.
+
+Impact:
+- Results now read as clear value, action, and reasoning lines with neutral card styling and subtle tier borders.
+
+Notes:
+- Visual layout only. No logic, evaluation behavior, item data, wording, Trade Value tiers, or copy mapping changed.
+
+[2026-05-04]
+
+Change:
 - Removed the LOD / Reign of the Warlock ruleset selector and unified supported uniques into one Unique Checker list.
 
 Type:

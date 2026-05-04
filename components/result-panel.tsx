@@ -114,33 +114,25 @@ export function ResultPanel({
   emptyMessage?: string;
   itemType?: "unique";
 }) {
-  const isStrongResult = result.priority === "High Trade Value" || result.priority === "Premium Trade Value";
-
   return (
-    <Card
-      className={`h-fit ${
-        isStrongResult
-          ? "border-emerald-500/35 bg-gradient-to-br from-emerald-950/25 via-panel/95 to-black/30 shadow-[0_0_0_1px_rgba(16,185,129,0.16),0_18px_50px_rgba(0,0,0,0.5)]"
-          : ""
-      }`}
-    >
+    <Card className="h-fit">
       <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-200/80">Result</p>
       {hasInput ? (
         <>
-          <div className={`mt-2 rounded-2xl border px-3.5 py-4 sm:px-4 ${TRADE_VALUE_STYLES[result.priority]}`}>
-            <div className="flex flex-wrap items-center gap-2.5">
-              <span className="rounded-full border border-current/25 bg-black/20 px-2.5 py-1 text-[11px] font-black uppercase tracking-[0.14em] text-current">
+          <div className={`mt-2 rounded-2xl border bg-black/15 px-4 py-4 ${TRADE_VALUE_STYLES[result.priority]}`}>
+            <div>
+              <div className="text-xl font-black uppercase leading-6 tracking-[0.08em] text-current sm:text-2xl">
                 {tradeValueBadge(result.priority)}
-              </span>
-              <span className="text-sm font-semibold leading-5 text-current/80">{tradeValueContext(result.priority)}</span>
+              </div>
+              <div className="mt-1 text-sm font-semibold leading-5 text-zinc-400">{tradeValueContext(result.priority)}</div>
             </div>
 
-            <div className="my-4 border-t border-white/10" />
+            <div className="my-5 h-px bg-white/10" />
 
-            <p className="text-lg font-black leading-6 text-white sm:text-xl">-&gt; {recommendedAction(result.priority, itemType)}</p>
+            <div className="text-lg font-black leading-6 text-white sm:text-xl">{recommendedAction(result.priority, itemType)}</div>
 
-            <div className="mt-3 border-t border-white/10 pt-3">
-              <p className="text-sm leading-5 text-current/75">{displayExplanation(result.explanation)}</p>
+            <div className="mt-5">
+              <div className="text-sm leading-5 text-zinc-400">{displayExplanation(result.explanation)}</div>
             </div>
           </div>
 

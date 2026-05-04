@@ -24,9 +24,9 @@ export const CATEGORY_TABS: ItemCategory[] = [
 ];
 
 export const TRADE_VALUE_STYLES: Record<EvaluationPriority, string> = {
-  "Premium Trade Value": "border-emerald-400/60 bg-emerald-950/35 text-emerald-100",
-  "High Trade Value": "border-emerald-500/50 bg-emerald-950/30 text-emerald-100",
-  "Moderate Trade Value": "border-orange-500/55 bg-orange-950/35 text-orange-100",
-  "Low Trade Value": "border-red-700/60 bg-red-950/35 text-red-100",
-  Trash: "border-red-800/70 bg-red-950/45 text-red-100"
+  "Premium Trade Value": "border-emerald-400/55 text-emerald-100",
+  "High Trade Value": "border-emerald-500/45 text-emerald-100",
+  "Moderate Trade Value": "border-orange-500/50 text-orange-100",
+  "Low Trade Value": "border-red-700/55 text-red-100",
+  Trash: "border-red-800/60 text-red-100"
 };
