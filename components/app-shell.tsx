@@ -13,8 +13,8 @@ import { RingChecker } from "@/components/ring-checker";
 import { RuneGuide } from "@/components/rune-guide";
 import { UniqueChecker } from "@/components/unique-checker";
 import { Card, Pill } from "@/components/ui";
-import { CATEGORY_TABS, MODE_OPTIONS, RULESET_OPTIONS } from "@/lib/constants";
-import { GameMode, ItemCategory, Ruleset } from "@/lib/types";
+import { CATEGORY_TABS, MODE_OPTIONS } from "@/lib/constants";
+import { GameMode, ItemCategory } from "@/lib/types";
 
 const quickIdTargets = [
   {
@@ -60,7 +60,6 @@ const quickIdTargets = [
 ];
 
 export function AppShell() {
-  const [ruleset, setRuleset] = useState<Ruleset>("lod");
   const [mode, setMode] = useState<GameMode>("SCNL");
   const [category, setCategory] = useState<ItemCategory>("Bases");
   const [howItWorksOpen, setHowItWorksOpen] = useState(false);
@@ -87,23 +86,6 @@ export function AppShell() {
           </div>
 
           <div className="mt-2 flex flex-wrap gap-1.5">
-            {RULESET_OPTIONS.map((option) => (
-              <button
-                key={option.value}
-                className={`rounded-xl border px-3 py-1.5 text-sm font-semibold transition ${
-                  ruleset === option.value
-                    ? "border-accent bg-accent/15 text-accent"
-                    : "border-border bg-black/20 text-zinc-300 hover:border-amber-500/60 hover:text-white"
-                }`}
-                onClick={() => setRuleset(option.value)}
-                type="button"
-              >
-                {option.label}
-              </button>
-            ))}
-          </div>
-
-          <div className="mt-1.5 flex flex-wrap gap-1.5">
             {MODE_OPTIONS.map((option) => (
               <button
                 key={option.value}
@@ -208,7 +190,7 @@ export function AppShell() {
       {category === "Amulets" ? <AmuletChecker mode={mode} /> : null}
       {category === "Boots" ? <BootsChecker mode={mode} /> : null}
       {category === "Gloves" ? <GloveChecker mode={mode} /> : null}
-      {category === "Uniques" ? <UniqueChecker mode={mode} ruleset={ruleset} /> : null}
+      {category === "Uniques" ? <UniqueChecker mode={mode} /> : null}
       {category !== "Bases" &&
       category !== "Circlets" &&
       category !== "Runes" &&

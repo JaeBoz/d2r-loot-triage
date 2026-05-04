@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Card, Pill } from "@/components/ui";
 import { ResultPanel } from "@/components/result-panel";
-import { evaluateUnique, isUniqueAvailableInRuleset, uniqueItems } from "@/lib/unique-checker";
+import { evaluateUnique, uniqueItems } from "@/lib/unique-checker";
 import { GameMode, Ruleset, UniqueRollField, UniqueSelectField } from "@/lib/types";
 
 const fieldLabels: Record<UniqueRollField, string> = {
@@ -154,11 +154,8 @@ function displayUniqueNote(note: string) {
   return note.replace(/Warlock-only item/gi, "Reign of the Warlock item");
 }
 
-export function UniqueChecker({ mode, ruleset }: { mode: GameMode; ruleset: Ruleset }) {
-  const availableUniqueItems = useMemo(
-    () => uniqueItems.filter((item) => isUniqueAvailableInRuleset(item, ruleset)),
-    [ruleset]
-  );
+export function UniqueChecker({ mode }: { mode: GameMode }) {
+  const availableUniqueItems = uniqueItems;
   const defaultItemId = availableUniqueItems[0]?.id ?? "";
   const [itemId, setItemId] = useState(defaultItemId);
   const [form, setForm] = useState<UniqueFormState>(emptyForm);
@@ -170,7 +167,7 @@ export function UniqueChecker({ mode, ruleset }: { mode: GameMode; ruleset: Rule
     setForm(emptyForm);
     setSelectForm(emptySelectForm);
     setEthereal(false);
-  }, [defaultItemId, ruleset]);
+  }, [defaultItemId]);
 
   const selectedItem = useMemo(
     () => availableUniqueItems.find((item) => item.id === itemId),
@@ -183,10 +180,12 @@ export function UniqueChecker({ mode, ruleset }: { mode: GameMode; ruleset: Rule
     Object.values(selectForm).some((value) => value.trim() !== "");
 
   const result = useMemo(
-    () =>
-      evaluateUnique({
+    () => {
+      const activeRuleset: Ruleset = selectedItem?.ruleset === "warlock" ? "warlock" : "lod";
+
+      return evaluateUnique({
         mode,
-        ruleset,
+        ruleset: activeRuleset,
         itemId,
         ethereal,
         magicFind: toOptionalNumber(form.magicFind),
@@ -241,8 +240,9 @@ export function UniqueChecker({ mode, ruleset }: { mode: GameMode; ruleset: Rule
         vitality: toOptionalNumber(form.vitality),
         ormusSkillQuality: selectForm.ormusSkillQuality || undefined,
         rainbowFacetElement: selectForm.rainbowFacetElement || undefined
-      }),
-    [ethereal, form, itemId, mode, ruleset, selectForm]
+      });
+    },
+    [ethereal, form, itemId, mode, selectForm, selectedItem?.ruleset]
   );
 
   const handleReset = () => {
@@ -259,10 +259,10 @@ export function UniqueChecker({ mode, ruleset }: { mode: GameMode; ruleset: Rule
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-200/80">Unique Triage</p>
             <h2 className="mt-1 text-xl font-bold text-white sm:text-2xl">Identify the unique, then check only meaningful rolls</h2>
+            <p className="mt-1 text-sm leading-5 text-zinc-400">LOD and Reign of the Warlock uniques are included together.</p>
           </div>
           <div className="flex items-center gap-2">
             <Pill active>{mode}</Pill>
-            <Pill>{ruleset === "warlock" ? "Warlock" : "LOD"}</Pill>
             <button
               className="rounded-xl border border-border bg-black/20 px-3 py-2 text-sm font-semibold text-zinc-200 transition hover:border-amber-500/60 hover:text-white"
               onClick={handleReset}

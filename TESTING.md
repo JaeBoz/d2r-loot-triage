@@ -35,18 +35,16 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 
 ## Rulesets
 
-- Load the app fresh; expected: `LOD` is the default active ruleset.
-- Confirm the header no longer duplicates selected `LOD`/`SCNL` state as passive pills; selected toggle buttons are the state indicator.
-- Open Unique Triage in `LOD`; expected: Standard LOD uniques such as `Stone of Jordan` appear and Warlock-only uniques do not.
-- Switch to `Reign of the Warlock`; expected: Warlock-only uniques appear in the Unique Checker, alongside LOD staples such as `Stone of Jordan` and `Arachnid Mesh`.
-- Switch back to `LOD`; expected: Warlock-only uniques are hidden again and LOD uniques are available.
-- Toggle `SCNL` and `SCL` while in both rulesets; expected: mode switching still works and does not break selected checker navigation.
-- Test `Stone of Jordan` in `LOD`; expected: no-roll staple behavior remains unchanged.
+- Load the app fresh; expected: only the `SCNL` / `SCL` mode selector appears, with no `LOD` / `Reign of the Warlock` ruleset selector.
+- Open Unique Triage; expected: standard LOD uniques such as `Stone of Jordan`, `War Travelers`, and `Arachnid Mesh` appear in the same list as Reign of the Warlock uniques.
+- Confirm Reign of the Warlock uniques are visible without a ruleset toggle; expected: `Ars Al'Diabolos`, `Ars Tor'Baalos`, `Ars Dul'Mephistos`, `Measured Wrath`, `Dreadfang`, `Bloodpact Shard`, `Wraithstep`, `Sling`, `Opalvein`, `Entropy Locket`, `Gheed's Wager`, and `Hellwarden's Will` appear.
+- Select LOD uniques such as `Stone of Jordan` and `War Travelers`; expected: no `Reign of the Warlock item` tag appears.
+- Select Reign of the Warlock uniques such as `Ars Al'Diabolos` and `Dreadfang`; expected: the `Reign of the Warlock item` tag appears.
+- Toggle `SCNL` and `SCL` while checking both LOD and Reign of the Warlock uniques; expected: mode switching still works and does not break selected checker navigation.
+- Test `Stone of Jordan`; expected: no-roll staple behavior remains unchanged.
 - Test one newly added LOD unique such as `Chance Guards` or `Magefist`; expected: minimal roll/no-roll fields appear as appropriate.
-- In Warlock mode, confirm corrected names appear: `Ars Al'Diabolos`, `Ars Tor'Baalos`, `Ars Dul'Mephistos`, `Measured Wrath`, `Dreadfang`, `Bloodpact Shard`, `Wraithstep`, `Sling`, `Opalvein`, `Entropy Locket`, `Gheed's Wager`, and `Hellwarden's Will`.
-- In `LOD`, confirm those Warlock names are hidden.
 - Confirm old inaccurate Warlock names no longer appear: `Diablo's Deception`, `Baal's Betrayal`, and `Mephisto's Manipulation`.
-- Select one Grimoire such as `Ars Al'Diabolos` and one non-Grimoire such as `Dreadfang`; expected: both are Warlock-only Unique Checker entries.
+- Select one Grimoire such as `Ars Al'Diabolos` and one non-Grimoire such as `Dreadfang`; expected: both are Reign of the Warlock Unique Checker entries.
 - Test `Dreadfang`; expected: `Enhanced Damage` and `Mana Stolen Per Hit` roll inputs are available.
 - Test `Bloodpact Shard`; expected: `Bind Demon`, `Blood Boil`, `Blood Oath`, `Increased Maximum Life`, and `Magic Find` roll inputs are available.
 - Test `Entropy Locket` or `Gheed's Wager`; expected: their listed Warlock roll inputs are available and no unlisted rolls appear.

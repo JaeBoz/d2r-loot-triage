@@ -3,6 +3,23 @@
 [2026-05-04]
 
 Change:
+- Removed the LOD / Reign of the Warlock ruleset selector and unified supported uniques into one Unique Checker list.
+
+Type:
+- UX
+
+Why:
+- The ruleset toggle only gated unique visibility, so it added friction without meaningful evaluation behavior.
+
+Impact:
+- LOD and Reign of the Warlock uniques now appear together, while RotW items keep their Reign of the Warlock tag and SCNL/SCL mode behavior stays unchanged.
+
+Notes:
+- No evaluation logic, Trade Value tiers, item data, or roll ranges changed.
+
+[2026-05-04]
+
+Change:
 - Simplified the result panel visual hierarchy with a compact Trade Value badge, larger action line, and quieter reasoning text.
 
 Type:
