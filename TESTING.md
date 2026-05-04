@@ -113,8 +113,16 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - Type into Base Checker search on a narrow/mobile viewport; expected: search results do not visually conflict with stale selected-base details.
 - Confirm recently added bases such as `Colossus Voulge`, `Great Poleaxe`, `Balrog Skin`, `Long Sword`, and `Flail` appear in Base Checker search.
 - Select each new base and confirm socket options are possible for that base only.
+- Check `Superior` on a weapon or polearm base; expected: `Superior ED %` and `Superior durability %` appear, and both clamp to `15` on blur.
+- Check `Superior` on an armor, shield, or helm-style base; expected: `Superior EDef %` and `Superior durability %` appear, and both clamp to `15` on blur.
 - Test ethereal mercenary bases such as eth polearms; expected: eth status improves relevant merc/runeword value.
 - Test eth `0os Thresher`; expected: wording says it is a good base with socket potential, but not a finished clean trade piece yet.
+- Test eth `4os Thresher`; expected: plain eth 4os remains strong.
+- Test eth `4os Thresher` with `15 Superior ED`; expected: reads as a stronger/jackpot-style base result.
+- Test eth `4os Thresher` with superior durability only; expected: durability is minor support and does not equal the ED boost.
+- Test `5os Phase Blade`; expected: plain 5os remains strong.
+- Test `5os Phase Blade` with `15 Superior ED`; expected: stronger than the plain 5os version.
+- Test wrong-socket superior base; expected: superior rolls do not rescue it into High/Premium alone.
 - Test weak or wrong-socket bases; expected: output explains why trade value is limited.
 
 ## Jewels

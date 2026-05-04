@@ -68,6 +68,24 @@ const modePriority = (item: BaseItem, mode: GameMode) => (mode === "SCNL" ? item
 
 const primaryUseCase = (item: BaseItem) => item.runewordUseCases[0] ?? "runeword";
 
+const SUPERIOR_ROLL_CAP = 15;
+
+function clampSuperiorRoll(value: number | undefined) {
+  if (typeof value !== "number" || Number.isNaN(value)) {
+    return 0;
+  }
+
+  return Math.min(SUPERIOR_ROLL_CAP, Math.max(0, value));
+}
+
+function isWeaponBase(item: BaseItem) {
+  return item.category === "Weapon" || item.category === "Polearm";
+}
+
+function isArmorLikeBase(item: BaseItem) {
+  return item.category === "Armor" || item.category === "Shield" || item.category === "Helm";
+}
+
 function hasMeaningfulUnsocketedDemand(input: BaseCheckInput, item: BaseItem) {
   if (item.tags.includes("merc") && input.ethereal && item.ethPriority !== "low") {
     return true;
@@ -89,6 +107,17 @@ function hasMeaningfulUnsocketedDemand(input: BaseCheckInput, item: BaseItem) {
 }
 
 function baseDemandPhrase(item: BaseItem, input: BaseCheckInput) {
+  const superiorEd = clampSuperiorRoll(input.superiorEnhancedDamage);
+  const superiorEDef = clampSuperiorRoll(input.superiorEnhancedDefense);
+
+  if (input.superior && isWeaponBase(item) && superiorEd >= 15 && item.socketSensitive && item.desiredSockets.includes(input.sockets)) {
+    return "Superior ED boosts the base";
+  }
+
+  if (input.superior && isArmorLikeBase(item) && superiorEDef >= 15 && item.socketSensitive && item.desiredSockets.includes(input.sockets)) {
+    return "Superior EDef boosts the base";
+  }
+
   if (item.socketSensitive && input.sockets === 0 && !hasMeaningfulUnsocketedDemand(input, item)) {
     return "Socket state drives value";
   }
@@ -215,10 +244,20 @@ function adjustForSockets(score: number, input: BaseCheckInput, item: BaseItem, 
 function adjustForAffixes(score: number, input: BaseCheckInput, item: BaseItem, details: string[]) {
   let nextScore = score;
   const isCircletFamily = item.tags.includes("circlet");
+  const superiorEd = clampSuperiorRoll(input.superiorEnhancedDamage);
+  const superiorEDef = clampSuperiorRoll(input.superiorEnhancedDefense);
+  const superiorDurability = clampSuperiorRoll(input.durabilityBonus);
+  const hasUsefulBaseState =
+    (item.socketSensitive && item.desiredSockets.includes(input.sockets)) ||
+    (input.sockets === 0 && hasMeaningfulUnsocketedDemand(input, item)) ||
+    (!item.socketSensitive && modePriority(item, input.mode) !== "low");
 
   if (input.superior) {
-    nextScore += 1;
-    details.push("Superior adds a small bump.");
+    if (hasUsefulBaseState) {
+      details.push("Superior roll supports a useful base state.");
+    } else {
+      details.push("Superior roll cannot rescue a weak base state.");
+    }
   }
 
   if (item.category === "Armor" && typeof input.defenseOrEd === "number") {
@@ -241,12 +280,36 @@ function adjustForAffixes(score: number, input: BaseCheckInput, item: BaseItem, 
     }
   }
 
-  if (isCircletFamily && input.superior && typeof input.durabilityBonus === "number") {
-    if (input.durabilityBonus >= 10) {
-      nextScore += 1;
-      details.push("Superior durability is a real quality bump here.");
-    } else if (input.durabilityBonus > 0) {
-      details.push("Superior durability is present, but nothing special.");
+  if (input.superior && hasUsefulBaseState) {
+    if (isWeaponBase(item) && superiorEd > 0) {
+      if (superiorEd >= 15) {
+        nextScore += 3;
+        details.push("15 ED superior roll.");
+      } else if (superiorEd >= 10) {
+        nextScore += 2;
+        details.push("Strong superior ED roll.");
+      } else {
+        nextScore += 1;
+        details.push("Superior ED adds minor support.");
+      }
+    }
+
+    if (isArmorLikeBase(item) && superiorEDef > 0) {
+      if (superiorEDef >= 15) {
+        nextScore += 3;
+        details.push("15 EDef superior roll.");
+      } else if (superiorEDef >= 10) {
+        nextScore += 2;
+        details.push("Strong superior EDef roll.");
+      } else {
+        nextScore += 1;
+        details.push("Superior EDef adds minor support.");
+      }
+    }
+
+    if (superiorDurability > 0) {
+      nextScore += superiorDurability >= 10 ? 1 : 0;
+      details.push("Superior durability adds minor support.");
     }
   }
 

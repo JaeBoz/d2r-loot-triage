@@ -7,6 +7,8 @@ import { baseItems } from "@/lib/data";
 import { evaluateBase } from "@/lib/base-checker";
 import { GameMode } from "@/lib/types";
 
+const SUPERIOR_ROLL_CAP = 15;
+
 function matchesBaseSearch(search: string, item: (typeof baseItems)[number]) {
   const query = search.trim().toLowerCase();
   if (!query) return true;
@@ -19,6 +21,19 @@ function matchesBaseSearch(search: string, item: (typeof baseItems)[number]) {
   );
 }
 
+function clampSuperiorRoll(value: string) {
+  if (value.trim() === "") {
+    return undefined;
+  }
+
+  const numericValue = Number(value);
+  if (Number.isNaN(numericValue)) {
+    return undefined;
+  }
+
+  return Math.min(SUPERIOR_ROLL_CAP, Math.max(0, numericValue));
+}
+
 export function BaseChecker({ mode }: { mode: GameMode }) {
   const defaultItemId = baseItems[0]?.id ?? "";
   const defaultItem = baseItems[0];
@@ -29,6 +44,8 @@ export function BaseChecker({ mode }: { mode: GameMode }) {
   const [ethereal, setEthereal] = useState(false);
   const [superior, setSuperior] = useState(false);
   const [defenseOrEd, setDefenseOrEd] = useState<number | undefined>(undefined);
+  const [superiorEnhancedDamage, setSuperiorEnhancedDamage] = useState<number | undefined>(undefined);
+  const [superiorEnhancedDefense, setSuperiorEnhancedDefense] = useState<number | undefined>(undefined);
   const [durabilityBonus, setDurabilityBonus] = useState<number | undefined>(undefined);
   const [allRes, setAllRes] = useState<number | undefined>(undefined);
 
@@ -48,6 +65,8 @@ export function BaseChecker({ mode }: { mode: GameMode }) {
     setEthereal(false);
     setSuperior(false);
     setDefenseOrEd(undefined);
+    setSuperiorEnhancedDamage(undefined);
+    setSuperiorEnhancedDefense(undefined);
     setDurabilityBonus(undefined);
     setAllRes(undefined);
   }, [itemId, selectedItem]);
@@ -61,16 +80,22 @@ export function BaseChecker({ mode }: { mode: GameMode }) {
         ethereal,
         superior,
         defenseOrEd,
+        superiorEnhancedDamage,
+        superiorEnhancedDefense,
         durabilityBonus,
         allRes
       }),
-    [allRes, defenseOrEd, durabilityBonus, ethereal, itemId, mode, sockets, superior]
+    [allRes, defenseOrEd, durabilityBonus, ethereal, itemId, mode, sockets, superior, superiorEnhancedDamage, superiorEnhancedDefense]
   );
 
   const isCircletFamily = selectedItem?.tags.includes("circlet") ?? false;
+  const isWeaponBase = selectedItem?.category === "Weapon" || selectedItem?.category === "Polearm";
+  const isArmorLikeBase = selectedItem?.category === "Armor" || selectedItem?.category === "Shield" || selectedItem?.category === "Helm";
   const showAllResInput = selectedItem?.tags.includes("paladin") ?? false;
   const showDefenseInput = selectedItem?.category === "Armor" || isCircletFamily;
-  const showDurabilityInput = isCircletFamily && superior;
+  const showSuperiorEnhancedDamageInput = superior && isWeaponBase;
+  const showSuperiorEnhancedDefenseInput = superior && isArmorLikeBase;
+  const showDurabilityInput = superior && (isWeaponBase || isArmorLikeBase);
   const showSuperiorToggle = (selectedItem?.socketSensitive ?? false) || isCircletFamily;
   const showEtherealToggle = selectedItem?.etherealAllowed ?? false;
 
@@ -82,6 +107,8 @@ export function BaseChecker({ mode }: { mode: GameMode }) {
     setEthereal(false);
     setSuperior(false);
     setDefenseOrEd(undefined);
+    setSuperiorEnhancedDamage(undefined);
+    setSuperiorEnhancedDefense(undefined);
     setDurabilityBonus(undefined);
     setAllRes(undefined);
   };
@@ -200,6 +227,49 @@ export function BaseChecker({ mode }: { mode: GameMode }) {
           ) : null}
 
           {showDurabilityInput ? (
+            <>
+              {showSuperiorEnhancedDamageInput ? (
+                <label className="grid gap-2 text-sm text-zinc-300">
+                  Superior ED %
+                  <input
+                    className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
+                    type="number"
+                    min={0}
+                    max={SUPERIOR_ROLL_CAP}
+                    inputMode="numeric"
+                    placeholder="Blank"
+                    value={superiorEnhancedDamage ?? ""}
+                    onChange={(event) => {
+                      const value = event.target.value;
+                      setSuperiorEnhancedDamage(value === "" ? undefined : Number(value));
+                    }}
+                    onBlur={(event) => setSuperiorEnhancedDamage(clampSuperiorRoll(event.target.value))}
+                    aria-label="Superior enhanced damage percentage"
+                  />
+                </label>
+              ) : null}
+
+              {showSuperiorEnhancedDefenseInput ? (
+                <label className="grid gap-2 text-sm text-zinc-300">
+                  Superior EDef %
+                  <input
+                    className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
+                    type="number"
+                    min={0}
+                    max={SUPERIOR_ROLL_CAP}
+                    inputMode="numeric"
+                    placeholder="Blank"
+                    value={superiorEnhancedDefense ?? ""}
+                    onChange={(event) => {
+                      const value = event.target.value;
+                      setSuperiorEnhancedDefense(value === "" ? undefined : Number(value));
+                    }}
+                    onBlur={(event) => setSuperiorEnhancedDefense(clampSuperiorRoll(event.target.value))}
+                    aria-label="Superior enhanced defense percentage"
+                  />
+                </label>
+              ) : null}
+
             <label className="grid gap-2 text-sm text-zinc-300">
               Superior durability %
               <input
@@ -213,9 +283,11 @@ export function BaseChecker({ mode }: { mode: GameMode }) {
                   const value = event.target.value;
                   setDurabilityBonus(value === "" ? undefined : Number(value));
                 }}
+                onBlur={(event) => setDurabilityBonus(clampSuperiorRoll(event.target.value))}
                 aria-label="Superior durability percentage"
               />
             </label>
+            </>
           ) : null}
 
           {showAllResInput ? (
@@ -269,6 +341,13 @@ export function BaseChecker({ mode }: { mode: GameMode }) {
               Valid sockets: {selectedItem.validSockets.join(", ")} | Desired sockets: {selectedItem.desiredSockets.join(", ")} | Use cases:{" "}
               {selectedItem.runewordUseCases.join(", ")}
             </p>
+            {superior ? (
+              <div className="mt-3 flex flex-wrap gap-2 text-xs font-semibold text-amber-100">
+                {typeof superiorEnhancedDamage === "number" && superiorEnhancedDamage > 0 ? <Pill>{superiorEnhancedDamage} ED superior roll</Pill> : null}
+                {typeof superiorEnhancedDefense === "number" && superiorEnhancedDefense > 0 ? <Pill>{superiorEnhancedDefense} EDef superior roll</Pill> : null}
+                {typeof durabilityBonus === "number" && durabilityBonus > 0 ? <Pill>{durabilityBonus} durability superior roll</Pill> : null}
+              </div>
+            ) : null}
           </div>
         ) : null}
       </Card>

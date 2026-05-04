@@ -94,6 +94,8 @@ export interface BaseCheckInput {
   ethereal: boolean;
   superior: boolean;
   defenseOrEd?: number;
+  superiorEnhancedDamage?: number;
+  superiorEnhancedDefense?: number;
   durabilityBonus?: number;
   allRes?: number;
 }

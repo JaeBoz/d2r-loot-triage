@@ -3,6 +3,23 @@
 [2026-05-04]
 
 Change:
+- Added superior roll inputs and evaluation support to Base Checker for enhanced damage, enhanced defense, and durability.
+
+Type:
+- Data / Evaluation
+
+Why:
+- Superior roll quality can materially change elite runeword base value, especially correct-socket weapon and mercenary bases.
+
+Impact:
+- Base Checker now distinguishes plain bases from useful superior ED/EDef rolls while keeping durability as minor support and preventing weak socket states from becoming fake jackpots.
+
+Notes:
+- Base Checker only. No pricing logic, Trade Value tier names, global result panel structure, or unrelated checker behavior changed.
+
+[2026-05-04]
+
+Change:
 - Standardized checker-owned Value Reasoning strings across bases, uniques, rings, amulets, gloves, boots, charms, jewels, and circlets.
 
 Type:
