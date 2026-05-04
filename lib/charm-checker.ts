@@ -1,5 +1,5 @@
 import { charmModeAdjustments, charmPatterns } from "@/data/charm-rules";
-import { sanitizeCharmSizeInput } from "@/data/charm-size-ranges";
+import { charmSizeRanges, sanitizeCharmSizeInput } from "@/data/charm-size-ranges";
 import { sanitizeMechanicsInput } from "@/data/mechanics-affixes";
 import { CharmCheckInput, CharmCheckResult, CharmPatternInput, Liquidity, RingArchetype, Verdict } from "@/lib/types";
 
@@ -146,7 +146,29 @@ function isTopPoisonSmallCharm(input: CharmCheckInput, matchedPatternIds: string
 function baseTags(input: CharmCheckInput): Set<RingArchetype> {
   const tags = new Set<RingArchetype>();
   if (input.skill?.trim()) {
-    tags.add("caster");
+    const skill = input.skill.toLowerCase();
+    if (
+      skill.includes("sorceress") ||
+      skill.includes("traps") ||
+      skill.includes("elemental") ||
+      skill.includes("poison and bone") ||
+      skill.includes("curses")
+    ) {
+      tags.add("caster");
+    } else if (
+      skill.includes("javelin") ||
+      skill.includes("bow") ||
+      skill.includes("passive") ||
+      skill.includes("barbarian") ||
+      skill.includes("martial arts") ||
+      skill.includes("shape shifting") ||
+      skill.includes("paladin combat") ||
+      skill.includes("offensive auras")
+    ) {
+      tags.add("PvM");
+    } else {
+      tags.add("PvM");
+    }
   }
   if ((input.magicFind ?? 0) > 0) {
     tags.add("MF");
@@ -178,6 +200,43 @@ function baseTags(input: CharmCheckInput): Set<RingArchetype> {
     tags.add("niche");
   }
   return tags;
+}
+
+function isCasterCharmSkill(skill: string | undefined) {
+  const normalized = skill?.toLowerCase() ?? "";
+  return (
+    normalized.includes("sorceress") ||
+    normalized.includes("traps") ||
+    normalized.includes("elemental") ||
+    normalized.includes("poison and bone") ||
+    normalized.includes("curses")
+  );
+}
+
+function hasNonCasterCharmSkill(skill: string | undefined) {
+  return Boolean(skill?.trim()) && !isCasterCharmSkill(skill);
+}
+
+function normalizeSkillTags(input: CharmCheckInput, tags: Set<RingArchetype>) {
+  if (!hasNonCasterCharmSkill(input.skill)) {
+    return;
+  }
+
+  tags.delete("caster");
+  tags.add("PvM");
+}
+
+function cappedStatCount(input: CharmCheckInput) {
+  const ranges = charmSizeRanges[input.size];
+  return (Object.keys(ranges) as Array<keyof typeof ranges>).filter((key) => {
+    const rule = ranges[key];
+    const value = input[key];
+    return typeof value === "number" && typeof rule?.max === "number" && value >= rule.max;
+  }).length;
+}
+
+function hasSaturatedStatStack(input: CharmCheckInput) {
+  return cappedStatCount(input) >= 4;
 }
 
 function awkwardPenalty(input: CharmCheckInput, matchedPatterns: string[]) {
@@ -300,6 +359,7 @@ export function evaluateCharm(rawInput: CharmCheckInput): CharmCheckResult {
       }
     }
   }
+  normalizeSkillTags(input, tags);
 
   if (input.size === "Grand Charm" && input.skill?.trim()) {
     score += 2;
@@ -334,10 +394,17 @@ export function evaluateCharm(rawInput: CharmCheckInput): CharmCheckResult {
   }
 
   score -= awkwardPenalty(input, matchedPatterns);
+  const saturatedStatStack = hasSaturatedStatStack(input);
+  if (saturatedStatStack) {
+    score = Math.min(score, 15);
+  }
 
   let verdict = verdictFromScore(score);
   if (verdictRank[floorVerdict] > verdictRank[verdict]) {
     verdict = floorVerdict;
+  }
+  if (saturatedStatStack && verdictRank[verdict] > verdictRank.List) {
+    verdict = "List";
   }
 
   const archetypeTags = Array.from(tags);

@@ -73,6 +73,32 @@ function getSkillLabel(input: CircletCheckInput) {
   return "No standout skill line";
 }
 
+function addCircletSkillTags(input: CircletCheckInput, tags: Set<RingArchetype>) {
+  const skillText = `${input.classSkillType ?? ""} ${input.skillTreeType ?? ""}`.toLowerCase();
+
+  if (
+    skillText.includes("sorceress") ||
+    skillText.includes("traps") ||
+    skillText.includes("elemental") ||
+    skillText.includes("poison and bone") ||
+    skillText.includes("curses")
+  ) {
+    tags.add("caster");
+    return;
+  }
+
+  if (skillText.trim()) {
+    tags.add("PvM");
+  }
+}
+
+function hasNonCasterCircletSkill(input: CircletCheckInput) {
+  const skillText = `${input.classSkillType ?? ""} ${input.skillTreeType ?? ""}`;
+  const tags = new Set<RingArchetype>();
+  addCircletSkillTags(input, tags);
+  return skillText.trim().length > 0 && !tags.has("caster");
+}
+
 function compactCircletIdentity(input: CircletCheckInput) {
   const skillLabel = getSkillLabel(input);
   const parts: string[] = [];
@@ -131,19 +157,23 @@ function scoreMagicCirclet(input: CircletCheckInput, details: string[], tags: Se
     const skillTreeType = input.skillTreeType;
     score += input.skillTreeValue === 3 ? 10 : input.skillTreeValue === 2 ? 5 : 1;
     score += circletTreeSkillDemand[skillTreeType];
-    tags.add("caster");
+    addCircletSkillTags(input, tags);
     details.push(`${getSkillLabel(input)} is the classic magic circlet angle.`);
   } else if (input.skillMode === "class" && input.classSkillType && input.classSkillValue) {
     const classSkillType = input.classSkillType;
     score += input.classSkillValue === 2 ? 7 : 3;
     score += circletClassSkillDemand[classSkillType];
-    tags.add("caster");
+    addCircletSkillTags(input, tags);
     details.push(`${getSkillLabel(input)} gives it real magic circlet upside.`);
   }
 
   if ((input.fasterCastRate ?? 0) >= 20) {
     score += 6;
-    tags.add("caster");
+    if (hasNonCasterCircletSkill(input)) {
+      tags.add("PvM");
+    } else {
+      tags.add("caster");
+    }
     details.push("20 FCR is the caster line people notice.");
   } else if ((input.fasterCastRate ?? 0) >= 10) {
     score += 2;
@@ -217,13 +247,17 @@ function scoreRareCirclet(input: CircletCheckInput, details: string[], tags: Set
     if (classSkillType) {
       score += circletClassSkillDemand[classSkillType];
     }
-    tags.add("caster");
+    addCircletSkillTags(input, tags);
     details.push(`${getSkillLabel(input)} is the main rare circlet line.`);
   }
 
   if (has20Fcr) {
     score += 4;
-    tags.add("caster");
+    if (hasNonCasterCircletSkill(input)) {
+      tags.add("PvM");
+    } else {
+      tags.add("caster");
+    }
     details.push("20 FCR is the caster breakpoint people want.");
   } else if ((input.fasterCastRate ?? 0) >= 10) {
     score += 1;

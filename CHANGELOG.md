@@ -1,5 +1,22 @@
 # D2R Loot Triage App - Internal Changelog
 
+[2026-05-04]
+
+Change:
+- Tightened roll-sensitive unique explanations, charm hostile-stack handling, skill tags, and decision/action mapping.
+
+Type:
+- Evaluation + UX
+
+Why:
+- Final trust QA found strong uniques could use mid-tier wording, hostile charm bundles could stack capped stats into fake Premium outputs, and some skill tags/actions conflicted.
+
+Impact:
+- Premium and High uniques now name the stat that drives value, saturated charm stat stacks cap below Premium, non-caster skill items avoid caster tags, and API/UI actions stay aligned.
+
+Notes:
+- No Trade Value tiers, affix simulation, pricing, data expansion, or broader system scope changed.
+
 [2026-05-03]
 
 Change:

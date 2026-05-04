@@ -25,6 +25,9 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - Confirm context tags are actionable; expected: no vague `Specialty` tag.
 - Confirm no repeated phrases or duplicated signals appear in result output.
 - Confirm copy-only changes did not alter Trade Value tiers, scores, available inputs, or scoring logic.
+- Confirm Premium and High roll-sensitive uniques name the roll that drives value; expected: no `decent`, `not a standout`, or `situational` phrasing on strong unique results.
+- Confirm UI and API decision mapping agree; expected: Conditional always pairs with `Compare or keep for use`, Keep with `Keep it`, and Drop with `Drop it`.
+- Confirm skill tags match build usage; expected: Javelin, Amazon, and other non-caster skill items do not show a caster tag unless the actual value signal is caster-based.
 
 ## Rulesets
 
@@ -163,6 +166,7 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - Test `Small Charm` with `7 MF`; expected: valid max small charm magic find remains representable.
 - Test `Small Charm` with `3 FRW`; expected: valid small charm FRW remains representable.
 - Test `Small Charm` with `999 poison damage`; expected: it clamps to the source-backed small charm cap.
+- Test a hostile small charm bundle with capped all resist, poison damage, max damage, and attack rating; expected: clamped stat stacking cannot reach Premium.
 - Test `Small Charm` with `451 poison damage`; expected: valid high-end poison small charm behavior remains unchanged.
 - Test oversized charm mana, all resist, single resist, FHR, max damage, and attack rating across all three charm sizes; expected: each clamps to the selected charm size's cap.
 - Test `Grand Charm` with `50 life`; expected: it clamps to `45`.

@@ -163,6 +163,9 @@ type RollAssessment = {
   high: number;
   mid: number;
   low: number;
+  highLabels: string[];
+  midLabels: string[];
+  lowLabels: string[];
 };
 
 function baseTier(item: UniqueItemDefinition, mode: UniqueCheckInput["mode"]) {
@@ -247,7 +250,10 @@ function scoreRolls(input: UniqueCheckInput, item: UniqueItemDefinition, details
     provided: 0,
     high: 0,
     mid: 0,
-    low: 0
+    low: 0,
+    highLabels: [],
+    midLabels: [],
+    lowLabels: []
   };
 
   if (!item.rollDefinitions) {
@@ -260,6 +266,9 @@ function scoreRolls(input: UniqueCheckInput, item: UniqueItemDefinition, details
     if (band) {
       assessment.provided += 1;
       assessment[band] += 1;
+      if (band === "high") assessment.highLabels.push(definition.label);
+      if (band === "mid") assessment.midLabels.push(definition.label);
+      if (band === "low") assessment.lowLabels.push(definition.label);
     }
 
     assessment.score += scoreDefinitionRoll(input, item, definition, details);
@@ -426,12 +435,27 @@ function rotwLabel(text: string) {
   return text.replace(/Warlock-only item/gi, "Reign of the Warlock item");
 }
 
+function uniqueAnchorStat(item: UniqueItemDefinition, rollAssessment: RollAssessment) {
+  const strongLabels = rollAssessment.highLabels.length > 0 ? rollAssessment.highLabels : rollAssessment.midLabels;
+  const preferredStrongLabel = strongLabels.find((label) => label.toLowerCase().includes("enemy"));
+  const label =
+    preferredStrongLabel ??
+    rollAssessment.highLabels[0] ??
+    rollAssessment.midLabels[0] ??
+    rollAssessment.lowLabels[0] ??
+    item.rollDefinitions?.[0]?.label ??
+    "drop";
+
+  return label.toLowerCase();
+}
+
 function conciseUniqueExplanation(item: UniqueItemDefinition, rollAssessment: RollAssessment, verdict: Verdict) {
   const itemNote = lowerFirst(rotwLabel(firstSentence(item.notes)));
   const isStrongWarlockHit = (item.ruleset ?? "lod") === "warlock" && (verdict === "List" || verdict === "Premium");
-  const warlockNote = rollAssessment.high >= 2 ? "good roll package" : "good roll";
+  const anchor = uniqueAnchorStat(item, rollAssessment);
+
   if (isStrongWarlockHit) {
-    return `${item.name}: Reign of the Warlock item with a ${warlockNote}.`;
+    return `${item.name}: RotW ${anchor} drives value.`;
   }
 
   const demandNote =
@@ -448,12 +472,16 @@ function conciseUniqueExplanation(item: UniqueItemDefinition, rollAssessment: Ro
     return `${item.name} is a staple unique; the drop itself is the value${demandClause}.`;
   }
 
+  if (verdict === "Premium" || verdict === "List") {
+    return `${item.name}: ${anchor} drives value.`;
+  }
+
   if (rollAssessment.high >= 2) {
-    return `${item.name}: Good roll package; ${itemNote}${demandClause}.`;
+    return `${item.name}: strong ${anchor} roll; ${itemNote}${demandClause}.`;
   }
 
   if (rollAssessment.high >= 1 && rollAssessment.low === 0) {
-    return `${item.name}: Good roll; ${itemNote}${demandClause}.`;
+    return `${item.name}: strong ${anchor} roll; ${itemNote}${demandClause}.`;
   }
 
   if (rollAssessment.low >= rollAssessment.provided && rollAssessment.provided > 0) {
@@ -461,10 +489,10 @@ function conciseUniqueExplanation(item: UniqueItemDefinition, rollAssessment: Ro
   }
 
   if (rollAssessment.mid > 0 || rollAssessment.low > 0) {
-    return `${item.name}: Decent, not a standout; ${itemNote}${demandClause}.`;
+    return `${item.name}: mid ${anchor} roll; ${itemNote}${demandClause}.`;
   }
 
-  return `${item.name}: Rolls matter here; ${itemNote}${demandClause}.`;
+  return `${item.name}: ${anchor} roll decides value.`;
 }
 
 export function evaluateUnique(input: UniqueCheckInput): UniqueCheckResult {

@@ -29,18 +29,6 @@ function displayContextTag(tag: RingArchetype, priority: EvaluationPriority) {
   return "Build-specific";
 }
 
-function displayAction(label: ReturnType<typeof mapDecisionOutput>["label"]) {
-  if (label === "Keep") {
-    return "Keep it.";
-  }
-
-  if (label === "Conditional") {
-    return "Compare or keep for use.";
-  }
-
-  return "Drop it.";
-}
-
 function tradeValueContext(priority: EvaluationPriority) {
   if (priority === "Premium Trade Value") {
     return "High demand, easy to trade";
@@ -149,7 +137,7 @@ export function ResultPanel({
 
             <div className="mt-3 rounded-xl border border-white/10 bg-black/25 px-3 py-2">
               <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-zinc-300">Recommended Action</p>
-              <p className="mt-1 text-sm font-semibold leading-5 text-white">{displayAction(decision.label)}</p>
+              <p className="mt-1 text-sm font-semibold leading-5 text-white">{decision.actionLine}</p>
             </div>
           </div>
 

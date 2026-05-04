@@ -87,11 +87,11 @@ export function mapDecisionOutput(input: DecisionInput): DecisionOutput {
     };
   }
 
+  const label = isSocketDependent || isSelfUse ? "Conditional" : "Drop";
+
   return {
-    label: isSocketDependent || isSelfUse ? "Conditional" : "Drop",
-    actionLine: isSocketDependent
-      ? "Compare or keep for use."
-      : "Drop it.",
+    label,
+    actionLine: label === "Conditional" ? "Compare or keep for use." : "Drop it.",
     caveat: isSelfUse ? "Mostly self-use." : undefined
   };
 }
