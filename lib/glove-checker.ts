@@ -82,50 +82,50 @@ function liquidityFor(input: GloveCheckInput, verdict: Verdict, matchedPatterns:
 
 function explanationFor(input: GloveCheckInput, verdict: Verdict, matchedPatterns: string[]) {
   if (matchedPatterns.includes("+3 Jav / 20 IAS")) {
-    return "+3 Jav / 20 IAS is the chase glove hit.";
+    return "+3 Jav / 20 IAS drives value";
   }
 
   if (matchedPatterns.includes("+2 Jav / 20 IAS")) {
-    return "+2 Jav / 20 IAS is strong, but below the +3 magic chase.";
+    return "+2 Jav / 20 IAS drives value";
   }
 
   if (input.quality === "Magic" && input.skillType === "Bow and Crossbow" && input.increasedAttackSpeed === 20) {
-    return "Bow + IAS can be useful, but it needs support.";
+    return "Bow + IAS drives value";
   }
 
   if (input.quality === "Magic" && input.skillType === "Martial Arts" && input.increasedAttackSpeed === 20) {
-    return "Martial Arts + IAS is niche without strong support.";
+    return "Martial Arts + IAS drives value";
   }
 
   if (matchedPatterns.includes("IAS + Crushing Blow")) {
-    return "Blood-style hit: CB helps, but IAS and support make it real.";
+    return "IAS + CB drives value";
   }
 
   if (matchedPatterns.includes("skills + IAS")) {
-    return "Skills + IAS is the reason to care.";
+    return "Skills + IAS drives value";
   }
 
   if (input.increasedAttackSpeed === 20 && matchedPatterns.includes("IAS + strong support")) {
-    return "IAS is the anchor; good support is the value signal.";
+    return "IAS + support drives value";
   }
 
   if (input.increasedAttackSpeed === 20) {
-    return "IAS only is useful, but not enough by itself.";
+    return "IAS drives value";
   }
 
   if (input.skillType !== "None" && input.skillLevel > 0) {
-    return "Skill roll is present, but no IAS. Usually a weak glove hit.";
+    return "Skill roll drives value";
   }
 
   if ((input.crushingBlow ?? 0) > 0 || (input.lifeLeech ?? 0) > 0) {
-    return "Crushing Blow or leech alone does not carry gloves. It needs IAS and support.";
+    return "CB or leech drives value";
   }
 
   if (verdict === "Ignore") {
-    return "No IAS and no strong glove pattern. Drop gloves.";
+    return "Glove pattern drives value";
   }
 
-  return "Some support is present, but the glove pattern is not clean.";
+  return "Support stats drive value";
 }
 
 function recommendedActionFor(verdict: Verdict, input: GloveCheckInput, matchedPatterns: string[]) {

@@ -446,53 +446,52 @@ function uniqueAnchorStat(item: UniqueItemDefinition, rollAssessment: RollAssess
     item.rollDefinitions?.[0]?.label ??
     "drop";
 
-  return label.toLowerCase();
+  if (/magic find/i.test(label)) return "MF roll";
+  if (/faster cast rate/i.test(label)) return "FCR roll";
+  if (/faster run\/walk/i.test(label)) return "FRW roll";
+  if (/faster hit recovery/i.test(label)) return "FHR roll";
+  if (/enhanced damage/i.test(label)) return "ED roll";
+
+  return label;
+}
+
+function uniqueRollReason(anchor: string) {
+  return anchor.endsWith("roll") ? `${anchor} drives value` : `${anchor} roll drives value`;
 }
 
 function conciseUniqueExplanation(item: UniqueItemDefinition, rollAssessment: RollAssessment, verdict: Verdict) {
-  const itemNote = lowerFirst(rotwLabel(firstSentence(item.notes)));
   const isStrongWarlockHit = (item.ruleset ?? "lod") === "warlock" && (verdict === "List" || verdict === "Premium");
   const anchor = uniqueAnchorStat(item, rollAssessment);
 
   if (isStrongWarlockHit) {
-    return `${item.name}: RotW ${anchor} drives value.`;
+    return `RotW ${anchor} drives value`;
   }
 
-  const demandNote =
-    item.liquidity === "High" && verdict !== "Premium"
-      ? itemNote.toLowerCase().includes("staple")
-        ? "easy to move"
-        : "staple demand helps"
-      : item.liquidity === "Low" && verdict !== "List" && verdict !== "Premium"
-        ? "niche or mostly self-use"
-        : "";
-  const demandClause = demandNote ? `, ${demandNote}` : "";
-
   if (!item.hasVariableRolls) {
-    return `${item.name} is a staple unique; the drop itself is the value${demandClause}.`;
+    return "Drop itself drives value";
   }
 
   if (verdict === "Premium" || verdict === "List") {
-    return `${item.name}: ${anchor} drives value.`;
+    return `${anchor} drives value`;
   }
 
   if (rollAssessment.high >= 2) {
-    return `${item.name}: strong ${anchor} roll; ${itemNote}${demandClause}.`;
+    return uniqueRollReason(anchor);
   }
 
   if (rollAssessment.high >= 1 && rollAssessment.low === 0) {
-    return `${item.name}: strong ${anchor} roll; ${itemNote}${demandClause}.`;
+    return uniqueRollReason(anchor);
   }
 
   if (rollAssessment.low >= rollAssessment.provided && rollAssessment.provided > 0) {
-    return `${item.name}: Low roll; ${itemNote}${demandClause}.`;
+    return "Roll quality drives value";
   }
 
   if (rollAssessment.mid > 0 || rollAssessment.low > 0) {
-    return `${item.name}: mid ${anchor} roll; ${itemNote}${demandClause}.`;
+    return uniqueRollReason(anchor);
   }
 
-  return `${item.name}: ${anchor} roll decides value.`;
+  return uniqueRollReason(anchor);
 }
 
 export function evaluateUnique(input: UniqueCheckInput): UniqueCheckResult {

@@ -90,58 +90,34 @@ function hasMeaningfulUnsocketedDemand(input: BaseCheckInput, item: BaseItem) {
 
 function baseDemandPhrase(item: BaseItem, input: BaseCheckInput) {
   if (item.socketSensitive && input.sockets === 0 && !hasMeaningfulUnsocketedDemand(input, item)) {
-    return "Good base, but this is socket-dependent potential, not an easy trade as-is.";
+    return "Socket state drives value";
   }
 
   if (item.socketSensitive && input.sockets > 0 && !item.desiredSockets.includes(input.sockets)) {
-    return "Wrong sockets. Demand is limited because it misses the usual target.";
+    return "Wrong socket state drives value";
   }
 
   if (item.socketSensitive && item.desiredSockets.includes(input.sockets)) {
-    if (item.tags.includes("spirit")) {
-      return "Sockets are the value here. Useful base, but easy to find.";
-    }
-
-    if (item.tags.includes("caster") || item.tags.includes("merc")) {
-      return "Sockets are the value here. Good runeword base.";
-    }
-
-    return "Sockets are the value here.";
+    return "Socket state drives value";
   }
 
   if (item.socketSensitive && input.sockets === 0 && item.tags.includes("merc") && input.ethereal && item.ethPriority !== "low") {
-    return "Good eth merc base. It still needs the right sockets before it becomes a clean trade piece.";
+    return "Eth merc base drives value";
   }
 
   if (item.tags.includes("merc") && input.ethereal && item.ethPriority !== "low") {
-    return "Eth merc bases are the version people actually chase.";
+    return "Eth merc base drives value";
   }
 
   if (item.tags.includes("paladin") && (input.allRes ?? 0) >= 30) {
-    return "The paladin resist automod is what matters here.";
+    return "Paladin all res drives value";
   }
 
   if (item.scnlPriority === "low" || item.tags.includes("staffmods")) {
-    return "Specific-use base. Keep only for the right setup.";
+    return "Build-specific use drives value";
   }
 
-  return "Only keep it if the visible state matches a real runeword plan.";
-}
-
-function useCaseLabel(item: BaseItem) {
-  if (item.tags.includes("merc")) {
-    return `mercenary ${primaryUseCase(item)} base`;
-  }
-
-  if (item.tags.includes("caster") || item.tags.includes("spirit")) {
-    return `caster ${primaryUseCase(item)} base`;
-  }
-
-  if (item.category === "Armor") {
-    return `${primaryUseCase(item)} armor base`;
-  }
-
-  return `${primaryUseCase(item)} base`;
+  return "Runeword plan drives value";
 }
 
 function adjustForEtherealState(score: number, input: BaseCheckInput, item: BaseItem, details: string[]) {
@@ -290,23 +266,7 @@ function adjustForAffixes(score: number, input: BaseCheckInput, item: BaseItem, 
 }
 
 function buildExplanation(item: BaseItem, input: BaseCheckInput, verdict: Verdict, details: string[]) {
-  const ethLabel = input.ethereal ? "Eth " : "Non-eth ";
-  const useCase = useCaseLabel(item);
-  const demandPhrase = baseDemandPhrase(item, input);
-  const priorityTone =
-    verdict === "Premium"
-      ? "premium base"
-      : verdict === "Keep"
-        ? "good base"
-        : verdict === "Low Priority"
-          ? "niche base"
-          : "weak base";
-
-  if (item.tags.includes("circlet")) {
-    return `${ethLabel}${item.name} is a ${priorityTone} for ${input.mode}; ${demandPhrase}`;
-  }
-
-  return `${ethLabel}${item.name} is ${articleFor(useCase)} ${useCase}; ${demandPhrase}`;
+  return baseDemandPhrase(item, input);
 }
 
 function buildRecommendedAction(item: BaseItem, input: BaseCheckInput, verdict: Verdict) {

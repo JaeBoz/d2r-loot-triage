@@ -295,6 +295,46 @@ function topSummary(input: CharmCheckInput) {
   return parts.slice(0, 3).join(", ");
 }
 
+function charmReasoning(input: CharmCheckInput, matchedPatternIds: string[], matchedPatterns: string[]) {
+  if (isTopPoisonSmallCharm(input, matchedPatternIds) || matchedPatternIds.includes("sc-poison")) {
+    return "Poison damage drives value";
+  }
+
+  if (matchedPatternIds.includes("sc-mf") && input.size === "Small Charm" && (input.magicFind ?? 0) >= 7) {
+    return "7 MF roll drives value";
+  }
+
+  if (input.size === "Grand Charm" && input.skill?.trim()) {
+    if ((input.life ?? 0) >= 1) {
+      return "Skill + life drives value";
+    }
+
+    if ((input.fasterHitRecovery ?? 0) >= 1) {
+      return "Skill + FHR drives value";
+    }
+
+    return "Skill tree drives value";
+  }
+
+  if (matchedPatternIds.includes("sc-life-res")) {
+    return "Life + res drives value";
+  }
+
+  if ((input.maxDamage ?? 0) > 0 && (input.attackRating ?? 0) > 0) {
+    return "Max damage + AR drives value";
+  }
+
+  if ((input.allResist ?? 0) > 0 || (input.fireResist ?? 0) > 0 || (input.lightningResist ?? 0) > 0 || (input.coldResist ?? 0) > 0) {
+    return "Resist roll drives value";
+  }
+
+  if (matchedPatterns.length > 0) {
+    return `${matchedPatterns[0]} drives value`;
+  }
+
+  return "Charm pattern drives value";
+}
+
 function toCharmPatternInput(input: CharmCheckInput): CharmPatternInput {
   const stats = sanitizeMechanicsInput("charm", sanitizeCharmSizeInput(input));
 
@@ -420,30 +460,7 @@ export function evaluateCharm(rawInput: CharmCheckInput): CharmCheckResult {
   }
 
   const archetypeTags = Array.from(tags);
-  const summary = topSummary(input) || "some usable stats";
-  const patternText =
-    matchedPatterns.length > 0 ? matchedPatterns.slice(0, 2).join(" and ") : "do not form a strong charm pattern";
-
-  let explanation = "";
-  if (matchedPatterns.length > 0) {
-    if (isTopPoisonSmallCharm(input, matchedPatternIds)) {
-      explanation = `${summary} is a top poison SC roll, not filler.`;
-    } else if (matchedPatternIds.includes("sc-poison")) {
-      explanation = `${summary} is a moderate poison small charm. Niche, not a jackpot.`;
-    } else if (input.size === "Grand Charm" && isPlainSkiller(matchedPatternIds)) {
-      explanation = `${summary} is a plain skiller; the tree decides how good it is.`;
-    } else if (input.size === "Grand Charm" && input.skill?.trim()) {
-      explanation = `${summary} is a skiller hit; the second mod pushes it higher.`;
-    } else if (matchedPatternIds.includes("sc-mf") && input.size === "Small Charm" && (input.magicFind ?? 0) >= 7) {
-      explanation = "7 MF is the max small charm roll.";
-    } else if (input.size === "Small Charm") {
-      explanation = `Good small charm: ${patternText} is the pattern.`;
-    } else {
-      explanation = `Decent ${input.size.toLowerCase()}: ${patternText} is the value signal.`;
-    }
-  } else {
-    explanation = `${summary} is present, but it is not a real ${input.mode} charm pattern.`;
-  }
+  const explanation = charmReasoning(input, matchedPatternIds, matchedPatterns);
 
   let recommendedAction = "";
   if (verdict === "Ignore") {

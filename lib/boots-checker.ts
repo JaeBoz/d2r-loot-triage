@@ -315,53 +315,49 @@ function explanationFor(
   stats: NormalizedBootsStats,
   rated: RatedStat[]
 ) {
-  const summary = summaryFor(stats) || "some utility stats";
   const comboText = comboTextFor(highlights);
   const highCount = rated.filter((entry) => entry.score >= 4).length;
   const lowOnly = rated.length > 0 && rated.every((entry) => entry.score <= 1);
   const hasFrw = (stats.fasterRunWalk ?? 0) >= 30;
   const resists = resistHitCount(stats);
   const support = supportScore(stats);
+  const anchor = hasFrw ? comboText : "No FRW";
 
   if (!hasFrw && verdict !== "Ignore") {
-    return `Useful stats, but no FRW: ${summary} is conditional.`;
+    return "Missing FRW drives value";
   }
 
   if (verdict === "Ignore") {
-    return hasFrw
-      ? `FRW is here, but ${summary} is too light.`
-      : `No FRW: ${summary} is usually a drop.`;
+    return hasFrw ? "FRW + support drives value" : "Missing FRW drives value";
   }
 
   if (verdict === "Low Priority") {
-    return hasFrw
-      ? `FRW is the anchor, but ${summary} is mostly filler.`
-      : `Useful stats, but no FRW: ${summary} is mostly self-use.`;
+    return hasFrw ? "FRW + light support drives value" : "Missing FRW drives value";
   }
 
   if (verdict === "Check") {
     if (hasFrw && resists >= 2) {
-      return "Decent boot shell: FRW + dual res is the value signal.";
+      return "FRW + dual res drives value";
     }
-    return `Decent partial hit: ${summary} is usable, but not clean.`;
+    return `${anchor} drives value`;
   }
 
   if (verdict === "Keep") {
     if (hasFrw && support >= 2) {
-      return "Solid boots: FRW plus support is what matters.";
+      return "FRW + support drives value";
     }
-    return `Solid boots: ${comboText} is the reason to keep them.`;
+    return `${comboText} drives value`;
   }
 
   if (verdict === "List") {
-    return `Good boots: FRW plus ${comboText} is the value.`;
+    return `FRW + ${comboText} drives value`;
   }
 
   if (highCount >= 2 && !lowOnly) {
-    return `Premium boots: ${comboText} is the hit.`;
+    return `${comboText} drives value`;
   }
 
-  return "Good roll, but the full boot mix decides the value.";
+  return "Boot mix drives value";
 }
 
 function recommendedActionFor(verdict: Verdict, highlights: string[]) {

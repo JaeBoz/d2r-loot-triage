@@ -3,6 +3,40 @@
 [2026-05-04]
 
 Change:
+- Standardized checker-owned Value Reasoning strings across bases, uniques, rings, amulets, gloves, boots, charms, jewels, and circlets.
+
+Type:
+- UX
+
+Why:
+- QA found some checkers still emitted older description-style reasoning and relied on ResultPanel cleanup for consistency.
+
+Impact:
+- Checker reasoning now uses short anchor-first `drives value` phrasing across item types, reducing presentation drift in the result panel.
+
+Notes:
+- Copy consistency only. No evaluation logic, scoring, Trade Value tiers, item data, roll ranges, or features changed.
+
+[2026-05-04]
+
+Change:
+- Normalized result panel punctuation, reasoning display, and spacing hierarchy.
+
+Type:
+- UX
+
+Why:
+- Final polish feedback found action punctuation, long reasoning lines, and spacing still felt slightly inconsistent.
+
+Impact:
+- Result output now uses period-free action and reasoning lines, tighter anchor-first reasoning, and clearer spacing between value, action, and reason.
+
+Notes:
+- Copy and spacing only. No logic, evaluation behavior, Trade Value tiers, item data, or features changed.
+
+[2026-05-04]
+
+Change:
 - Cleaned up result panel layout with separated Trade Value context, plain action text, quieter reasoning, and subtler tier color.
 
 Type:

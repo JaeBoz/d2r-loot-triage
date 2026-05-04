@@ -107,8 +107,8 @@ const labelByKey: Record<StatKey, string> = {
   lightningResist: "lightning resist",
   coldResist: "cold resist",
   poisonResist: "poison resist",
-  magicFind: "magic find",
-  attackRating: "attack rating",
+  magicFind: "MF",
+  attackRating: "AR",
   minDamage: "min damage",
   maxDamage: "max damage",
   levelRequirement: "level requirement",
@@ -492,49 +492,38 @@ function explanationFor(
   highlights: string[],
   topRated: Array<{ key: StatKey; value: number }>
 ) {
-  const leadTag = tags[0] ?? "niche";
   const hasCasterSkillMismatch = highlights.includes("class skill does not fit the caster-style stats");
   const summaryText = summaryTextFor(topRated, input, hasCasterSkillMismatch);
   const isCraftFcr = topRated.some((entry) => entry.key === "fasterCastRate" && entry.value >= 15);
-  const craftLabel = isCraftFcr ? " craft-style" : "";
+  const anchor = isCraftFcr
+    ? `20 FCR + support`
+    : hasCasterSkillMismatch
+      ? `FCR mismatch`
+      : summaryText === "very little usable value"
+        ? "Skill and stat mix"
+        : summaryText;
 
   if (verdict === "Ignore") {
-    return `Drop amulet: ${summaryText} is not enough.`;
+    return `${anchor} drives value`;
   }
 
   if (verdict === "Low Priority") {
-    return hasCasterSkillMismatch
-      ? "High FCR shell, but the skill roll makes it niche."
-      : `Self-use amulet: ${summaryText} does not come together.`;
+    return `${anchor} drives value`;
   }
 
   if (verdict === "Check") {
-    return hasCasterSkillMismatch
-      ? "High FCR shell, but the class skill does not line up."
-      : `Decent, not a big trade item: ${summaryText} needs better support.`;
+    return `${anchor} drives value`;
   }
 
   if (verdict === "Keep") {
-    if (hasCasterSkillMismatch) {
-      return `High FCR, but mismatch: ${summaryText} keeps it niche.`;
-    }
-
-    return `Good${craftLabel} ${leadTag} amulet: ${summaryText} is the reason to keep it.`;
+    return `${anchor} drives value`;
   }
 
   if (verdict === "List") {
-    if (hasCasterSkillMismatch) {
-      return `High FCR, but mismatch: ${summaryText} is the value.`;
-    }
-
-    return `Good${craftLabel} ${leadTag} amulet: ${summaryText} is the value.`;
+    return `${anchor} drives value`;
   }
 
-  if (hasCasterSkillMismatch) {
-    return `High FCR, but mismatch: ${summaryText} is the value.`;
-  }
-
-  return `Premium${craftLabel} ${leadTag} amulet: ${summaryText} is the hit.`;
+  return `${anchor} drives value`;
 }
 
 function recommendedActionFor(verdict: Verdict, mode: AmuletCheckInput["mode"]) {

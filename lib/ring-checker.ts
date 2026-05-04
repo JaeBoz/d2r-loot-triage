@@ -48,13 +48,13 @@ const labelByKey: Record<StatKey, string> = {
   dexterity: "dexterity",
   life: "life",
   mana: "mana",
-  attackRating: "attack rating",
+  attackRating: "AR",
   allResist: "all resist",
   fireResist: "fire resist",
   lightningResist: "lightning resist",
   coldResist: "cold resist",
   poisonResist: "poison resist",
-  magicFind: "magic find",
+  magicFind: "MF",
   lifeLeech: "life leech",
   manaLeech: "mana leech",
   minDamage: "min damage",
@@ -328,44 +328,40 @@ function explanationFor(
   topRated: Array<{ key: StatKey; value: number }>,
   rated: RatedStat[]
 ) {
-  const leadTag = tags[0] ?? "niche";
-  const summaryBits = topRated.slice(0, 3).map((entry) => `${entry.value} ${labelByKey[entry.key]}`);
-  const summaryText = summaryBits.length > 0 ? summaryBits.join(", ") : "very little usable value";
   const comboText = comboTextFor(highlights);
   const hasFcrAnchor = topRated.some((entry) => entry.key === "fasterCastRate" && entry.value >= 10);
   const valueText = hasFcrAnchor && !comboText.includes("FCR") ? `FCR + ${comboText}` : comboText;
   const highCount = rated.filter((entry) => entry.score >= 4).length;
   const lowOnly = rated.length > 0 && rated.every((entry) => entry.score <= 1);
-  const craftedLeechNote =
-    topRated.some((entry) => entry.key === "lifeLeech" && entry.value >= 9)
-      ? "high blood leech, but support still matters; "
-      : "";
+  const hasLeechAnchor = topRated.some((entry) => entry.key === "lifeLeech" || entry.key === "manaLeech");
+  const hasMfAnchor = topRated.some((entry) => entry.key === "magicFind");
+  const fallbackAnchor = hasLeechAnchor ? "Leech + support" : hasMfAnchor ? "MF + support" : "Stat mix";
 
   if (verdict === "Ignore") {
-    return `Drop ring: ${summaryText} is not enough.`;
+    return `${fallbackAnchor} drives value`;
   }
 
   if (verdict === "Low Priority") {
-    return `Self-use ring: ${craftedLeechNote}${summaryText} does not come together.`;
+    return `${fallbackAnchor} drives value`;
   }
 
   if (verdict === "Check") {
-    return `Decent, not a big trade item: ${craftedLeechNote}${summaryText} needs a cleaner combo.`;
+    return `${valueText} drives value`;
   }
 
   if (verdict === "Keep") {
-    return `Good ${leadTag} ring: ${craftedLeechNote}${summaryText} is the reason to keep it.`;
+    return `${valueText} drives value`;
   }
 
   if (verdict === "List") {
-    return `Good ${leadTag} ring: ${valueText} is the value.`;
+    return `${valueText} drives value`;
   }
 
   if (highCount >= 2 && !lowOnly) {
-    return `Premium ${leadTag} ring: ${valueText} is the hit.`;
+    return `${valueText} drives value`;
   }
 
-  return "Good roll, but the full stat mix decides the value.";
+  return "Stat mix drives value";
 }
 
 function recommendedActionFor(verdict: Verdict, mode: RingCheckInput["mode"]) {

@@ -150,6 +150,20 @@ function compactCircletSupport(input: CircletCheckInput) {
   return support.slice(0, 3).join("/");
 }
 
+function circletReasoning(input: CircletCheckInput, verdict: Verdict) {
+  const supportText = compactCircletSupport(input);
+  const coreText =
+    supportText && (verdict === "Premium" || verdict === "List")
+      ? `${compactCircletIdentity(input)} + ${supportText}`
+      : compactCircletIdentity(input);
+
+  if (coreText === "no standout core roll") {
+    return "Circlet pattern drives value";
+  }
+
+  return `${coreText} drives value`;
+}
+
 function scoreMagicCirclet(input: CircletCheckInput, details: string[], tags: Set<RingArchetype>) {
   let score = 0;
 
@@ -385,19 +399,6 @@ export function evaluateCirclet(rawInput: CircletCheckInput): CircletCheckResult
   const verdict = verdictFromScore(score);
   const priority = tradeValueFromVerdict(verdict);
   const liquidity = liquidityFor(input, verdict, tags);
-  const verdictSummary =
-    verdict === "Premium"
-      ? "premium circlet hit"
-      : verdict === "List"
-        ? "good circlet hit"
-        : verdict === "Keep"
-          ? "good circlet, not a jackpot"
-        : verdict === "Check"
-            ? "partial hit, not a clean winner"
-            : verdict === "Low Priority"
-              ? "some utility, but the combo is weak"
-              : "no real circlet pattern";
-
   let recommendedAction = "Drop it unless you collect niche circlets.";
   if (verdict === "Low Priority") {
     recommendedAction = "Only keep for niche self-use.";
@@ -411,12 +412,7 @@ export function evaluateCirclet(rawInput: CircletCheckInput): CircletCheckResult
     recommendedAction = "Keep it. Premium circlet hit.";
   }
 
-  const supportText = compactCircletSupport(input);
-  const coreText =
-    supportText && (verdict === "Premium" || verdict === "List")
-      ? `${compactCircletIdentity(input)} + ${supportText}`
-      : compactCircletIdentity(input);
-  const explanation = `${input.quality} ${input.family}: ${coreText} is a ${verdictSummary}.`;
+  const explanation = circletReasoning(input, verdict);
 
   return {
     verdict,

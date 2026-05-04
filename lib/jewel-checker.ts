@@ -183,32 +183,32 @@ function explanationFor(
 ) {
   const summary = topSummary(stats) || "some usable stats";
   const comboText = comboTextFor(highlights);
-  const leadTag = tags[0] ?? "niche";
+  const anchor = comboText === "the overall stat mix" ? summary : comboText;
 
   if (verdict === "Ignore") {
-    return `Drop jewel: ${summary} is not a real pattern.`;
+    return `${anchor} drives value`;
   }
 
   if (verdict === "Low Priority") {
-    return `Self-use jewel: ${summary} does not come together.`;
+    return `${anchor} drives value`;
   }
 
   if (verdict === "Check") {
-    return `Decent jewel: ${summary} is usable, not a big trade item.`;
+    return `${anchor} drives value`;
   }
 
   if (verdict === "Keep") {
-    return `Solid ${leadTag} jewel: ${comboText} is the reason to keep it.`;
+    return `${anchor} drives value`;
   }
 
   if (verdict === "List") {
     if (highlights.includes("enhanced damage with -requirements")) {
-      return `Good niche jewel: ${summary} helps awkward sockets.`;
+      return "ED + -req drives value";
     }
-    return `Good ${leadTag} jewel: ${comboText} is the value.`;
+    return `${anchor} drives value`;
   }
 
-  return `Premium ${leadTag} jewel: ${comboText} is the hit.`;
+  return `${anchor} drives value`;
 }
 
 function recommendedActionFor(verdict: Verdict, highlights: string[]) {

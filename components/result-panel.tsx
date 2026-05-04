@@ -70,22 +70,22 @@ function tradeValueBadge(priority: EvaluationPriority) {
 
 function recommendedAction(priority: EvaluationPriority, itemType?: "unique") {
   if (priority === "Premium Trade Value" || priority === "High Trade Value") {
-    return "Keep it.";
+    return "Keep it";
   }
 
   if (priority === "Moderate Trade Value") {
-    return "Keep or trade at a discount.";
+    return "Keep or trade at a discount";
   }
 
   if (priority === "Low Trade Value") {
     if (itemType === "unique") {
-      return "Self-use or trade cheap.";
+      return "Self-use or trade cheap";
     }
 
-    return "Only keep for self-use or a second look.";
+    return "Only keep for self-use or a second look";
   }
 
-  return "Drop it.";
+  return "Drop it";
 }
 
 function stripPrefix(value: string) {
@@ -97,10 +97,38 @@ function stripPrefix(value: string) {
 }
 
 function displayExplanation(explanation: string) {
-  const text = stripPrefix(explanation.replace(/\s+/g, " ").trim()).replace(/\.$/, "");
-  const firstSentence = text.split(".")[0]?.trim() || text;
+  const normalized = stripPrefix(explanation.replace(/\s+/g, " ").trim())
+    .replace(/\bconditional\b/gi, "compare-only")
+    .replace(/\bmagic find\b/gi, "MF")
+    .replace(/\bfcr\b/gi, "FCR")
+    .replace(/\bias\b/gi, "IAS")
+    .replace(/\bfrw\b/gi, "FRW")
+    .replace(/\bfhr\b/gi, "FHR")
+    .replace(/\bed\b/gi, "ED")
+    .replace(/\bar\b/gi, "AR")
+    .replace(/\bcb\b/gi, "CB")
+    .replace(/\bdecides value\b/gi, "drives value")
+    .replace(/\bdecides the value\b/gi, "drives value")
+    .replace(/\broll decides value\b/gi, "roll drives value")
+    .replace(/\bis the value signal\b/gi, "drives value")
+    .replace(/\bis the value\b/gi, "drives value")
+    .replace(/\bis the reason to care\b/gi, "drives value")
+    .replace(/\bdrives the result\b/gi, "drives value")
+    .replace(/\bthis is\b/gi, "")
+    .replace(/\bgood base, but\b/gi, "")
+    .replace(/\bnot an easy trade as-is\b/gi, "")
+    .trim();
 
-  return firstSentence.replace(/\bconditional\b/gi, "compare-only");
+  if (/socket-dependent|socket dependent|socket state|desired sockets|valid sockets/i.test(normalized)) {
+    return "Socket state drives value";
+  }
+
+  if (/\bMF\b/i.test(normalized) && /drives value|roll/i.test(normalized)) {
+    return "MF roll drives value";
+  }
+
+  const firstSentence = normalized.split(".")[0]?.trim() || normalized;
+  return firstSentence.replace(/[.;,\s]+$/, "");
 }
 
 export function ResultPanel({
@@ -127,11 +155,11 @@ export function ResultPanel({
               <div className="mt-1 text-sm font-semibold leading-5 text-zinc-400">{tradeValueContext(result.priority)}</div>
             </div>
 
-            <div className="my-5 h-px bg-white/10" />
+            <div className="mb-5 mt-6 h-px bg-white/10" />
 
             <div className="text-lg font-black leading-6 text-white sm:text-xl">{recommendedAction(result.priority, itemType)}</div>
 
-            <div className="mt-5">
+            <div className="mt-3">
               <div className="text-sm leading-5 text-zinc-400">{displayExplanation(result.explanation)}</div>
             </div>
           </div>
