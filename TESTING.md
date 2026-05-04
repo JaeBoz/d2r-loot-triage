@@ -7,7 +7,7 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - Smoke-test representative outputs across Uniques, Rings, Amulets, Gloves, Boots, Charms, Jewels, and Circlets; expected: Trade Value, Recommended Action, and Value Reasoning are readable in under 3 seconds.
 - Confirm Value Reasoning is one short value-focused sentence where possible; expected: no repeated ideas, long stat essays, or system-style phrasing.
 - Confirm player-native wording stays clear for newer players; expected: short phrases like `Good roll`, `Missing key stats`, `decent`, and `Premium` are used only where they fit.
-- Confirm Trade Value and Recommended Action agree; expected: Premium/High say `Keep it`, Moderate says `Compare or keep for use`, Low says `Only keep for self-use or a second look`, and Trash says `Drop it`.
+- Confirm Trade Value and Recommended Action agree; expected: Premium/High say `Keep it`, Moderate says `Keep or trade at a discount`, Low uniques say `Self-use or trade cheap`, Low non-uniques say `Only keep for self-use or a second look`, and Trash says `Drop it`.
 - Confirm no visible result panel text says `Conditional`; expected: lower-value reasoning uses `compare-only`, `socket-dependent`, or self-use/second-look language instead.
 - Confirm Premium and High outputs do not sound hesitant; expected: no `Check Before Tossing`, `worth checking`, or similar cautious language on strong results.
 - Confirm Premium and High outputs contain no conditional/weak phrasing; expected: no `if someone needs this`, `mostly self-use`, or `niche` framing on strong results.
@@ -20,15 +20,17 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - Confirm tags and Value Reasoning do not conflict; expected: strong results avoid weak-looking context labels.
 - Confirm result panel hierarchy is fast to scan; expected: Trade Value is dominant, then context, Action, Value Reasoning, and Tags.
 - Confirm no redundant decision labels appear; expected: no separate `Decision`, `Strong`, `Conditional`, or `Weak` badge competing with Trade Value.
-- Confirm action text aligns with Trade Value; expected: Premium/High say `Keep it`, Moderate says `Compare or keep for use`, Low says `Only keep for self-use or a second look`, and Trash says `Drop it`.
+- Confirm action text aligns with Trade Value; expected: Premium/High say `Keep it`, Moderate says `Keep or trade at a discount`, Low uniques say `Self-use or trade cheap`, Low non-uniques say `Only keep for self-use or a second look`, and Trash says `Drop it`.
 - Confirm Moderate/Low Value Reasoning avoids over-praise; expected: no `Good caster amulet`, `Solid boots`, or `good circlet` tone on weaker results.
 - Confirm Trade Value has subtle micro-context; expected: Premium/High/Moderate/Low/Trash explain demand in one short line.
 - Confirm Value Reasoning follows anchor/support into value meaning; expected: one tight sentence with no item-name prefix or soft phrasing.
+- Confirm checker explanations are not regex-mangled by the result panel; expected: unique, ring, base, charm, and circlet reasoning preserves checker-owned anchor stats.
+- Confirm specific anchors survive presentation cleanup; expected: War Travelers keeps magic find, FCR rings keep FCR/support, bases keep sockets/base state, and poison charms keep poison damage.
 - Confirm context tags are actionable; expected: no vague `Specialty` tag.
 - Confirm no repeated phrases or duplicated signals appear in result output.
 - Confirm copy-only changes did not alter Trade Value tiers, scores, available inputs, or scoring logic.
 - Confirm Premium and High roll-sensitive uniques name the roll that drives value; expected: no `decent`, `not a standout`, or `situational` phrasing on strong unique results.
-- Confirm visible action mapping is Trade Value based; expected: Premium/High say `Keep it`, Moderate says `Compare or keep for use`, Low says `Only keep for self-use or a second look`, and Trash says `Drop it`.
+- Confirm visible action mapping is Trade Value based; expected: Premium/High say `Keep it`, Moderate says `Keep or trade at a discount`, Low uniques say `Self-use or trade cheap`, Low non-uniques say `Only keep for self-use or a second look`, and Trash says `Drop it`.
 - Confirm skill tags match build usage; expected: Javelin, Amazon, and other non-caster skill items do not show a caster tag unless the actual value signal is caster-based.
 
 ## Rulesets

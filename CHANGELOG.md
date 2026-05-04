@@ -3,6 +3,40 @@
 [2026-05-04]
 
 Change:
+- Simplified ResultPanel copy ownership so checker explanations render with minimal safety cleanup.
+
+Type:
+- UX / Architecture cleanup
+
+Why:
+- Code review found the result panel was regex-rewriting checker explanations, which could drift from checker-owned value reasoning.
+
+Impact:
+- ResultPanel now owns layout, color, Trade Value display, context, and broad action mapping while preserving checker-provided anchor reasoning.
+
+Notes:
+- No evaluation logic, Trade Value tiers, item data, roll ranges, features, or Decision display were changed.
+
+[2026-05-04]
+
+Change:
+- Shortened Trade Value micro-context and Recommended Action copy.
+
+Type:
+- UX
+
+Why:
+- Final copy feedback asked for briefer, clearer action lines with Low uniques separated from Low non-unique items.
+
+Impact:
+- Moderate now reads as discounted trade/use, Low uniques read as cheap/self-use, and Low value context is clearer about limited demand.
+
+Notes:
+- Copy-only presentation change. No evaluation logic, Trade Value tiers, item data, roll ranges, features, or result structure changed.
+
+[2026-05-04]
+
+Change:
 - Tightened Trade Value-first result wording and capped hostile charm stat bundles below strong-value outputs.
 
 Type:

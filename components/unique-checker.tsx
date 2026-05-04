@@ -383,6 +383,7 @@ export function UniqueChecker({ mode, ruleset }: { mode: GameMode; ruleset: Rule
       <ResultPanel
         result={result}
         hasInput={hasInput}
+        itemType="unique"
         emptyMessage="Select a unique and add any relevant roll values. The panel stays clear until you start a check."
       />
     </div>
