@@ -48,6 +48,26 @@ function tradeValueContext(priority: EvaluationPriority) {
   return "No trade value";
 }
 
+function tradeValueBadge(priority: EvaluationPriority) {
+  if (priority === "Premium Trade Value") {
+    return "Premium";
+  }
+
+  if (priority === "High Trade Value") {
+    return "High";
+  }
+
+  if (priority === "Moderate Trade Value") {
+    return "Moderate";
+  }
+
+  if (priority === "Low Trade Value") {
+    return "Low";
+  }
+
+  return "Trash";
+}
+
 function recommendedAction(priority: EvaluationPriority, itemType?: "unique") {
   if (priority === "Premium Trade Value" || priority === "High Trade Value") {
     return "Keep it.";
@@ -107,22 +127,21 @@ export function ResultPanel({
       <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-200/80">Result</p>
       {hasInput ? (
         <>
-          <div className={`mt-2 rounded-2xl border p-3 sm:p-4 ${TRADE_VALUE_STYLES[result.priority]}`}>
-            <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-current/80">Trade Value</p>
-              <h3 className="mt-1 text-4xl font-black leading-none text-white sm:text-5xl">{result.priority}</h3>
-              <p className="mt-1 text-xs leading-5 text-current/70">{tradeValueContext(result.priority)}</p>
+          <div className={`mt-2 rounded-2xl border px-3.5 py-4 sm:px-4 ${TRADE_VALUE_STYLES[result.priority]}`}>
+            <div className="flex flex-wrap items-center gap-2.5">
+              <span className="rounded-full border border-current/25 bg-black/20 px-2.5 py-1 text-[11px] font-black uppercase tracking-[0.14em] text-current">
+                {tradeValueBadge(result.priority)}
+              </span>
+              <span className="text-sm font-semibold leading-5 text-current/80">{tradeValueContext(result.priority)}</span>
             </div>
 
-            <div className="mt-3 rounded-xl border border-white/10 bg-black/25 px-3 py-2">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-zinc-300">Recommended Action</p>
-              <p className="mt-1 text-sm font-semibold leading-5 text-white">{recommendedAction(result.priority, itemType)}</p>
-            </div>
-          </div>
+            <div className="my-4 border-t border-white/10" />
 
-          <div className="mt-2.5 rounded-xl border border-border bg-black/20 px-3 py-2.5">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-400">Value Reasoning</p>
-            <p className="mt-1.5 text-sm leading-5 text-zinc-300">{displayExplanation(result.explanation)}</p>
+            <p className="text-lg font-black leading-6 text-white sm:text-xl">-&gt; {recommendedAction(result.priority, itemType)}</p>
+
+            <div className="mt-3 border-t border-white/10 pt-3">
+              <p className="text-sm leading-5 text-current/75">{displayExplanation(result.explanation)}</p>
+            </div>
           </div>
 
           {result.archetypeTags?.length ? (

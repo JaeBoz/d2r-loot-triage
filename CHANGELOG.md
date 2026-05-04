@@ -3,6 +3,23 @@
 [2026-05-04]
 
 Change:
+- Simplified the result panel visual hierarchy with a compact Trade Value badge, larger action line, and quieter reasoning text.
+
+Type:
+- UX
+
+Why:
+- User feedback found the result panel hard to scan because labeled sections created flat, crowded text hierarchy.
+
+Impact:
+- Results now read faster as badge plus context, action, and secondary reasoning while keeping the same wording and logic.
+
+Notes:
+- Visual layout only. No evaluation logic, copy mapping, Trade Value tiers, item data, roll ranges, or features changed.
+
+[2026-05-04]
+
+Change:
 - Simplified ResultPanel copy ownership so checker explanations render with minimal safety cleanup.
 
 Type:
