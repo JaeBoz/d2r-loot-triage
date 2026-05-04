@@ -239,6 +239,18 @@ function hasSaturatedStatStack(input: CharmCheckInput) {
   return cappedStatCount(input) >= 4;
 }
 
+function capSaturatedCharmPriority(priority: CharmCheckResult["priority"], saturatedStatStack: boolean) {
+  if (!saturatedStatStack) {
+    return priority;
+  }
+
+  if (priority === "Premium Trade Value" || priority === "High Trade Value") {
+    return "Moderate Trade Value";
+  }
+
+  return priority;
+}
+
 function awkwardPenalty(input: CharmCheckInput, matchedPatterns: string[]) {
   let penalty = 0;
   const rawStats = [
@@ -454,7 +466,7 @@ export function evaluateCharm(rawInput: CharmCheckInput): CharmCheckResult {
 
   return {
     verdict,
-    priority: priorityFromCharm(verdict, input, matchedPatternIds, score),
+    priority: capSaturatedCharmPriority(priorityFromCharm(verdict, input, matchedPatternIds, score), saturatedStatStack),
     liquidity: charmLiquidityFrom(input, score, input.mode, archetypeTags, matchedPatternIds),
     explanation,
     recommendedAction,

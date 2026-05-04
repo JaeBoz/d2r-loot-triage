@@ -3,6 +3,40 @@
 [2026-05-04]
 
 Change:
+- Tightened Trade Value-first result wording and capped hostile charm stat bundles below strong-value outputs.
+
+Type:
+- UX + Evaluation
+
+Why:
+- QA found leftover Conditional wording, over-positive weaker-result copy, a too-generous Low action, and hostile charm bundles still reaching High after clamping.
+
+Impact:
+- Low results now use self-use/second-look action text, lower-tier reasoning avoids over-praise, visible Conditional wording is removed, and hostile multi-signal charm bundles cap below High.
+
+Notes:
+- No Trade Value tier names, item data, roll ranges, pricing, features, or Decision display were changed.
+
+[2026-05-04]
+
+Change:
+- Removed the separate Decision display and made Trade Value the primary result signal.
+
+Type:
+- UX
+
+Why:
+- User feedback found the Decision layer redundant beside Trade Value and Recommended Action.
+
+Impact:
+- Results now lead with Trade Value, keep demand context directly underneath, move the action into one clear instruction, and label the explanation as Value Reasoning.
+
+Notes:
+- No evaluation logic, scoring, Trade Value tiers, data ranges, pricing, or features changed.
+
+[2026-05-04]
+
+Change:
 - Tightened roll-sensitive unique explanations, charm hostile-stack handling, skill tags, and decision/action mapping.
 
 Type:

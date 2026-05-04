@@ -4,10 +4,11 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 
 ## Final Output Tone
 
-- Smoke-test representative outputs across Uniques, Rings, Amulets, Gloves, Boots, Charms, Jewels, and Circlets; expected: Decision, Recommended Action, and Why It Matters are readable in under 3 seconds.
-- Confirm Why It Matters is one short value-focused sentence where possible; expected: no repeated ideas, long stat essays, or system-style phrasing.
+- Smoke-test representative outputs across Uniques, Rings, Amulets, Gloves, Boots, Charms, Jewels, and Circlets; expected: Trade Value, Recommended Action, and Value Reasoning are readable in under 3 seconds.
+- Confirm Value Reasoning is one short value-focused sentence where possible; expected: no repeated ideas, long stat essays, or system-style phrasing.
 - Confirm player-native wording stays clear for newer players; expected: short phrases like `Good roll`, `Missing key stats`, `decent`, and `Premium` are used only where they fit.
-- Confirm Trade Value and Decision agree; expected: Premium/High are confident `Keep`, Moderate is `Conditional`, Low is `Conditional` or `Drop`, and Trash is `Drop`.
+- Confirm Trade Value and Recommended Action agree; expected: Premium/High say `Keep it`, Moderate says `Compare or keep for use`, Low says `Only keep for self-use or a second look`, and Trash says `Drop it`.
+- Confirm no visible result panel text says `Conditional`; expected: lower-value reasoning uses `compare-only`, `socket-dependent`, or self-use/second-look language instead.
 - Confirm Premium and High outputs do not sound hesitant; expected: no `Check Before Tossing`, `worth checking`, or similar cautious language on strong results.
 - Confirm Premium and High outputs contain no conditional/weak phrasing; expected: no `if someone needs this`, `mostly self-use`, or `niche` framing on strong results.
 - Confirm value sentences lead with the primary signal; expected: FCR, IAS, FRW, sockets, skills, or ED appears before secondary support when that stat drives value.
@@ -16,17 +17,18 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - Confirm typing oversized values does not auto-jump while the field is focused; expected: clamping happens only after blur.
 - Confirm Warlock item presentation no longer says `Warlock-only`; expected: visible labels and output use `Reign of the Warlock item` or `RotW item`.
 - Confirm result colors follow Trade Value consistently, including charms; expected: Premium/High green, Moderate orange, Low/Trash red.
-- Confirm tags and Why It Matters do not conflict; expected: strong results avoid weak-looking context labels.
-- Confirm result panel hierarchy is fast to scan; expected: Decision is dominant, Trade Value is secondary, then Action, Why It Matters, and Tags.
-- Confirm no redundant strength labels appear; expected: no extra `Strong`, `Conditional`, or `Weak` badge competing with Decision.
-- Confirm action text aligns with Decision; expected: Conditional says `Compare or keep for use`, Keep says `Keep it`, and Drop says `Drop it`.
+- Confirm tags and Value Reasoning do not conflict; expected: strong results avoid weak-looking context labels.
+- Confirm result panel hierarchy is fast to scan; expected: Trade Value is dominant, then context, Action, Value Reasoning, and Tags.
+- Confirm no redundant decision labels appear; expected: no separate `Decision`, `Strong`, `Conditional`, or `Weak` badge competing with Trade Value.
+- Confirm action text aligns with Trade Value; expected: Premium/High say `Keep it`, Moderate says `Compare or keep for use`, Low says `Only keep for self-use or a second look`, and Trash says `Drop it`.
+- Confirm Moderate/Low Value Reasoning avoids over-praise; expected: no `Good caster amulet`, `Solid boots`, or `good circlet` tone on weaker results.
 - Confirm Trade Value has subtle micro-context; expected: Premium/High/Moderate/Low/Trash explain demand in one short line.
-- Confirm Why It Matters follows anchor/support into value meaning; expected: one tight sentence with no item-name prefix or soft phrasing.
+- Confirm Value Reasoning follows anchor/support into value meaning; expected: one tight sentence with no item-name prefix or soft phrasing.
 - Confirm context tags are actionable; expected: no vague `Specialty` tag.
 - Confirm no repeated phrases or duplicated signals appear in result output.
 - Confirm copy-only changes did not alter Trade Value tiers, scores, available inputs, or scoring logic.
 - Confirm Premium and High roll-sensitive uniques name the roll that drives value; expected: no `decent`, `not a standout`, or `situational` phrasing on strong unique results.
-- Confirm UI and API decision mapping agree; expected: Conditional always pairs with `Compare or keep for use`, Keep with `Keep it`, and Drop with `Drop it`.
+- Confirm visible action mapping is Trade Value based; expected: Premium/High say `Keep it`, Moderate says `Compare or keep for use`, Low says `Only keep for self-use or a second look`, and Trash says `Drop it`.
 - Confirm skill tags match build usage; expected: Javelin, Amazon, and other non-caster skill items do not show a caster tag unless the actual value signal is caster-based.
 
 ## Rulesets
@@ -155,8 +157,8 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - Test `Rainbow Facet` with low rolls versus perfect `5/5`; expected: low facets are not overhyped, perfect rolls stand out clearly.
 - Test `Highlord's Wrath`; expected: no roll input is needed and it reads as a staple keep/check item rather than a roll chase.
 - For eth-sensitive uniques, confirm ethereal state only helps when it makes sense for that item.
-- Test no-roll staple uniques such as `Stone of Jordan` and `Arachnid Mesh`; expected: decision label reads `Keep`, not `Check Before Tossing`.
-- Test a mid roll-sensitive unique; expected: decision label reads `Conditional` when roll quality deserves review but is not an automatic keep.
+- Test no-roll staple uniques such as `Stone of Jordan` and `Arachnid Mesh`; expected: Trade Value and Recommended Action read as a clear keep signal, not `Check Before Tossing`.
+- Test a mid roll-sensitive unique; expected: Trade Value and Recommended Action clearly show review/compare behavior without a separate Decision label.
 
 ## Charms
 
@@ -166,7 +168,7 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - Test `Small Charm` with `7 MF`; expected: valid max small charm magic find remains representable.
 - Test `Small Charm` with `3 FRW`; expected: valid small charm FRW remains representable.
 - Test `Small Charm` with `999 poison damage`; expected: it clamps to the source-backed small charm cap.
-- Test a hostile small charm bundle with capped all resist, poison damage, max damage, and attack rating; expected: clamped stat stacking cannot reach Premium.
+- Test a hostile small charm bundle with capped all resist, poison damage, max damage, and attack rating; expected: clamped stat stacking caps below High.
 - Test `Small Charm` with `451 poison damage`; expected: valid high-end poison small charm behavior remains unchanged.
 - Test oversized charm mana, all resist, single resist, FHR, max damage, and attack rating across all three charm sizes; expected: each clamps to the selected charm size's cap.
 - Test `Grand Charm` with `50 life`; expected: it clamps to `45`.

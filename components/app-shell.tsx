@@ -162,7 +162,7 @@ export function AppShell() {
             <div>Pick the item type</div>
             <div>Enter what you see on the item</div>
             <div>If a stat isn't listed, it usually doesn't add value</div>
-            <div>Decision tells you what to do; Trade Value shows strength</div>
+            <div>Trade Value shows strength; Recommended Action tells you what to do</div>
           </div>
         ) : null}
       </Card>

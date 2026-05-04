@@ -1,6 +1,5 @@
 import { Card, Pill } from "@/components/ui";
 import { TRADE_VALUE_STYLES } from "@/lib/constants";
-import { mapDecisionOutput } from "@/lib/decision-output";
 import { EvaluationPriority, Liquidity, RingArchetype, Verdict } from "@/lib/types";
 
 type ResultPanelResult = {
@@ -49,6 +48,22 @@ function tradeValueContext(priority: EvaluationPriority) {
   return "No trade value";
 }
 
+function recommendedAction(priority: EvaluationPriority) {
+  if (priority === "Premium Trade Value" || priority === "High Trade Value") {
+    return "Keep it.";
+  }
+
+  if (priority === "Moderate Trade Value") {
+    return "Compare or keep for use.";
+  }
+
+  if (priority === "Low Trade Value") {
+    return "Only keep for self-use or a second look.";
+  }
+
+  return "Drop it.";
+}
+
 function stripPrefix(value: string) {
   if (value.startsWith("No FRW:")) {
     return value;
@@ -57,7 +72,7 @@ function stripPrefix(value: string) {
   return value.replace(/^[^:]{1,48}:\s+/, "");
 }
 
-function displayExplanation(explanation: string) {
+function displayExplanation(explanation: string, priority: EvaluationPriority) {
   let text = stripPrefix(explanation.replace(/\s+/g, " ").trim()).replace(/\.$/, "");
 
   text = text
@@ -101,6 +116,30 @@ function displayExplanation(explanation: string) {
     .replace(/^Unknown .+$/i, "Missing local rule → no trade value")
     .replace(/^Wrong ruleset.+$/i, "Ruleset mismatch → no value here");
 
+  if (priority === "Moderate Trade Value" || priority === "Low Trade Value") {
+    text = text
+      .replace(/^Good caster amulet:\s*/i, "")
+      .replace(/^Good small charm:\s*/i, "")
+      .replace(/^Decent [^:]+:\s*/i, "")
+      .replace(/^Solid boots:\s*/i, "")
+      .replace(/^Decent partial hit:\s*/i, "")
+      .replace(/^Useful stats, but no FRW:\s*(.+?) is conditional$/i, "No FRW + $1 -> useful, but not a clean trade hit")
+      .replace(/^Bow \+ IAS can be useful, but it needs support$/i, "IAS + support needs stronger rolls")
+      .replace(/^(.+?) is usable, but not clean$/i, "$1 -> useful, but not a clean trade hit")
+      .replace(/\bkeep signal\b/gi, "needs stronger support")
+      .replace(/\bvalue check\b/gi, "needs a second look");
+  }
+
+  text = text
+    .replace(/Stat mix\s*(?:â†’|→|->)\s*value check/gi, "FCR + support drives value")
+    .replace(/Boot mix\s*(?:â†’|→|->)\s*value check/gi, "FRW + res drives value")
+    .replace(/Good rolls\s*(?:â†’|→|->)\s*trade value/gi, "Roll quality drives value")
+    .replace(/Good roll\s*(?:â†’|→|->)\s*trade value/gi, "Roll quality drives value")
+    .replace(/Variable rolls\s*(?:â†’|→|->)\s*value check/gi, "Roll quality drives value")
+    .replace(/\bconditional value\b/gi, "compare-only value")
+    .replace(/\bis conditional\b/gi, "needs a second look")
+    .replace(/\bconditional\b/gi, "compare-only");
+
   return text.split(".")[0]?.trim() || text;
 }
 
@@ -113,7 +152,6 @@ export function ResultPanel({
   hasInput?: boolean;
   emptyMessage?: string;
 }) {
-  const decision = mapDecisionOutput(result);
   const isStrongResult = result.priority === "High Trade Value" || result.priority === "Premium Trade Value";
 
   return (
@@ -129,21 +167,20 @@ export function ResultPanel({
         <>
           <div className={`mt-2 rounded-2xl border p-3 sm:p-4 ${TRADE_VALUE_STYLES[result.priority]}`}>
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-current/80">Decision</p>
-              <h3 className="mt-1 text-4xl font-black leading-none text-white sm:text-5xl">{decision.label}</h3>
-              <p className="mt-2 text-xs font-semibold uppercase tracking-[0.16em] text-current/80">{result.priority}</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-current/80">Trade Value</p>
+              <h3 className="mt-1 text-4xl font-black leading-none text-white sm:text-5xl">{result.priority}</h3>
               <p className="mt-1 text-xs leading-5 text-current/70">{tradeValueContext(result.priority)}</p>
             </div>
 
             <div className="mt-3 rounded-xl border border-white/10 bg-black/25 px-3 py-2">
               <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-zinc-300">Recommended Action</p>
-              <p className="mt-1 text-sm font-semibold leading-5 text-white">{decision.actionLine}</p>
+              <p className="mt-1 text-sm font-semibold leading-5 text-white">{recommendedAction(result.priority)}</p>
             </div>
           </div>
 
           <div className="mt-2.5 rounded-xl border border-border bg-black/20 px-3 py-2.5">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-400">Why It Matters</p>
-            <p className="mt-1.5 text-sm leading-5 text-zinc-300">{displayExplanation(result.explanation)}</p>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-400">Value Reasoning</p>
+            <p className="mt-1.5 text-sm leading-5 text-zinc-300">{displayExplanation(result.explanation, result.priority)}</p>
           </div>
 
           {result.archetypeTags?.length ? (
