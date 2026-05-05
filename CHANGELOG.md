@@ -3,6 +3,23 @@
 [2026-05-04]
 
 Change:
+- Tuned Base Checker socket-state separation and superior roll signaling.
+
+Type:
+- Evaluation / UX
+
+Why:
+- Base QA found 0os eth merc bases, finished correct-socket eth bases, and 15 ED superior bases reading too similarly, with some socket/runeword reasoning naming the wrong runeword.
+
+Impact:
+- Unsocketed eth merc bases now read as socket potential below finished socket hits; wrong sockets are less trade-forward; true correct-socket 15 ED/EDef superior bases can show a `Jackpot base` tag.
+
+Notes:
+- Base Checker only. No new Trade Value tier, pricing logic, global result panel refactor, or non-base checker changes.
+
+[2026-05-04]
+
+Change:
 - Lightly tightened result panel spacing and allowed short natural anchor-first reasoning lines.
 
 Type:

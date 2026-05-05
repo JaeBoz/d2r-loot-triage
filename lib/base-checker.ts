@@ -68,6 +68,30 @@ const modePriority = (item: BaseItem, mode: GameMode) => (mode === "SCNL" ? item
 
 const primaryUseCase = (item: BaseItem) => item.runewordUseCases[0] ?? "runeword";
 
+const runewordSocketCounts: Record<string, number> = {
+  Beast: 5,
+  "Breath of the Dying": 6,
+  "Call to Arms": 5,
+  "Chains of Honor": 4,
+  "Crescent Moon": 3,
+  Death: 5,
+  Enigma: 3,
+  Exile: 4,
+  Faith: 4,
+  Fortitude: 4,
+  Grief: 5,
+  "Heart of the Oak": 4,
+  Infinity: 4,
+  Insight: 4,
+  "Last Wish": 6,
+  Obedience: 5,
+  Phoenix: 4,
+  Pride: 4,
+  Smoke: 2,
+  Spirit: 4,
+  Treachery: 3
+};
+
 const SUPERIOR_ROLL_CAP = 15;
 
 function clampSuperiorRoll(value: number | undefined) {
@@ -84,6 +108,10 @@ function isWeaponBase(item: BaseItem) {
 
 function isArmorLikeBase(item: BaseItem) {
   return item.category === "Armor" || item.category === "Shield" || item.category === "Helm";
+}
+
+function useCaseForSocketCount(item: BaseItem, sockets: number) {
+  return item.runewordUseCases.find((useCase) => runewordSocketCounts[useCase] === sockets);
 }
 
 function hasMeaningfulUnsocketedDemand(input: BaseCheckInput, item: BaseItem) {
@@ -111,27 +139,28 @@ function baseDemandPhrase(item: BaseItem, input: BaseCheckInput) {
   const superiorEDef = clampSuperiorRoll(input.superiorEnhancedDefense);
 
   if (input.superior && isWeaponBase(item) && superiorEd >= 15 && item.socketSensitive && item.desiredSockets.includes(input.sockets)) {
-    return "Superior ED boosts the base";
+    return "15 ED superior roll drives value";
   }
 
   if (input.superior && isArmorLikeBase(item) && superiorEDef >= 15 && item.socketSensitive && item.desiredSockets.includes(input.sockets)) {
-    return "Superior EDef boosts the base";
+    return "15 EDef superior roll drives value";
   }
 
   if (item.socketSensitive && input.sockets === 0 && !hasMeaningfulUnsocketedDemand(input, item)) {
-    return "Socket state drives value";
+    return "Socket potential drives value";
   }
 
   if (item.socketSensitive && input.sockets > 0 && !item.desiredSockets.includes(input.sockets)) {
-    return "Wrong socket state drives value";
+    return "Wrong sockets limit value";
   }
 
   if (item.socketSensitive && item.desiredSockets.includes(input.sockets)) {
-    return `${input.sockets}os makes the ${primaryUseCase(item)} base`;
+    const useCase = useCaseForSocketCount(item, input.sockets);
+    return useCase ? `${input.sockets}os makes the ${useCase} base` : "Correct sockets drive value";
   }
 
   if (item.socketSensitive && input.sockets === 0 && item.tags.includes("merc") && input.ethereal && item.ethPriority !== "low") {
-    return "Eth merc base drives value";
+    return "Eth socket potential drives value";
   }
 
   if (item.tags.includes("merc") && input.ethereal && item.ethPriority !== "low") {
@@ -146,7 +175,7 @@ function baseDemandPhrase(item: BaseItem, input: BaseCheckInput) {
     return "Build-specific use drives value";
   }
 
-  return "Runeword plan drives value";
+  return "Base use drives value";
 }
 
 function adjustForEtherealState(score: number, input: BaseCheckInput, item: BaseItem, details: string[]) {
@@ -213,7 +242,7 @@ function adjustForSockets(score: number, input: BaseCheckInput, item: BaseItem, 
 
       if (item.tags.includes("merc") && input.ethereal) {
         details.push("Unsocketed eth merc bases can still matter because buyers may want socket control.");
-        nextScore += 1;
+        nextScore -= 1;
       } else {
         details.push("Socket potential, not a finished socket hit.");
       }
@@ -235,10 +264,8 @@ function adjustForSockets(score: number, input: BaseCheckInput, item: BaseItem, 
     return score + 2;
   }
 
-  details.push(
-    `${input.sockets} sockets is off-pattern. The usual target is ${formatSockets(item.desiredSockets)}.`
-  );
-  return score - 3;
+  details.push(`${input.sockets} sockets is off-pattern. The usual target is ${formatSockets(item.desiredSockets)}.`);
+  return score - 5;
 }
 
 function adjustForAffixes(score: number, input: BaseCheckInput, item: BaseItem, details: string[]) {
@@ -364,6 +391,26 @@ function buildRecommendedAction(item: BaseItem, input: BaseCheckInput, verdict: 
   return "Keep it. Premium base hit.";
 }
 
+function hasJackpotSuperiorRoll(item: BaseItem, input: BaseCheckInput) {
+  if (!input.superior || !item.socketSensitive || !item.desiredSockets.includes(input.sockets)) {
+    return false;
+  }
+
+  if (modePriority(item, input.mode) === "low") {
+    return false;
+  }
+
+  const ethStateFits = item.ethPriority === "high" || item.ethPriority === "required" ? input.ethereal : true;
+  if (!ethStateFits) {
+    return false;
+  }
+
+  const superiorEd = clampSuperiorRoll(input.superiorEnhancedDamage);
+  const superiorEDef = clampSuperiorRoll(input.superiorEnhancedDefense);
+
+  return (isWeaponBase(item) && superiorEd >= 15) || (isArmorLikeBase(item) && superiorEDef >= 15);
+}
+
 export function evaluateBase(input: BaseCheckInput): BaseCheckResult {
   const item = baseItemMap.get(input.itemId);
 
@@ -405,6 +452,7 @@ export function evaluateBase(input: BaseCheckInput): BaseCheckResult {
     priority,
     liquidity,
     explanation: buildExplanation(item, input, verdict, details),
-    recommendedAction: buildRecommendedAction(item, input, verdict)
+    recommendedAction: buildRecommendedAction(item, input, verdict),
+    archetypeTags: hasJackpotSuperiorRoll(item, input) ? ["Jackpot base"] : undefined
   };
 }

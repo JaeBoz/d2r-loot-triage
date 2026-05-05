@@ -1,6 +1,6 @@
 import { Card, Pill } from "@/components/ui";
 import { TRADE_VALUE_STYLES } from "@/lib/constants";
-import { EvaluationPriority, Liquidity, RingArchetype, Verdict } from "@/lib/types";
+import { EvaluationPriority, Liquidity, Verdict } from "@/lib/types";
 
 type ResultPanelResult = {
   verdict: Verdict;
@@ -9,10 +9,10 @@ type ResultPanelResult = {
   explanation: string;
   recommendedAction: string;
   qualityScore?: number;
-  archetypeTags?: RingArchetype[];
+  archetypeTags?: string[];
 };
 
-function displayContextTag(tag: RingArchetype, priority: EvaluationPriority) {
+function displayContextTag(tag: string, priority: EvaluationPriority) {
   if (tag !== "niche") {
     return tag;
   }

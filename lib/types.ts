@@ -106,6 +106,7 @@ export interface BaseCheckResult {
   liquidity: Liquidity;
   explanation: string;
   recommendedAction: string;
+  archetypeTags?: string[];
 }
 
 export interface BaseReferenceData {
