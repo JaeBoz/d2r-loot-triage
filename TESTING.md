@@ -116,15 +116,17 @@ Use this checklist before pushing or deploying. The goal is to catch obvious gam
 - Check `Superior` on a weapon or polearm base; expected: `Superior ED %` and `Superior durability %` appear, and both clamp to `15` on blur.
 - Check `Superior` on an armor, shield, or helm-style base; expected: `Superior EDef %` and `Superior durability %` appear, and both clamp to `15` on blur.
 - Test ethereal mercenary bases such as eth polearms; expected: eth status improves relevant merc/runeword value.
-- Test eth `0os Thresher`; expected: socket-potential wording and lower Trade Value than finished eth `4os Thresher`.
-- Test eth `4os Thresher`; expected: strong finished-socket base result.
-- Test eth `4os Thresher` with `15 Superior ED`; expected: stronger result with `Jackpot base` tag.
-- Test eth `4os Thresher` with superior durability only; expected: durability is minor support and does not show `Jackpot base`.
-- Test eth `5os Thresher`; expected: reasoning does not mention `Insight`.
+- Test eth `0os Thresher`; expected: socket-potential wording, lower Trade Value than finished eth `4os Thresher`, and action says `Socket or trade as potential`.
+- Test eth `4os Thresher`; expected: strong finished-socket base result with `Keep or list as a base`.
+- Test eth `4os Thresher` with `15 Superior ED`; expected: `GG base` tag and `GG base — keep or list` action.
+- Test eth `4os Thresher` with superior durability only; expected: durability is minor support and does not show `GG base`.
+- Test eth `5os Thresher`; expected: reasoning does not mention `Insight` and result does not read like the main 4os Insight/Infinity hit.
+- Test wrong-socket eth `Thresher`; expected: action says `Only keep if you need this exact base`.
 - Test `5os Phase Blade`; expected: plain 5os remains strong.
 - Test `5os Phase Blade` with `15 Superior ED`; expected: stronger than the plain 5os version.
-- Test `3os Archon Plate`; expected: reasoning may mention `Enigma`.
-- Test `4os Archon Plate`; expected: reasoning does not mention `Enigma`.
+- Test `3os Archon Plate`; expected: socket-specific reasoning says `3os Enigma base drives value`.
+- Test `4os Archon Plate`; expected: socket-specific reasoning says `4os Fortitude base drives value` and does not imply Enigma.
+- Test `3os` and `4os Archon Plate` with `15 Superior EDef`; expected: superior EDef behavior is visibly separated when applicable.
 - Test wrong-socket superior eth `Thresher`; expected: superior rolls do not rescue it into High/Premium and wording makes the socket miss clear.
 - Test weak or wrong-socket bases; expected: output explains why trade value is limited.
 

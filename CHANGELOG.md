@@ -3,6 +3,23 @@
 [2026-05-04]
 
 Change:
+- Refined Base Checker action copy, socket-specific base separation, and GG base signaling.
+
+Type:
+- Evaluation / UX
+
+Why:
+- Focused base QA found generic `Keep it` too strong for socket-potential bases and found plain, useful, and jackpot superior base states still visually compressed.
+
+Impact:
+- Base results can now show base-owned actions such as `Socket or trade as potential`, `Keep or list as a base`, `GG base — keep or list`, and `Only keep if you need this exact base`; 5os Thresher and 4os Archon Plate are separated from the stronger broad-demand socket paths.
+
+Notes:
+- Base Checker only. No new Trade Value tier, pricing logic, or non-base checker behavior changes.
+
+[2026-05-04]
+
+Change:
 - Tuned Base Checker socket-state separation and superior roll signaling.
 
 Type:

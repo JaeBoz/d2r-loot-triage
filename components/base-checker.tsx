@@ -355,6 +355,7 @@ export function BaseChecker({ mode }: { mode: GameMode }) {
       <ResultPanel
         result={result}
         hasInput={!pickerOpen}
+        itemType="base"
         emptyMessage="Choose a base from the search results to refresh the trade-value check."
       />
     </div>

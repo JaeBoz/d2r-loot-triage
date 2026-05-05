@@ -114,6 +114,15 @@ function useCaseForSocketCount(item: BaseItem, sockets: number) {
   return item.runewordUseCases.find((useCase) => runewordSocketCounts[useCase] === sockets);
 }
 
+function socketUseCaseReason(item: BaseItem, input: BaseCheckInput) {
+  if (item.id === "thresher" && input.ethereal && input.sockets === 4) {
+    return "4os eth merc base drives value";
+  }
+
+  const useCase = useCaseForSocketCount(item, input.sockets);
+  return useCase ? `${input.sockets}os ${useCase} base drives value` : "Correct sockets drive value";
+}
+
 function hasMeaningfulUnsocketedDemand(input: BaseCheckInput, item: BaseItem) {
   if (item.tags.includes("merc") && input.ethereal && item.ethPriority !== "low") {
     return true;
@@ -155,8 +164,7 @@ function baseDemandPhrase(item: BaseItem, input: BaseCheckInput) {
   }
 
   if (item.socketSensitive && item.desiredSockets.includes(input.sockets)) {
-    const useCase = useCaseForSocketCount(item, input.sockets);
-    return useCase ? `${input.sockets}os makes the ${useCase} base` : "Correct sockets drive value";
+    return socketUseCaseReason(item, input);
   }
 
   if (item.socketSensitive && input.sockets === 0 && item.tags.includes("merc") && input.ethereal && item.ethPriority !== "low") {
@@ -355,40 +363,58 @@ function adjustForAffixes(score: number, input: BaseCheckInput, item: BaseItem, 
   return nextScore;
 }
 
+function adjustForSocketSpecificDemand(score: number, input: BaseCheckInput, item: BaseItem, details: string[]) {
+  if (item.id === "thresher" && input.sockets === 5) {
+    details.push("5os Thresher has Obedience-style demand, below the main 4os merc base hit.");
+    return score - 3;
+  }
+
+  if (item.id === "archon-plate" && input.sockets === 4) {
+    details.push("4os Archon Plate is useful, but broader demand is below the 3os Enigma path.");
+    return score - 1;
+  }
+
+  return score;
+}
+
 function buildExplanation(item: BaseItem, input: BaseCheckInput, verdict: Verdict, details: string[]) {
   return baseDemandPhrase(item, input);
 }
 
 function buildRecommendedAction(item: BaseItem, input: BaseCheckInput, verdict: Verdict) {
+  if (hasJackpotSuperiorRoll(item, input)) {
+    return "GG base — keep or list";
+  }
+
   if (item.socketSensitive && input.sockets === 0 && hasMeaningfulUnsocketedDemand(input, item)) {
-    return `Good base. Socket potential matters, but it needs ${formatSockets(item.desiredSockets)} before it is a finished trade piece.`;
+    return "Socket or trade as potential";
   }
 
   if (item.socketSensitive && input.sockets === 0 && !hasMeaningfulUnsocketedDemand(input, item)) {
-    return `Conditional keep. It needs ${formatSockets(item.desiredSockets)} to be clean.`;
+    return "Socket or trade as potential";
   }
 
   if (item.socketSensitive && input.sockets > 0 && !item.desiredSockets.includes(input.sockets)) {
-    return `Usually move on. This misses the normal ${formatSockets(item.desiredSockets)} target.`;
+    return "Only keep if you need this exact base";
   }
 
   if (item.socketSensitive && item.desiredSockets.includes(input.sockets)) {
-    return "Right sockets. Keep it and compare later.";
+    return "Keep or list as a base";
   }
 
   if (verdict === "Ignore") {
-    return "Drop it unless you need the base personally.";
+    return "Only keep if you need this exact base";
   }
 
   if (verdict === "Low Priority") {
-    return "Only stash for a specific buyer or use case.";
+    return "Only keep if you need this exact base";
   }
 
   if (verdict === "Keep") {
-    return "Keep it. Real base, not always instant trade.";
+    return "Keep or list as a base";
   }
 
-  return "Keep it. Premium base hit.";
+  return "Keep or list as a base";
 }
 
 function hasJackpotSuperiorRoll(item: BaseItem, input: BaseCheckInput) {
@@ -431,6 +457,7 @@ export function evaluateBase(input: BaseCheckInput): BaseCheckResult {
   score = adjustForEtherealState(score, input, item, details);
   score = adjustForSockets(score, input, item, details);
   score = adjustForAffixes(score, input, item, details);
+  score = adjustForSocketSpecificDemand(score, input, item, details);
 
   if (input.mode === "SCL" && item.tags.includes("ladder-staple")) {
     score += 1;
@@ -453,6 +480,6 @@ export function evaluateBase(input: BaseCheckInput): BaseCheckResult {
     liquidity,
     explanation: buildExplanation(item, input, verdict, details),
     recommendedAction: buildRecommendedAction(item, input, verdict),
-    archetypeTags: hasJackpotSuperiorRoll(item, input) ? ["Jackpot base"] : undefined
+    archetypeTags: hasJackpotSuperiorRoll(item, input) ? ["GG base"] : undefined
   };
 }

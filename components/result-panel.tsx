@@ -68,7 +68,7 @@ function tradeValueBadge(priority: EvaluationPriority) {
   return "Trash";
 }
 
-function recommendedAction(priority: EvaluationPriority, itemType?: "unique") {
+function recommendedAction(priority: EvaluationPriority, itemType?: "unique" | "base") {
   if (priority === "Premium Trade Value" || priority === "High Trade Value") {
     return "Keep it";
   }
@@ -86,6 +86,11 @@ function recommendedAction(priority: EvaluationPriority, itemType?: "unique") {
   }
 
   return "Drop it";
+}
+
+function displayAction(result: ResultPanelResult, itemType?: "unique" | "base") {
+  const action = itemType === "base" ? result.recommendedAction : recommendedAction(result.priority, itemType);
+  return action.replace(/[.;,\s]+$/, "");
 }
 
 function stripPrefix(value: string) {
@@ -125,8 +130,11 @@ export function ResultPanel({
   result: ResultPanelResult;
   hasInput?: boolean;
   emptyMessage?: string;
-  itemType?: "unique";
+  itemType?: "unique" | "base";
 }) {
+  const hasGgBaseTag = itemType === "base" && result.archetypeTags?.includes("GG base");
+  const displayedTags = hasGgBaseTag ? result.archetypeTags?.filter((tag) => tag !== "GG base") : result.archetypeTags;
+
   return (
     <Card className="h-fit">
       <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-200/80">Result</p>
@@ -138,22 +146,27 @@ export function ResultPanel({
                 {tradeValueBadge(result.priority)}
               </div>
               <div className="mt-1 text-sm font-semibold leading-5 text-zinc-400">{tradeValueContext(result.priority)}</div>
+              {hasGgBaseTag ? (
+                <div className="mt-3 inline-flex rounded-full border border-amber-300/70 bg-amber-300/10 px-2.5 py-1 text-[11px] font-black uppercase tracking-[0.16em] text-amber-100">
+                  GG base
+                </div>
+              ) : null}
             </div>
 
             <div className="mb-4 mt-5 h-px bg-white/10" />
 
-            <div className="text-lg font-black leading-6 text-white sm:text-xl">{recommendedAction(result.priority, itemType)}</div>
+            <div className="text-lg font-black leading-6 text-white sm:text-xl">{displayAction(result, itemType)}</div>
 
             <div className="mt-2.5">
               <div className="text-sm leading-5 text-zinc-400">{displayExplanation(result.explanation)}</div>
             </div>
           </div>
 
-          {result.archetypeTags?.length ? (
+          {displayedTags?.length ? (
             <div className="mt-2.5 rounded-xl border border-border bg-black/10 px-3 py-2.5">
               <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-500">Tags</p>
               <div className="mt-2 flex flex-wrap gap-2">
-                {result.archetypeTags.map((tag) => (
+                {displayedTags.map((tag) => (
                   <Pill key={tag}>{displayContextTag(tag, result.priority)}</Pill>
                 ))}
               </div>
