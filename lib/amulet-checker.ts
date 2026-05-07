@@ -441,6 +441,27 @@ function hasWeakRareStyleCasterShell(stats: NormalizedAmuletStats) {
   return hasTwoCasterSkills && hasOnlyRareStyleFcr && !hasMeaningfulSupport;
 }
 
+function hasMeaningfulAmuletSupport(stats: NormalizedAmuletStats) {
+  return (
+    (stats.allResist ?? 0) >= 10 ||
+    (stats.life ?? 0) >= 25 ||
+    (stats.mana ?? 0) >= 40 ||
+    (stats.strength ?? 0) >= 10 ||
+    (stats.dexterity ?? 0) >= 10 ||
+    (stats.lightningResist ?? 0) >= 25 ||
+    (stats.magicFind ?? 0) >= 20
+  );
+}
+
+function isSkillsOnlyAmulet(stats: NormalizedAmuletStats) {
+  const hasSkills = (stats.classSkills ?? 0) >= 1 || (stats.skillTreeSkills ?? 0) >= 1;
+  const presentKeys = Object.keys(stats).filter(
+    (key) => key !== "levelRequirement" && key !== "classSkillType" && key !== "skillTreeType"
+  );
+
+  return hasSkills && presentKeys.every((key) => key === "classSkills" || key === "skillTreeSkills");
+}
+
 function isSecondaryOnlyStack(stats: NormalizedAmuletStats) {
   const secondaryOnlyKeys = new Set<StatKey>([
     "magicFind",
@@ -495,11 +516,25 @@ function explanationFor(
   const hasCasterSkillMismatch = highlights.includes("class skill does not fit the caster-style stats");
   const summaryText = summaryTextFor(topRated, input, hasCasterSkillMismatch);
   const isCraftFcr = topRated.some((entry) => entry.key === "fasterCastRate" && entry.value >= 15);
+  const stats = normalizeStats(input);
+  const hasSkills = (stats.classSkills ?? 0) >= 1 || (stats.skillTreeSkills ?? 0) >= 1;
+  const hasTwentyFcr = (stats.fasterCastRate ?? 0) >= 20;
+
+  if (hasCasterSkillMismatch) {
+    return "Skill/FCR mismatch keeps this mostly compare-only";
+  }
+
+  if (hasSkills && hasTwentyFcr && !hasMeaningfulAmuletSupport(stats)) {
+    return "20 FCR is the anchor, but secondaries decide it";
+  }
+
+  if (isSkillsOnlyAmulet(stats)) {
+    return "+skills alone needs stronger support";
+  }
+
   const anchor = isCraftFcr
     ? `20 FCR + support`
-    : hasCasterSkillMismatch
-      ? `FCR mismatch`
-      : summaryText === "very little usable value"
+    : summaryText === "very little usable value"
         ? "Skill and stat mix"
         : summaryText;
 
@@ -526,10 +561,15 @@ function explanationFor(
   return `${anchor} drives value`;
 }
 
-function recommendedActionFor(verdict: Verdict, mode: AmuletCheckInput["mode"]) {
+function recommendedActionFor(verdict: Verdict, mode: AmuletCheckInput["mode"], stats: NormalizedAmuletStats, highlights: string[]) {
   if (verdict === "Ignore") return "Drop it unless you need a temporary amulet.";
   if (verdict === "Low Priority") return "Only keep it as a progression filler.";
+  if (highlights.includes("class skill does not fit the caster-style stats")) return "Compare only. Class fit is limited.";
+  if ((stats.fasterCastRate ?? 0) >= 20 && ((stats.classSkills ?? 0) >= 1 || (stats.skillTreeSkills ?? 0) >= 1) && !hasMeaningfulAmuletSupport(stats)) {
+    return "Keep it, but secondaries decide demand.";
+  }
   if (verdict === "Check") return "Conditional keep. The support needs to line up.";
+  if (isSkillsOnlyAmulet(stats)) return "Compare only. +skills need support.";
   if (verdict === "Keep") return `Keep it. Compare against your other ${mode} amulets.`;
   if (verdict === "List") return "Keep it. Good amulet hit.";
   return "Keep it. Premium amulet hit.";
@@ -597,7 +637,7 @@ export function evaluateAmulet(input: AmuletCheckInput): AmuletCheckResult {
     priority: priorityFromVerdict(verdict),
     liquidity: liquidityFrom(score, input.mode, archetypeTags, input),
     explanation,
-    recommendedAction: recommendedActionFor(verdict, input.mode),
+    recommendedAction: recommendedActionFor(verdict, input.mode, stats, highlights),
     qualityScore: Math.max(0, score),
     archetypeTags
   };

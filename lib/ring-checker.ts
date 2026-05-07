@@ -228,7 +228,7 @@ function comboTextFor(highlights: string[]) {
     return `FCR + ${fcrSupport.slice(0, 3).join("/")}`;
   }
 
-  return displayHighlights.length > 0 ? displayHighlights.slice(0, 2).join(" and ") : "the overall stat mix";
+  return displayHighlights.length > 0 ? displayHighlights.slice(0, 2).join(" and ") : "stat support";
 }
 
 function rollPackageAdjustment(
@@ -330,6 +330,31 @@ function explanationFor(
 ) {
   const comboText = comboTextFor(highlights);
   const hasFcrAnchor = topRated.some((entry) => entry.key === "fasterCastRate" && entry.value >= 10);
+  const hasFcrSupport = highlights.some((highlight) => highlight.startsWith("FCR with"));
+  const hasDualLeech =
+    (input.lifeLeech ?? 0) >= 4 &&
+    (input.manaLeech ?? 0) >= 4;
+  const hasLeech = (input.lifeLeech ?? 0) >= 2 || (input.manaLeech ?? 0) >= 2;
+  const hasMeleeSupport =
+    (input.attackRating ?? 0) >= 60 ||
+    (input.strength ?? 0) >= 8 ||
+    (input.dexterity ?? 0) >= 8 ||
+    (input.maxDamage ?? 0) >= 5 ||
+    (input.allResist ?? 0) >= 5 ||
+    (input.lightningResist ?? 0) >= 20;
+
+  if (hasFcrAnchor && !hasFcrSupport) {
+    return "FCR is useful, but weak secondaries keep it conditional";
+  }
+
+  if (hasDualLeech) {
+    return "Dual leech is the hook; support decides trade strength";
+  }
+
+  if (hasLeech && !hasMeleeSupport) {
+    return "Leech needs AR, stats, or res support";
+  }
+
   const valueText = hasFcrAnchor && !comboText.includes("FCR") ? `FCR + ${comboText}` : comboText;
   const highCount = rated.filter((entry) => entry.score >= 4).length;
   const lowOnly = rated.length > 0 && rated.every((entry) => entry.score <= 1);
@@ -364,7 +389,19 @@ function explanationFor(
   return "Stat mix drives value";
 }
 
-function recommendedActionFor(verdict: Verdict, mode: RingCheckInput["mode"]) {
+function hasFcrWithoutRealSupport(stats: NormalizedRingStats) {
+  return (
+    (stats.fasterCastRate ?? 0) >= 10 &&
+    (stats.strength ?? 0) < 8 &&
+    (stats.dexterity ?? 0) < 8 &&
+    (stats.life ?? 0) < 20 &&
+    (stats.mana ?? 0) < 40 &&
+    (stats.allResist ?? 0) < 7 &&
+    (stats.lightningResist ?? 0) < 20
+  );
+}
+
+function recommendedActionFor(verdict: Verdict, mode: RingCheckInput["mode"], stats: NormalizedRingStats) {
   if (verdict === "Ignore") {
     return "Drop it unless you need a temporary ring.";
   }
@@ -375,6 +412,10 @@ function recommendedActionFor(verdict: Verdict, mode: RingCheckInput["mode"]) {
 
   if (verdict === "Check") {
     return "Conditional keep. The mix needs to line up.";
+  }
+
+  if (hasFcrWithoutRealSupport(stats)) {
+    return "Conditional keep. FCR needs support.";
   }
 
   if (verdict === "Keep") {
@@ -443,7 +484,7 @@ export function evaluateRing(input: RingCheckInput): RingCheckResult {
     priority: priorityFromVerdict(verdict),
     liquidity: liquidityFrom(score, input.mode, archetypeTags),
     explanation,
-    recommendedAction: recommendedActionFor(verdict, input.mode),
+    recommendedAction: recommendedActionFor(verdict, input.mode, stats),
     qualityScore: Math.max(0, score),
     archetypeTags
   };

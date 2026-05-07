@@ -3,6 +3,23 @@
 [2026-05-07]
 
 Change:
+- Tightened borderline amulet, ring, and boot result wording.
+
+Type:
+- UX
+
+Why:
+- QA found some composite items used vague or over-positive copy such as `overall stat mix`, implied support on thin +skills/FCR shells, or repeated FRW/res phrasing.
+
+Impact:
+- Amulet, ring, and boot results now describe weak support, mismatch, leech hooks, and no-FRW cases more honestly without changing Trade Value, thresholds, tags, or checker coverage.
+
+Notes:
+- Copy/action alignment only. No scoring, pricing, data, or highlight behavior changed.
+
+[2026-05-07]
+
+Change:
 - Reduced repeated Value Reasoning wording on highlighted charm and jewel results.
 
 Type:

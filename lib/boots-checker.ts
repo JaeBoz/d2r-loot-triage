@@ -304,7 +304,11 @@ function comboTextFor(highlights: string[]) {
     return "FRW + tri-res";
   }
 
-  return displayHighlights.length > 0 ? displayHighlights.slice(0, 2).join(" and ") : "the overall stat mix";
+  if (displayHighlights.includes("FRW + strong res") && displayHighlights.includes("FRW + dual res")) {
+    return "FRW + dual res";
+  }
+
+  return displayHighlights.length > 0 ? displayHighlights.slice(0, 2).join(" and ") : "boot support";
 }
 
 function explanationFor(
@@ -320,11 +324,20 @@ function explanationFor(
   const lowOnly = rated.length > 0 && rated.every((entry) => entry.score <= 1);
   const hasFrw = (stats.fasterRunWalk ?? 0) >= 30;
   const resists = resistHitCount(stats);
+  const anyResists = resistHitCount(stats, 15);
   const support = supportScore(stats);
   const anchor = hasFrw ? comboText : "No FRW";
 
   if (!hasFrw && verdict !== "Ignore") {
-    return "Missing FRW drives value";
+    if (resists >= 3) {
+      return "Useful res package, but no FRW keeps it conditional";
+    }
+
+    if (anyResists > 0) {
+      return "Resists help, but missing FRW is hard to justify";
+    }
+
+    return "Missing FRW keeps these compare-only";
   }
 
   if (verdict === "Ignore") {
@@ -337,12 +350,20 @@ function explanationFor(
 
   if (verdict === "Check") {
     if (hasFrw && resists >= 2) {
-      return "FRW + dual res drives value";
+      return "FRW with dual res is the value hook";
     }
     return `${anchor} drives value`;
   }
 
   if (verdict === "Keep") {
+    if (highlights.includes("FRW with MF, but no support")) {
+      return "FRW + MF needs res or extra support";
+    }
+
+    if (hasFrw && resists >= 2) {
+      return "FRW with dual res is the value hook";
+    }
+
     if (hasFrw && support >= 2) {
       return "FRW + support drives value";
     }
@@ -350,7 +371,7 @@ function explanationFor(
   }
 
   if (verdict === "List") {
-    return `FRW + ${comboText} drives value`;
+    return comboText.startsWith("FRW") ? `${comboText} drives value` : `FRW + ${comboText} drives value`;
   }
 
   if (highCount >= 2 && !lowOnly) {
