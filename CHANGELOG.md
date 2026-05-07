@@ -3,6 +3,23 @@
 [2026-05-07]
 
 Change:
+- Reduced repeated Value Reasoning wording on highlighted charm and jewel results.
+
+Type:
+- UX
+
+Why:
+- QA found some new contextual highlights repeated the same phrase in the reasoning line, slowing fast scans and slightly over-hyping IAS + res jewels.
+
+Impact:
+- `7 MF`, `IAS + ED`, and `IAS + res` results keep the same Trade Value, thresholds, and highlight tags while using shorter support-oriented reasoning.
+
+Notes:
+- Wording-only follow-up. No scoring, tag, checker coverage, or pricing behavior changed.
+
+[2026-05-07]
+
+Change:
 - Added rare contextual highlight pills for Charm, Jewel, and Circlet results.
 
 Type:

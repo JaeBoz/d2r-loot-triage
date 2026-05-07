@@ -321,7 +321,7 @@ function charmReasoning(input: CharmCheckInput, matchedPatternIds: string[], mat
   }
 
   if (matchedPatternIds.includes("sc-mf") && input.size === "Small Charm" && (input.magicFind ?? 0) >= 7) {
-    return "7 MF roll drives value";
+    return "Max MF small charm roll keeps it easy to read";
   }
 
   if (input.size === "Grand Charm" && input.skill?.trim()) {

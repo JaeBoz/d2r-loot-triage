@@ -182,6 +182,15 @@ function explanationFor(
   stats: NormalizedJewelStats
 ) {
   const summary = topSummary(stats) || "some usable stats";
+
+  if (highlights.includes("IAS with enhanced damage")) {
+    return "Attack-speed socket jewels need real damage support";
+  }
+
+  if (highlights.includes("IAS with resist support")) {
+    return "IAS is the anchor; res is the useful support";
+  }
+
   const comboText = comboTextFor(highlights);
   const anchor = comboText === "the overall stat mix" ? summary : comboText;
 
