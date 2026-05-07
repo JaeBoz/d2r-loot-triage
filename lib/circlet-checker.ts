@@ -364,6 +364,23 @@ function liquidityFor(input: CircletCheckInput, verdict: Verdict, tags: Set<Ring
   return verdict === "List" || verdict === "Premium" ? "High" : "Medium";
 }
 
+function contextualCircletHighlight(input: CircletCheckInput) {
+  if (
+    input.quality === "Magic" &&
+    input.skillMode === "tree" &&
+    (input.skillTreeValue ?? 0) >= 3 &&
+    (input.fasterCastRate ?? 0) >= 20
+  ) {
+    return "3/20 magic";
+  }
+
+  if (input.quality === "Rare" && (input.classSkillValue ?? 0) >= 2 && (input.fasterCastRate ?? 0) >= 20) {
+    return "2/20";
+  }
+
+  return undefined;
+}
+
 export function evaluateCirclet(rawInput: CircletCheckInput): CircletCheckResult {
   const input = normalizeCircletInput(rawInput);
   const family = getFamilyData(input.family);
@@ -421,6 +438,7 @@ export function evaluateCirclet(rawInput: CircletCheckInput): CircletCheckResult
     explanation,
     recommendedAction,
     qualityScore: Math.max(0, score),
-    archetypeTags: Array.from(tags)
+    archetypeTags: Array.from(tags),
+    contextualHighlight: contextualCircletHighlight(input)
   };
 }

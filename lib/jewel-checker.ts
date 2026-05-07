@@ -228,6 +228,18 @@ function recommendedActionFor(verdict: Verdict, highlights: string[]) {
   return "Keep it. Premium jewel hit.";
 }
 
+function contextualJewelHighlight(highlights: string[]) {
+  if (highlights.includes("IAS with enhanced damage")) {
+    return "IAS + ED";
+  }
+
+  if (highlights.includes("IAS with resist support")) {
+    return "IAS + res";
+  }
+
+  return undefined;
+}
+
 export function evaluateJewel(input: JewelCheckInput): JewelCheckResult {
   const stats = normalizeStats(input);
 
@@ -272,6 +284,7 @@ export function evaluateJewel(input: JewelCheckInput): JewelCheckResult {
     explanation: explanationFor(input, verdict, archetypeTags, highlights, stats),
     recommendedAction: recommendedActionFor(verdict, highlights),
     qualityScore: Math.max(0, score),
-    archetypeTags
+    archetypeTags,
+    contextualHighlight: contextualJewelHighlight(highlights)
   };
 }

@@ -107,6 +107,7 @@ export interface BaseCheckResult {
   explanation: string;
   recommendedAction: string;
   archetypeTags?: string[];
+  contextualHighlight?: string;
 }
 
 export interface BaseReferenceData {
@@ -243,6 +244,7 @@ export interface CharmCheckResult {
   recommendedAction: string;
   qualityScore: number;
   archetypeTags: RingArchetype[];
+  contextualHighlight?: string;
 }
 
 export interface JewelCheckInput {
@@ -291,6 +293,7 @@ export interface JewelCheckResult {
   recommendedAction: string;
   qualityScore: number;
   archetypeTags: RingArchetype[];
+  contextualHighlight?: string;
 }
 
 export type JewelAffixKey =
@@ -575,4 +578,5 @@ export interface CircletCheckResult {
   recommendedAction: string;
   qualityScore: number;
   archetypeTags: RingArchetype[];
+  contextualHighlight?: string;
 }

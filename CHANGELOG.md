@@ -1,5 +1,22 @@
 # D2R Loot Triage App - Internal Changelog
 
+[2026-05-07]
+
+Change:
+- Added rare contextual highlight pills for Charm, Jewel, and Circlet results.
+
+Type:
+- UX
+
+Why:
+- Standout item identities like Life skiller, IAS + ED, and 2/20 should be readable from the Trade Value card without adding noise or changing evaluator outcomes.
+
+Impact:
+- Charm, Jewel, and Circlet checks can now show one high-signal highlight when an existing evaluator pattern qualifies; scoring, thresholds, pricing assumptions, and other item types are unchanged.
+
+Notes:
+- Highlight-only pass. Tags stay limited to self-contained D2-native patterns already detected by the checker logic.
+
 [2026-05-04]
 
 Change:

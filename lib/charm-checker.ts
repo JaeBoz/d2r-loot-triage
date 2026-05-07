@@ -143,6 +143,26 @@ function isTopPoisonSmallCharm(input: CharmCheckInput, matchedPatternIds: string
   return input.size === "Small Charm" && matchedPatternIds.includes("sc-poison-top");
 }
 
+function contextualCharmHighlight(input: CharmCheckInput, matchedPatternIds: string[]) {
+  if (isTopPoisonSmallCharm(input, matchedPatternIds)) {
+    return "Small charm jackpot";
+  }
+
+  if (input.size === "Grand Charm" && input.skill?.trim() && (input.life ?? 0) > 0) {
+    return "Life skiller";
+  }
+
+  if (input.size === "Small Charm" && matchedPatternIds.includes("sc-mf") && (input.magicFind ?? 0) >= 7) {
+    return "7 MF";
+  }
+
+  if (input.size === "Grand Charm" && matchedPatternIds.includes("gc-skiller")) {
+    return "Skiller";
+  }
+
+  return undefined;
+}
+
 function baseTags(input: CharmCheckInput): Set<RingArchetype> {
   const tags = new Set<RingArchetype>();
   if (input.skill?.trim()) {
@@ -488,7 +508,8 @@ export function evaluateCharm(rawInput: CharmCheckInput): CharmCheckResult {
     explanation,
     recommendedAction,
     qualityScore: Math.max(0, score),
-    archetypeTags
+    archetypeTags,
+    contextualHighlight: contextualCharmHighlight(input, matchedPatternIds)
   };
 }
 

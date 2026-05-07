@@ -10,6 +10,7 @@ type ResultPanelResult = {
   recommendedAction: string;
   qualityScore?: number;
   archetypeTags?: string[];
+  contextualHighlight?: string;
 };
 
 function displayContextTag(tag: string, priority: EvaluationPriority) {
@@ -133,6 +134,7 @@ export function ResultPanel({
   itemType?: "unique" | "base";
 }) {
   const hasGgBaseTag = itemType === "base" && result.archetypeTags?.includes("GG base");
+  const contextualHighlight = result.contextualHighlight ?? (hasGgBaseTag ? "GG base" : undefined);
   const displayedTags = hasGgBaseTag ? result.archetypeTags?.filter((tag) => tag !== "GG base") : result.archetypeTags;
 
   return (
@@ -146,9 +148,9 @@ export function ResultPanel({
                 {tradeValueBadge(result.priority)}
               </div>
               <div className="mt-1 text-sm font-semibold leading-5 text-zinc-400">{tradeValueContext(result.priority)}</div>
-              {hasGgBaseTag ? (
+              {contextualHighlight ? (
                 <div className="mt-3 inline-flex rounded-full border border-amber-300/70 bg-amber-300/10 px-2.5 py-1 text-[11px] font-black uppercase tracking-[0.16em] text-amber-100">
-                  GG base
+                  {contextualHighlight}
                 </div>
               ) : null}
             </div>
