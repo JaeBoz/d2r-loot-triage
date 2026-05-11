@@ -1,0 +1,382 @@
+[
+  {
+    "id": "base-eth-0os-thresher",
+    "category": "Bases",
+    "name": "Eth 0os Thresher",
+    "priority": "High Trade Value",
+    "contextualHighlight": null,
+    "recommendedAction": "Socket or trade as potential",
+    "explanation": "Eth socket potential drives value",
+    "qualityScore": null,
+    "archetypeTags": []
+  },
+  {
+    "id": "base-eth-4os-thresher",
+    "category": "Bases",
+    "name": "Eth 4os Thresher",
+    "priority": "Premium Trade Value",
+    "contextualHighlight": null,
+    "recommendedAction": "Keep or list as a base",
+    "explanation": "4os eth merc base drives value",
+    "qualityScore": null,
+    "archetypeTags": []
+  },
+  {
+    "id": "base-eth-15ed-4os-thresher",
+    "category": "Bases",
+    "name": "Eth 15 ED 4os Thresher",
+    "priority": "Premium Trade Value",
+    "contextualHighlight": null,
+    "recommendedAction": "GG base — keep or list",
+    "explanation": "15 ED superior roll drives value",
+    "qualityScore": null,
+    "archetypeTags": [
+      "GG base"
+    ]
+  },
+  {
+    "id": "base-wrong-socket-elite",
+    "category": "Bases",
+    "name": "Wrong-socket eth elite base",
+    "priority": "High Trade Value",
+    "contextualHighlight": null,
+    "recommendedAction": "Keep or list as a base",
+    "explanation": "5os Obedience base drives value",
+    "qualityScore": null,
+    "archetypeTags": []
+  },
+  {
+    "id": "unique-low-griffons",
+    "category": "Uniques",
+    "name": "Low Griffon's Eye",
+    "priority": "Moderate Trade Value",
+    "contextualHighlight": null,
+    "recommendedAction": "Conditional keep. Staple demand helps.",
+    "explanation": "Roll quality drives value",
+    "qualityScore": 6,
+    "archetypeTags": []
+  },
+  {
+    "id": "unique-high-griffons",
+    "category": "Uniques",
+    "name": "High Griffon's Eye",
+    "priority": "Premium Trade Value",
+    "contextualHighlight": null,
+    "recommendedAction": "Keep it. Premium unique hit.",
+    "explanation": "-Enemy Lightning Resist drives value",
+    "qualityScore": 24,
+    "archetypeTags": []
+  },
+  {
+    "id": "unique-staple-arachnid",
+    "category": "Uniques",
+    "name": "Staple unique",
+    "priority": "High Trade Value",
+    "contextualHighlight": null,
+    "recommendedAction": "Keep it. The drop itself is the value.",
+    "explanation": "Drop itself drives value",
+    "qualityScore": 8,
+    "archetypeTags": []
+  },
+  {
+    "id": "charm-plain-skiller",
+    "category": "Charms",
+    "name": "Plain grand charm skiller",
+    "priority": "High Trade Value",
+    "contextualHighlight": "Skiller",
+    "recommendedAction": "Keep it if the skill tree is useful.",
+    "explanation": "Skill tree drives value",
+    "qualityScore": 10,
+    "archetypeTags": [
+      "caster",
+      "PvM"
+    ]
+  },
+  {
+    "id": "charm-life-skiller",
+    "category": "Charms",
+    "name": "Life skiller",
+    "priority": "Premium Trade Value",
+    "contextualHighlight": "Life skiller",
+    "recommendedAction": "Keep it. Premium charm hit.",
+    "explanation": "Skill + life drives value",
+    "qualityScore": 26,
+    "archetypeTags": [
+      "caster",
+      "PvM"
+    ]
+  },
+  {
+    "id": "charm-451-poison-sc",
+    "category": "Charms",
+    "name": "451 poison small charm",
+    "priority": "Premium Trade Value",
+    "contextualHighlight": "Small charm jackpot",
+    "recommendedAction": "Keep it. Premium poison small charm.",
+    "explanation": "Poison damage drives value",
+    "qualityScore": 16,
+    "archetypeTags": [
+      "niche",
+      "PvP"
+    ]
+  },
+  {
+    "id": "charm-filler",
+    "category": "Charms",
+    "name": "Filler charm",
+    "priority": "Trash",
+    "contextualHighlight": null,
+    "recommendedAction": "Drop it unless you need a temporary charm.",
+    "explanation": "Charm pattern drives value",
+    "qualityScore": 0,
+    "archetypeTags": [
+      "niche"
+    ]
+  },
+  {
+    "id": "jewel-ias-only",
+    "category": "Jewels",
+    "name": "IAS only jewel",
+    "priority": "Low Trade Value",
+    "contextualHighlight": null,
+    "recommendedAction": "Only keep it as a stash filler or niche socket option.",
+    "explanation": "15 IAS drives value",
+    "qualityScore": 3,
+    "archetypeTags": [
+      "PvM"
+    ]
+  },
+  {
+    "id": "jewel-ias-weak-res",
+    "category": "Jewels",
+    "name": "IAS plus weak resist jewel",
+    "priority": "High Trade Value",
+    "contextualHighlight": "IAS + res",
+    "recommendedAction": "Keep it. IAS + res is easy to read.",
+    "explanation": "IAS is the anchor; res is the useful support",
+    "qualityScore": 12,
+    "archetypeTags": [
+      "PvM",
+      "niche"
+    ]
+  },
+  {
+    "id": "jewel-ias-ed",
+    "category": "Jewels",
+    "name": "IAS plus ED jewel",
+    "priority": "High Trade Value",
+    "contextualHighlight": "IAS + ED",
+    "recommendedAction": "Keep it. Good jewel hit.",
+    "explanation": "Attack-speed socket jewels need real damage support",
+    "qualityScore": 15,
+    "archetypeTags": [
+      "PvM",
+      "melee",
+      "PvP"
+    ]
+  },
+  {
+    "id": "circlet-weak-2-20",
+    "category": "Circlets",
+    "name": "Weak rare 2/20",
+    "priority": "High Trade Value",
+    "contextualHighlight": "2/20",
+    "recommendedAction": "Keep it. Good circlet pattern.",
+    "explanation": "+2 Sorceress Skills / 20 FCR drives value",
+    "qualityScore": 21,
+    "archetypeTags": [
+      "caster"
+    ]
+  },
+  {
+    "id": "circlet-strong-2-20",
+    "category": "Circlets",
+    "name": "Strong rare 2/20",
+    "priority": "Premium Trade Value",
+    "contextualHighlight": "2/20",
+    "recommendedAction": "Keep it. Premium circlet hit.",
+    "explanation": "+2 Sorceress Skills / 20 FCR / 2os + 18 all res/20 strength/45 life drives value",
+    "qualityScore": 40,
+    "archetypeTags": [
+      "caster",
+      "PvP"
+    ]
+  },
+  {
+    "id": "circlet-3-20-magic",
+    "category": "Circlets",
+    "name": "3/20 magic circlet",
+    "priority": "Premium Trade Value",
+    "contextualHighlight": "3/20 magic",
+    "recommendedAction": "Keep it. Premium circlet hit.",
+    "explanation": "+3 Sorceress Lightning Spells / 20 FCR drives value",
+    "qualityScore": 27,
+    "archetypeTags": [
+      "caster"
+    ]
+  },
+  {
+    "id": "amulet-weak-2-20",
+    "category": "Amulets",
+    "name": "Weak +2/20 amulet",
+    "priority": "High Trade Value",
+    "contextualHighlight": null,
+    "recommendedAction": "Keep it, but secondaries decide demand.",
+    "explanation": "20 FCR is the anchor, but secondaries decide it",
+    "qualityScore": 19,
+    "archetypeTags": [
+      "caster",
+      "PvP"
+    ]
+  },
+  {
+    "id": "amulet-strong-caster",
+    "category": "Amulets",
+    "name": "Strong caster amulet",
+    "priority": "Premium Trade Value",
+    "contextualHighlight": null,
+    "recommendedAction": "Keep it. Premium amulet hit.",
+    "explanation": "20 FCR + support drives value",
+    "qualityScore": 45,
+    "archetypeTags": [
+      "caster",
+      "PvP",
+      "PvM",
+      "niche"
+    ]
+  },
+  {
+    "id": "amulet-plus-2-only",
+    "category": "Amulets",
+    "name": "+2 skills only amulet",
+    "priority": "Moderate Trade Value",
+    "contextualHighlight": null,
+    "recommendedAction": "Conditional keep. The support needs to line up.",
+    "explanation": "+skills alone needs stronger support",
+    "qualityScore": 6,
+    "archetypeTags": [
+      "caster"
+    ]
+  },
+  {
+    "id": "ring-weak-fcr",
+    "category": "Rings",
+    "name": "Weak FCR ring",
+    "priority": "Low Trade Value",
+    "contextualHighlight": null,
+    "recommendedAction": "Only keep it as a stopgap.",
+    "explanation": "FCR is useful, but weak secondaries keep it conditional",
+    "qualityScore": 3,
+    "archetypeTags": [
+      "caster"
+    ]
+  },
+  {
+    "id": "ring-strong-caster",
+    "category": "Rings",
+    "name": "Strong caster ring",
+    "priority": "Premium Trade Value",
+    "contextualHighlight": null,
+    "recommendedAction": "Keep it. Premium ring hit.",
+    "explanation": "FCR + strength/all res drives value",
+    "qualityScore": 31,
+    "archetypeTags": [
+      "caster",
+      "PvM"
+    ]
+  },
+  {
+    "id": "ring-dual-leech",
+    "category": "Rings",
+    "name": "Dual leech ring",
+    "priority": "Low Trade Value",
+    "contextualHighlight": null,
+    "recommendedAction": "Only keep it as a stopgap.",
+    "explanation": "Dual leech is the hook; support decides trade strength",
+    "qualityScore": 4,
+    "archetypeTags": [
+      "melee",
+      "PvM"
+    ]
+  },
+  {
+    "id": "gloves-jav-2-20",
+    "category": "Gloves",
+    "name": "Jav 2/20 gloves",
+    "priority": "High Trade Value",
+    "contextualHighlight": null,
+    "recommendedAction": "Conditional keep if the support lines fit.",
+    "explanation": "Skills + IAS drives value",
+    "qualityScore": 14,
+    "archetypeTags": [
+      "PvM"
+    ]
+  },
+  {
+    "id": "gloves-jav-3-20",
+    "category": "Gloves",
+    "name": "Jav 3/20 gloves",
+    "priority": "Premium Trade Value",
+    "contextualHighlight": null,
+    "recommendedAction": "Keep and compare. Big magic glove hit.",
+    "explanation": "+3 Jav / 20 IAS drives value",
+    "qualityScore": 21,
+    "archetypeTags": [
+      "PvM"
+    ]
+  },
+  {
+    "id": "gloves-ias-only",
+    "category": "Gloves",
+    "name": "IAS-only gloves",
+    "priority": "Low Trade Value",
+    "contextualHighlight": null,
+    "recommendedAction": "Only keep for self-use or a very specific build.",
+    "explanation": "IAS drives value",
+    "qualityScore": 2,
+    "archetypeTags": [
+      "niche"
+    ]
+  },
+  {
+    "id": "boots-no-frw-res",
+    "category": "Boots",
+    "name": "No-FRW resist boots",
+    "priority": "Moderate Trade Value",
+    "contextualHighlight": null,
+    "recommendedAction": "Only keep if you need the stats. No FRW is rough.",
+    "explanation": "Useful res package, but no FRW keeps it conditional",
+    "qualityScore": 6,
+    "archetypeTags": [
+      "PvM"
+    ]
+  },
+  {
+    "id": "boots-frw-dual-res",
+    "category": "Boots",
+    "name": "FRW dual-res boots",
+    "priority": "Moderate Trade Value",
+    "contextualHighlight": null,
+    "recommendedAction": "Conditional keep. Good shell, light support.",
+    "explanation": "FRW with dual res is the value hook",
+    "qualityScore": 8,
+    "archetypeTags": [
+      "PvM"
+    ]
+  },
+  {
+    "id": "boots-strong-tri-res-frw",
+    "category": "Boots",
+    "name": "Strong tri-res FRW boots",
+    "priority": "Premium Trade Value",
+    "contextualHighlight": null,
+    "recommendedAction": "Keep them. Premium boot hit.",
+    "explanation": "FRW + tri-res drives value",
+    "qualityScore": 32,
+    "archetypeTags": [
+      "MF",
+      "PvM",
+      "PvP"
+    ]
+  }
+]

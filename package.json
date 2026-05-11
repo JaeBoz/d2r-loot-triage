@@ -6,6 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "qa:evaluators": "node qa/evaluator-snapshots.cjs",
+    "qa:evaluators:update": "node qa/evaluator-snapshots.cjs --update",
     "lint": "next lint"
   },
   "dependencies": {
