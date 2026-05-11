@@ -114,7 +114,7 @@ export function BaseChecker({ mode }: { mode: GameMode }) {
   };
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+    <div className="grid gap-4 lg:grid-cols-[1.05fr_0.95fr] lg:gap-6">
       <Card>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
@@ -139,7 +139,7 @@ export function BaseChecker({ mode }: { mode: GameMode }) {
             <div className="relative">
               <input
                 id="base-search"
-                className="w-full rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
+                className="w-full rounded-xl border border-border bg-black/20 px-3 py-2.5 text-white outline-none transition focus:border-accent sm:py-2"
                 type="text"
                 value={searchTerm}
                 placeholder="Search base, tag, or runeword"
@@ -155,7 +155,7 @@ export function BaseChecker({ mode }: { mode: GameMode }) {
               />
 
               {pickerOpen ? (
-                <div className="absolute left-0 right-0 top-[calc(100%+0.4rem)] z-10 max-h-72 overflow-auto rounded-2xl border border-border bg-zinc-950/95 p-2 shadow-2xl">
+                <div className="absolute left-0 right-0 top-[calc(100%+0.4rem)] z-20 max-h-[52vh] overflow-auto rounded-2xl border border-border bg-zinc-950/95 p-1.5 shadow-2xl sm:max-h-72 sm:p-2">
                   {filteredItems.length > 0 ? (
                     filteredItems.map((item) => (
                       <button
@@ -194,7 +194,7 @@ export function BaseChecker({ mode }: { mode: GameMode }) {
           <label className="grid gap-2 text-sm text-zinc-300">
             Sockets
             <select
-              className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
+              className="rounded-xl border border-border bg-black/20 px-3 py-2.5 text-white outline-none transition focus:border-accent sm:py-2"
               value={String(sockets)}
               onChange={(event) => setSockets(Number(event.target.value))}
               aria-label="Sockets"

@@ -95,7 +95,7 @@ export function AffixEntryPanel<TAffixKey extends VarianceAffixKey>({
               <span className="text-[10px] uppercase tracking-[0.18em] text-zinc-500">{affix.impactTier}</span>
             </span>
             <input
-              className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
+              className="rounded-xl border border-border bg-black/20 px-3 py-2.5 text-white outline-none transition focus:border-accent sm:py-2"
               type="number"
               min={0}
               max={getAffixValueCap(affix.key, capItemType)}
@@ -113,7 +113,7 @@ export function AffixEntryPanel<TAffixKey extends VarianceAffixKey>({
         ))}
       </div>
 
-      <div className="rounded-xl border border-border bg-black/15 p-4">
+      <div className="rounded-xl border border-border bg-black/15 p-3 sm:p-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-400">Optional Affixes</p>
@@ -121,7 +121,7 @@ export function AffixEntryPanel<TAffixKey extends VarianceAffixKey>({
           </div>
           <div className="w-full max-w-sm">
             <input
-              className="w-full rounded-xl border border-border bg-black/20 px-3 py-2 text-sm text-white outline-none transition focus:border-accent"
+              className="w-full rounded-xl border border-border bg-black/20 px-3 py-2.5 text-sm text-white outline-none transition focus:border-accent sm:py-2"
               type="text"
               placeholder="+ Add affix"
               value={query}
@@ -138,7 +138,7 @@ export function AffixEntryPanel<TAffixKey extends VarianceAffixKey>({
                 <span className="flex items-center justify-between gap-2">
                   <span>{affix.label}</span>
                   <button
-                    className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500 transition hover:text-zinc-200"
+                    className="min-h-8 rounded-lg px-2 text-xs font-semibold uppercase tracking-[0.16em] text-zinc-500 transition hover:bg-white/5 hover:text-zinc-200"
                     onClick={() => onRemoveAffix(affix.key)}
                     type="button"
                   >
@@ -146,7 +146,7 @@ export function AffixEntryPanel<TAffixKey extends VarianceAffixKey>({
                   </button>
                 </span>
                 <input
-                  className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
+                  className="rounded-xl border border-border bg-black/20 px-3 py-2.5 text-white outline-none transition focus:border-accent sm:py-2"
                   type="number"
                   min={0}
                   max={getAffixValueCap(affix.key, capItemType)}
@@ -165,11 +165,11 @@ export function AffixEntryPanel<TAffixKey extends VarianceAffixKey>({
           </div>
         ) : null}
 
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="mt-4 flex flex-wrap gap-2.5 sm:gap-2">
           {searchableAffixes.slice(0, 10).map((affix) => (
             <button
               key={affix.key}
-              className="inline-flex items-center gap-2 rounded-full border border-border bg-black/20 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-zinc-300 transition hover:border-zinc-500 hover:text-white"
+              className="inline-flex min-h-10 items-center gap-2 rounded-full border border-border bg-black/20 px-3 py-2 text-left text-xs font-semibold uppercase leading-4 tracking-[0.12em] text-zinc-300 transition hover:border-zinc-500 hover:text-white sm:min-h-0 sm:py-1 sm:tracking-[0.16em]"
               onClick={() => {
                 onAddAffix(affix.key);
                 setQuery("");

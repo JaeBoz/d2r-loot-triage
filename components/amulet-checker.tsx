@@ -151,7 +151,7 @@ export function AmuletChecker({ mode }: { mode: GameMode }) {
   };
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+    <div className="grid gap-4 lg:grid-cols-[1.05fr_0.95fr] lg:gap-6">
       <Card>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
@@ -179,7 +179,7 @@ export function AmuletChecker({ mode }: { mode: GameMode }) {
               <label htmlFor="amulet-class-skill">Class skill</label>
               <select
                 id="amulet-class-skill"
-                className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
+                className="rounded-xl border border-border bg-black/20 px-3 py-2.5 text-white outline-none transition focus:border-accent sm:py-2"
                 value={classSkillType}
                 onChange={(event) => {
                   const value = event.target.value as AmuletClassSkill | "";
@@ -198,7 +198,7 @@ export function AmuletChecker({ mode }: { mode: GameMode }) {
               </select>
               {classSkillType ? (
                 <select
-                  className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
+                  className="rounded-xl border border-border bg-black/20 px-3 py-2.5 text-white outline-none transition focus:border-accent sm:py-2"
                   value={String(classSkillValue)}
                   onChange={(event) => setClassSkillValue(Number(event.target.value) as AmuletSkillTier)}
                   aria-label="Class skill value"
@@ -216,7 +216,7 @@ export function AmuletChecker({ mode }: { mode: GameMode }) {
               <label htmlFor="amulet-skill-tree">Tree skill</label>
               <select
                 id="amulet-skill-tree"
-                className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
+                className="rounded-xl border border-border bg-black/20 px-3 py-2.5 text-white outline-none transition focus:border-accent sm:py-2"
                 value={skillTreeType}
                 onChange={(event) => {
                   const value = event.target.value as AmuletSkillTree | "";
@@ -235,7 +235,7 @@ export function AmuletChecker({ mode }: { mode: GameMode }) {
               </select>
               {skillTreeType ? (
                 <select
-                  className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
+                  className="rounded-xl border border-border bg-black/20 px-3 py-2.5 text-white outline-none transition focus:border-accent sm:py-2"
                   value={String(skillTreeValue)}
                   onChange={(event) => setSkillTreeValue(Number(event.target.value) as AmuletSkillTier)}
                   aria-label="Tree skill value"

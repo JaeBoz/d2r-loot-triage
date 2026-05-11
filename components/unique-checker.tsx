@@ -277,7 +277,7 @@ export function UniqueChecker({ mode }: { mode: GameMode }) {
           <label className="grid gap-2 text-sm text-zinc-300 md:col-span-2">
             Unique item
             <select
-              className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
+              className="rounded-xl border border-border bg-black/20 px-3 py-2.5 text-white outline-none transition focus:border-accent sm:py-2"
               value={itemId}
               onChange={(event) => {
                 setItemId(event.target.value);
@@ -308,7 +308,7 @@ export function UniqueChecker({ mode }: { mode: GameMode }) {
             <label key={definition.key} className="grid gap-2 text-sm text-zinc-300">
               {definition.label}
               <select
-                className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
+                className="rounded-xl border border-border bg-black/20 px-3 py-2.5 text-white outline-none transition focus:border-accent sm:py-2"
                 value={selectForm[definition.key]}
                 onChange={(event) =>
                   setSelectForm((current) => ({
@@ -334,7 +334,7 @@ export function UniqueChecker({ mode }: { mode: GameMode }) {
                 <label key={field} className="grid gap-2 text-sm text-zinc-300">
                   {getFieldLabel(field, selectedItem)}
                   <input
-                    className="rounded-xl border border-border bg-black/20 px-3 py-2 text-white outline-none transition focus:border-accent"
+                    className="rounded-xl border border-border bg-black/20 px-3 py-2.5 text-white outline-none transition focus:border-accent sm:py-2"
                     type="number"
                     min={definition?.min ?? 0}
                     max={definition?.max}

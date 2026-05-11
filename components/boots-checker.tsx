@@ -92,7 +92,7 @@ export function BootsChecker({ mode }: { mode: GameMode }) {
   };
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+    <div className="grid gap-4 lg:grid-cols-[1.05fr_0.95fr] lg:gap-6">
       <Card>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>

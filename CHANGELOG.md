@@ -3,6 +3,23 @@
 [2026-05-11]
 
 Change:
+- Polished narrow-screen form touch targets and result spacing.
+
+Type:
+- UX
+
+Why:
+- Mobile release QA found no blockers, but affix-heavy checks and base search needed a little more touch comfort on 360px screens.
+
+Impact:
+- Optional affix buttons are easier to tap, mobile form-to-result spacing is tighter on affix-heavy checkers, and the Base Checker search dropdown is less likely to crowd narrow viewports.
+
+Notes:
+- Mobile UX polish only. No evaluator logic, scoring, thresholds, tiers, contextual highlights, pricing, or ResultPanel architecture changed.
+
+[2026-05-11]
+
+Change:
 - Added compact onboarding copy and example outcomes for first-time users.
 
 Type:
