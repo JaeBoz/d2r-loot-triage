@@ -139,6 +139,14 @@ function recommendedActionFor(verdict: Verdict, input: GloveCheckInput, matchedP
   return "Keep only if the pattern fits a build you care about.";
 }
 
+function capCompositeGlovePremium(score: number, matchedPatterns: string[]) {
+  if (matchedPatterns.includes("+2 Jav / 20 IAS")) {
+    return Math.min(score, 15);
+  }
+
+  return score;
+}
+
 export function evaluateGloves(input: GloveCheckInput): GloveCheckResult {
   const checkedInput: GloveCheckInput = {
     ...input,
@@ -181,6 +189,7 @@ export function evaluateGloves(input: GloveCheckInput): GloveCheckResult {
 
   if (input.mode === "SCNL" && score <= 9) score -= 1;
   if (input.mode === "SCL" && input.increasedAttackSpeed === 20) score += 1;
+  score = capCompositeGlovePremium(score, matchedPatterns);
 
   const verdict = verdictFromScore(score);
   const archetypeTags = tags.size > 0 ? Array.from(tags) : ["niche" as RingArchetype];

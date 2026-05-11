@@ -462,6 +462,14 @@ function isSkillsOnlyAmulet(stats: NormalizedAmuletStats) {
   return hasSkills && presentKeys.every((key) => key === "classSkills" || key === "skillTreeSkills");
 }
 
+function hasThinTwentyFcrSkillShell(stats: NormalizedAmuletStats) {
+  return (
+    (stats.fasterCastRate ?? 0) >= 20 &&
+    ((stats.classSkills ?? 0) >= 2 || (stats.skillTreeSkills ?? 0) >= 2) &&
+    !hasMeaningfulAmuletSupport(stats)
+  );
+}
+
 function isSecondaryOnlyStack(stats: NormalizedAmuletStats) {
   const secondaryOnlyKeys = new Set<StatKey>([
     "magicFind",
@@ -627,6 +635,10 @@ export function evaluateAmulet(input: AmuletCheckInput): AmuletCheckResult {
   if (isSecondaryOnlyStack(stats) && score > 5) {
     score = 5;
     highlights.push("secondary stats need a real anchor");
+  }
+
+  if (hasThinTwentyFcrSkillShell(stats) && score > 19) {
+    score = 19;
   }
 
   const verdict = verdictFromScore(score);

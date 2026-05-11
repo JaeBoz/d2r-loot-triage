@@ -1,5 +1,22 @@
 # D2R Loot Triage App - Internal Changelog
 
+[2026-05-11]
+
+Change:
+- Narrowed Premium outcomes for composite amulet and glove shells.
+
+Type:
+- Evaluation
+
+Why:
+- QA found weak +2/20 amulets and Jav 2/20 gloves crossing into Premium too easily, making Premium feel less distinct from High.
+
+Impact:
+- Thin +2/20 skill/FCR amulets and +2 Jav / 20 IAS gloves now cap below Premium, while strong supported caster amulets and +3 Jav / 20 IAS gloves remain Premium.
+
+Notes:
+- Targeted Premium compression pass only. No tier names, highlights, pricing logic, ResultPanel behavior, or non-target checker scoring changed.
+
 [2026-05-07]
 
 Change:
