@@ -3,6 +3,23 @@
 [2026-05-11]
 
 Change:
+- Added compact onboarding copy and example outcomes for first-time users.
+
+Type:
+- Guide / UX
+
+Why:
+- Release-readiness QA found the app needed clearer first-run language explaining that Trade Value is deterministic desirability, not live pricing.
+
+Impact:
+- README and in-app help now explain Trade Value, contextual highlights, Recommended Action, and example reads like GG base, Life skiller, weak +2/20 amulet, Jav gloves, and no-FRW boots.
+
+Notes:
+- Guide/onboarding only. No evaluator, scoring, threshold, tier, or ResultPanel behavior changed.
+
+[2026-05-11]
+
+Change:
 - Narrowed Premium outcomes for composite amulet and glove shells.
 
 Type:

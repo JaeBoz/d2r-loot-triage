@@ -1,16 +1,36 @@
 # D2R Loot Triage
 
-Lightweight Next.js + TypeScript + Tailwind app for fast Diablo 2 Resurrected item triage, starting with Softcore Battle.net Non-Ladder and a first-pass Softcore Ladder toggle.
+Fast Diablo 2 Resurrected loot triage for farming sessions.
 
-## MVP scope
+This is not a price checker. It does not simulate markets or predict exact trade prices. It answers one practical question:
+
+> Is this item valuable, and why?
+
+## How To Read Results
+
+- `Trade Value` means practical desirability, not an exact market price.
+- `High` means strong, desirable, or likely worth checking.
+- `Premium` means unusually clean, standout, or jackpot-adjacent.
+- Contextual highlights like `GG base`, `Life skiller`, or `IAS + ED` explain the item identity.
+- `Recommended Action` tells you what to do next while farming: drop, compare, stash, socket, keep, or list.
+
+## Example Outcomes
+
+| Item | Result read |
+| --- | --- |
+| 15 ED correct-socket elite base | `Premium` with `GG base`: keep or list as a standout base. |
+| Lightning skiller with life | `Premium` with `Life skiller`: clean charm hit. |
+| Plain +2 / 20 FCR amulet with weak secondaries | `High`: strong shell, but secondaries decide demand. |
+| +2 Jav / 20 IAS vs +3 Jav / 20 IAS gloves | `High` vs `Premium`: +2/20 is desirable; +3/20 is the standout magic hit. |
+| No-FRW boots with resists | usually compare-only: resists help, but missing FRW is rough. |
+
+## Current Scope
 
 - `SCNL` / `SCL` mode toggle
-- Category tabs for `Bases`, `Runes`, `Uniques`, `Charms`, `Jewels`, `Rings`, `Amulets`
-- Deterministic quick-triage UI
-- Local structured data files for starter references and rules
-- Base Checker as the first complete feature
-- Reference list page
-- No login, OCR, or external APIs
+- Checkers for `Bases`, `Uniques`, `Rings`, `Amulets`, `Gloves`, `Boots`, `Charms`, `Jewels`, and `Circlets`
+- Rune guide and reference page
+- Deterministic local evaluation logic
+- No login, OCR, external pricing, or market APIs
 
 ## Stack
 
@@ -60,38 +80,16 @@ npm run dev
 
 4. Open [http://localhost:3000](http://localhost:3000).
 
-## How the Base Checker works
-
-The Base Checker evaluates local item metadata and deterministic score modifiers:
-
-- supported socket patterns
-- ethereal desirability by base type
-- ladder vs non-ladder demand nudges
-- superior status
-- armor defense threshold
-- paladin shield all-res breakpoint
-- a few targeted premium overrides like `4os Monarch` and `5os Phase Blade`
-
-The resulting score maps to one of:
-
-- `Ignore`
-- `Low Priority`
-- `Check`
-- `Keep`
-- `List`
-- `Premium`
-
-## Expand later
+## Expand Later
 
 The current structure is designed so future features can plug in without rewriting the app shell:
 
 - add new category datasets under `data/`
 - add deterministic evaluators under `lib/`
-- implement lookup providers against the `MarketLookupAdapter` contract in `lib/market.ts`
-- replace placeholder category panels with dedicated checkers one by one
+- add QA fixtures for known item patterns
 
 ## Notes
 
-- Seed data is intentionally curated and small for the MVP.
-- No external pricing or OCR is included yet.
-- Market integration points are left modular on purpose so adapters can be added later.
+- Data is intentionally curated for fast farming decisions.
+- Exact value still depends on ladder state, buyer needs, and realm context.
+- When in doubt, the app is designed to avoid over-selling borderline items.

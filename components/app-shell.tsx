@@ -18,6 +18,11 @@ import { GameMode, ItemCategory } from "@/lib/types";
 
 const quickIdTargets = [
   {
+    category: "Examples",
+    hint: "How to read results",
+    targets: ["GG base = why it matters", "High = strong", "Premium = standout"]
+  },
+  {
     category: "Rings",
     hint: "FCR drives caster value",
     targets: ["10 FCR + res/stats", "10 FCR + dual res"]
@@ -141,10 +146,10 @@ export function AppShell() {
 
         {howItWorksOpen ? (
           <div className="mt-2 grid gap-1.5 text-sm leading-5 text-zinc-300 sm:grid-cols-2 lg:grid-cols-4">
-            <div>Pick the item type</div>
-            <div>Enter what you see on the item</div>
-            <div>If a stat isn't listed, it usually doesn't add value</div>
-            <div>Trade Value shows strength; Recommended Action tells you what to do</div>
+            <div>Not a price checker; no live market guesses</div>
+            <div>Trade Value means practical desirability, not exact price</div>
+            <div>Highlights name the item pattern: GG base, Life skiller, 2/20</div>
+            <div>Recommended Action tells you what to do next while farming</div>
           </div>
         ) : null}
       </Card>
@@ -153,7 +158,7 @@ export function AppShell() {
         <div className="flex items-center justify-between gap-2">
           <div className="flex flex-wrap items-center gap-2">
             <Pill active>Quick ID Targets</Pill>
-            <span className="text-xs font-semibold text-zinc-400">Jackpot patterns at a glance</span>
+            <span className="text-xs font-semibold text-zinc-400">Patterns and examples at a glance</span>
           </div>
           <button
             aria-expanded={quickIdOpen}
